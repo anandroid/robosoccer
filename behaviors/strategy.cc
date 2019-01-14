@@ -1,5 +1,7 @@
 #include "naobehavior.h"
 #include "../rvdraw/rvdraw.h"
+#include "../utwalk/math/Common.h"
+
 
 extern int agentBodyType;
 
@@ -8,10 +10,12 @@ extern int agentBodyType;
  * Filling params x y angle
  */
 void NaoBehavior::beam( double& beamX, double& beamY, double& beamAngle ) {
-    beamX = -HALF_FIELD_X + worldModel->getUNum();
-    beamY = 0;
+    beamX = -HALF_FIELD_X+random(HALF_FIELD_X);
+    beamY = -HALF_FIELD_Y+random(HALF_FIELD_Y);
     beamAngle = 0;
 }
+
+
 
 
 SkillType NaoBehavior::selectSkill() {
@@ -46,7 +50,7 @@ SkillType NaoBehavior::selectSkill() {
     //return goToTarget(ball);
 
     // Turn in place to face ball
-    /*double distance, angle;
+   /* double distance, angle;
     getTargetDistanceAndAngle(ball, distance, angle);
     if (abs(angle) > 10) {
       return goToTargetRelative(VecPosition(), angle);
@@ -58,7 +62,7 @@ SkillType NaoBehavior::selectSkill() {
     //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
 
     // Dribble ball toward opponent's goal
-    //return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
+   // return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
 
     // Kick ball toward opponent's goal
     //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
@@ -69,7 +73,12 @@ SkillType NaoBehavior::selectSkill() {
 
     // Demo behavior where players form a rotating circle and kick the ball
     // back and forth
-    return demoKickingCircle();
+    //return demoKickingCircle();
+    return goalingAgent();
+}
+
+SkillType NaoBehavior::goalingAgent(){
+    return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0));
 }
 
 
@@ -111,7 +120,8 @@ SkillType NaoBehavior::demoKickingCircle() {
 
     if (playerClosestToBall == worldModel->getUNum()) {
         // Have closest player kick the ball toward the center
-        return kickBall(KICK_FORWARD, center);
+        return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0));
+       // return kickBall(KICK_FORWARD, center);
     } else {
         // Move to circle position around center and face the center
         VecPosition localCenter = worldModel->g2l(center);
