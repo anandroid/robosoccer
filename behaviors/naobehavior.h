@@ -227,7 +227,6 @@ protected:
     void getSkillsForKickType(int kickType, SkillType skillsForType[]);
 
     SkillType demoKickingCircle();
-    SkillType goalingAgent();
 
 public:
 
