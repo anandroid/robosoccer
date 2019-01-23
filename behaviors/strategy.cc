@@ -9,13 +9,11 @@ extern int agentBodyType;
  * Real game beaming.
  * Filling params x y angle
  */
-void NaoBehavior::beam( double& beamX, double& beamY, double& beamAngle ) {
-    beamX = -HALF_FIELD_X+random(HALF_FIELD_X);
-    beamY = -HALF_FIELD_Y+random(HALF_FIELD_Y);
+void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
+    beamX = -random(HALF_FIELD_X);
+    beamY = -FIELD_Y+random(FIELD_Y);
     beamAngle = 0;
 }
-
-
 
 
 SkillType NaoBehavior::selectSkill() {
@@ -50,19 +48,19 @@ SkillType NaoBehavior::selectSkill() {
     //return goToTarget(ball);
 
     // Turn in place to face ball
-   /* double distance, angle;
-    getTargetDistanceAndAngle(ball, distance, angle);
-    if (abs(angle) > 10) {
-      return goToTargetRelative(VecPosition(), angle);
-    } else {
-      return SKILL_STAND;
-    }*/
+    /* double distance, angle;
+     getTargetDistanceAndAngle(ball, distance, angle);
+     if (abs(angle) > 10) {
+       return goToTargetRelative(VecPosition(), angle);
+     } else {
+       return SKILL_STAND;
+     }*/
 
     // Walk to ball while always facing forward
     //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
 
     // Dribble ball toward opponent's goal
-   // return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
+    // return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
 
     // Kick ball toward opponent's goal
     //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
@@ -77,8 +75,25 @@ SkillType NaoBehavior::selectSkill() {
     return goalingAgent();
 }
 
-SkillType NaoBehavior::goalingAgent(){
-    return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0));
+SkillType NaoBehavior::goalingAgent() {
+
+    // Choose any random 2d window in between the goal posts and keep kicking there
+
+    double randomY = worldModel->getOppLeftGoalPost().getY() +
+                     random(worldModel->getOppRightGoalPost().getY() - worldModel->getOppLeftGoalPost().getY());
+
+    double randomX = FIELD_X + random(worldModel->getOppRightGoalPost().getX());
+
+    VecPosition targetBallPosition = VecPosition(randomX, randomY, 0);
+
+
+    //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
+    if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
+        return kickBall(KICK_DRIBBLE,targetBallPosition);
+    } else {
+        return kickBall(KICK_IK, targetBallPosition);
+    }
+
 }
 
 
@@ -88,21 +103,21 @@ SkillType NaoBehavior::goalingAgent(){
  */
 SkillType NaoBehavior::demoKickingCircle() {
     // Parameters for circle
-    VecPosition center = VecPosition(-HALF_FIELD_X/2.0, 0, 0);
+    VecPosition center = VecPosition(-HALF_FIELD_X / 2.0, 0, 0);
     double circleRadius = 5.0;
     double rotateRate = 2.5;
 
     // Find closest player to ball
     int playerClosestToBall = -1;
     double closestDistanceToBall = 10000;
-    for(int i = WO_TEAMMATE1; i < WO_TEAMMATE1+NUM_AGENTS; ++i) {
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
         VecPosition temp;
         int playerNum = i - WO_TEAMMATE1 + 1;
         if (worldModel->getUNum() == playerNum) {
             // This is us
             temp = worldModel->getMyPosition();
         } else {
-            WorldObject* teammate = worldModel->getWorldObject( i );
+            WorldObject *teammate = worldModel->getWorldObject(i);
             if (teammate->validPosition) {
                 temp = teammate->pos;
             } else {
@@ -121,7 +136,7 @@ SkillType NaoBehavior::demoKickingCircle() {
     if (playerClosestToBall == worldModel->getUNum()) {
         // Have closest player kick the ball toward the center
         return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0));
-       // return kickBall(KICK_FORWARD, center);
+        // return kickBall(KICK_FORWARD, center);
     } else {
         // Move to circle position around center and face the center
         VecPosition localCenter = worldModel->g2l(center);
@@ -129,10 +144,15 @@ SkillType NaoBehavior::demoKickingCircle() {
 
         // Our desired target position on the circle
         // Compute target based on uniform number, rotate rate, and time
-        VecPosition target = center + VecPosition(circleRadius,0,0).rotateAboutZ(360.0/(NUM_AGENTS-1)*(worldModel->getUNum()-(worldModel->getUNum() > playerClosestToBall ? 1 : 0)) + worldModel->getTime()*rotateRate);
+        VecPosition target = center + VecPosition(circleRadius, 0, 0).rotateAboutZ(360.0 / (NUM_AGENTS - 1) *
+                                                                                   (worldModel->getUNum() -
+                                                                                    (worldModel->getUNum() >
+                                                                                     playerClosestToBall ? 1 : 0)) +
+                                                                                   worldModel->getTime() * rotateRate);
 
         // Adjust target to not be too close to teammates or the ball
-        target = collisionAvoidance(true /*teammate*/, false/*opponent*/, true/*ball*/, 1/*proximity thresh*/, .5/*collision thresh*/, target, true/*keepDistance*/);
+        target = collisionAvoidance(true /*teammate*/, false/*opponent*/, true/*ball*/, 1/*proximity thresh*/,
+                                    .5/*collision thresh*/, target, true/*keepDistance*/);
 
         if (me.getDistanceTo(target) < .25 && abs(localCenterAngle) <= 10) {
             // Close enough to desired position and orientation so just stand
