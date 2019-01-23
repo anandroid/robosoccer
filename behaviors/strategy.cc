@@ -10,8 +10,12 @@ extern int agentBodyType;
  * Filling params x y angle
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
+    //Choosing an X which is random on the team side
     beamX = -random(HALF_FIELD_X);
-    beamY = -FIELD_Y+random(FIELD_Y);
+    //Choosing a Y which is random  anywhere on the vertical length of the field
+    //to achieve it we need to go to the -HALF_FIELD_Y as 0 of Y is the center of the field and then
+    //add random number within range of FIELD_Y
+    beamY = -HALF_FIELD_Y+random(FIELD_Y);
     beamAngle = 0;
 }
 
@@ -72,20 +76,27 @@ SkillType NaoBehavior::selectSkill() {
     // Demo behavior where players form a rotating circle and kick the ball
     // back and forth
     //return demoKickingCircle();
-    return goalingAgent();
+      return goalingAgent();
 }
+
+/*
+ * Choose any random point in in 2d window which is in between the goal posts .And then keep kicking there
+ */
 
 SkillType NaoBehavior::goalingAgent() {
 
-    // Choose any random 2d window in between the goal posts and keep kicking there
+    // Choose any random point in in 2d window
 
-    double randomY = worldModel->getOppLeftGoalPost().getY() +
-                     random(worldModel->getOppRightGoalPost().getY() - worldModel->getOppLeftGoalPost().getY());
+    //choosing random Y which is in the goal post range
+    double randomY = worldModel->getOppRightGoalPost().getY() +
+                     random(GOAL_Y);
 
-    double randomX = FIELD_X + random(worldModel->getOppRightGoalPost().getX());
+    //choosing random X which is in the goal post range
+    double randomX = HALF_FIELD_X - random(GOAL_X);
 
     VecPosition targetBallPosition = VecPosition(randomX, randomY, 0);
 
+    LOG_MSG("targetBallPosition",targetBallPosition);
 
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
