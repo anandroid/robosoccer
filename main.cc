@@ -523,6 +523,7 @@ void Run()
     while (gLoop)
     {
         GetMessage(msg);
+        cout<<"Hello";
         string msgToServer = behavior->Think(msg);
         // To support agent sync mode
         msgToServer.append("(syn)");
