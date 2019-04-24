@@ -6,25 +6,33 @@
 #define UTAUSTINVILLABASE_PLAYER_H
 
 
-#include "../math/vecposition.h"
-
-
-class Range{
-    VecPosition bottomLeft;
-    VecPosition topRIght;
-};
-
 
 class player {
-  int playerNumber;
-  int playerPositionNumber;
-  VecPosition position;
-  int agressiveRating;
-  Action actionInvolved;
-  Range range;
+
+private:
+    int playerNumber;
+    int playerPositionNumber;
+    VecPosition position;
+    int agressiveRating;
+    Action actionInvolved;
+    Range range;
+public :
+    Player(int playerNumber,int playerPositionNumber,int aggressiveRating);
+
+    void setAggressiveRating();
+    void setActionInvolved();
+    void setRange();
+    void setPlayerPosition();
+
+
+    int getPlayerNumber();
+    int getPlayerPositionNumber();
+    VecPosition getPlayerPosition();
+    int getAggressiveRating();
+    Action getActionInvolved();
+    Range getRange();
 
 };
-
 
 
 #endif //UTAUSTINVILLABASE_PLAYER_H
