@@ -5,15 +5,16 @@
 #ifndef UTAUSTINVILLA3D_RANGE_H
 #define UTAUSTINVILLA3D_RANGE_H
 
-#endif //UTAUSTINVILLA3D_RANGE_H
-
-class Range {
+class FieldRange {
 private:
     VecPosition bottomLeft;
     VecPosition topRight;
 
 public:
-    Range(VecPosition bottomLeft, VecPosition topRight);
+    FieldRange(VecPosition bottomLeft, VecPosition topRight);
     VecPosition getBottomLeft();
     VecPosition getTopRight();
 };
+
+#endif //UTAUSTINVILLA3D_RANGE_H
+

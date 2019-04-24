@@ -14,8 +14,8 @@ private:
     int playerPositionNumber;
     VecPosition position;
     int agressiveRating;
-    Action actionInvolved;
-    Range range;
+    SkillType actionInvolved;
+    FieldRange range;
 public :
     Player(int playerNumber,int playerPositionNumber,int aggressiveRating);
 
@@ -29,8 +29,8 @@ public :
     int getPlayerPositionNumber();
     VecPosition getPlayerPosition();
     int getAggressiveRating();
-    Action getActionInvolved();
-    Range getRange();
+    SkillType getActionInvolved();
+    FieldRange getRange();
 
 };
 
