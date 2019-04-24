@@ -84,7 +84,7 @@ set(SRCS
   kalman/OrigKalmanFilter.cpp
   optimization/optimizationbehaviors.cc
   stats/recordstatsbehavior.cc
-)
+        behaviors/player.cpp behaviors/player.h)
 
 set(BINARY agentspark)
 
