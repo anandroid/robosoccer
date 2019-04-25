@@ -321,6 +321,7 @@ void *asuBackgroundFunction(void *playerNumberargs) {
 
 FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
 
+    cout<<"playerPositionNumber"<<playerPositionNumber<<"\n";
     if(playerPositionNumber==0){
          VecPosition bottomLeft(-HALF_FIELD_X/2-1,1,0);
          VecPosition topRight(-HALF_FIELD_X/2,0,0);
@@ -351,6 +352,8 @@ Player getPlayerObject(WorldModel *worldModel){
 
     Player player(worldModel->getUNum(),players.size(),players.size(),range);
     players.push_back(player);
+
+    cout<<"players size after push"<<players.size();
 
     return player;
 
