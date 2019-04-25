@@ -322,20 +322,83 @@ void *asuBackgroundFunction(void *playerNumberargs) {
 FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
 
     cout<<"playerPositionNumber"<<playerPositionNumber<<"\n";
+    X = HALF_FIELD_X;
+    Y = HALF_FIELD_Y;
+
+    int bottomLeftX;
+    int bottomLeftY;
+
+    int topRightX;
+    int topRightY;
+
+    int centerX;
+    int centerY;
+
     if(playerPositionNumber==1){
-         VecPosition bottomLeft(-HALF_FIELD_X/2-1,1,0);
-         VecPosition topRight(-HALF_FIELD_X/2,0,0);
+        centerX = -7*X/8;
+        centerY=0;
+    } else if (playerPositionNumber==2){
+        centerX = -5*X/8;
+        centerY=3*Y/4;
 
-         FieldRange range(bottomLeft,topRight);
-         return range;
-    } else {
-        VecPosition bottomLeft(HALF_FIELD_X/2-1,1,0);
-        VecPosition topRight(HALF_FIELD_X/2,0,0);
+    }else if (playerPositionNumber==3){
+        centerX = -5*X/8;
+        centerY=Y/4;
 
-        FieldRange range(bottomLeft,topRight);
-        return range;
+    }else if (playerPositionNumber==4){
+        centerX = -5*X/8;
+        centerY=-Y/4;
 
     }
+    else if (playerPositionNumber==5){
+        centerX = -5*X/8;
+        centerY= -3*Y/4;
+
+    }
+    else if (playerPositionNumber==6){
+        centerX = -3*X/8;
+        centerY= 3*Y/4;
+
+    }
+    else if (playerPositionNumber==7){
+        centerX = -3*X/8;
+        centerY=Y/4;
+
+    }
+    else if (playerPositionNumber==8){
+        centerX = -3*X/8;
+        centerY=-Y/4;
+
+    }
+    else if (playerPositionNumber==9){
+        centerX = -3*X/8;
+        centerY=-3*Y/4;
+
+    }
+    else if (playerPositionNumber==10){
+        centerX = -X/8;
+        centerY=Y/4;
+
+    }
+    else if (playerPositionNumber==11){
+        centerX = -X/8;
+        centerY=-Y/4;
+
+    }
+
+
+
+    bottomLeftX=centerX-1;
+    bottomLeftY=centerY+1;
+
+    topRightX=centerX+1;
+    topRightY=centerY-1;
+
+    VecPosition bottomLeft(bottomLeftX,bottomLeftY,0);
+    VecPosition topRight(topRightX,topRightY,0);
+
+    FieldRange range(bottomLeft,topRight);
+    return range;
 
 }
 
