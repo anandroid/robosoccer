@@ -34,8 +34,7 @@ int opponent_action_index = 0;
 
 string opponent_random_goal = "";
 
-std::vector<Player> players;
-
+std::vector <Player> players;
 
 
 class PlayerTask {
@@ -65,15 +64,10 @@ int getRandomInRange(int range) {
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
-    if (worldModel->getUNum() == 1) {
-        beamX = -HALF_FIELD_X / getRandomInRange(15);
-        beamY = 0;
-        beamAngle = 0;
-    } else {
-        beamX = -HALF_FIELD_X / 4;
-        beamY = 0;
-        beamAngle = 0;
-    }
+
+    beamX = -HALF_FIELD_X + (HALF_FIELD_X/11)*worldModel->getUNum();
+    beamY = 0;
+    beamAngle = 0;
 
 
     int randomValue = getRandomInRange(4);
@@ -319,9 +313,9 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
-FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
+FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
-    cout<<"playerPositionNumber"<<playerPositionNumber<<"\n";
+    cout << "playerPositionNumber" << playerPositionNumber << "\n";
     int X = HALF_FIELD_X;
     int Y = HALF_FIELD_Y;
 
@@ -334,89 +328,81 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
     int centerX;
     int centerY;
 
-    if(playerPositionNumber==1){
-        centerX = -7*X/8;
-        centerY=0;
-    } else if (playerPositionNumber==2){
-        centerX = -5*X/8;
-        centerY=3*Y/4;
+    if (playerPositionNumber == 1) {
+        centerX = -7 * X / 8;
+        centerY = 0;
+    } else if (playerPositionNumber == 2) {
+        centerX = -5 * X / 8;
+        centerY = 3 * Y / 4;
 
-    }else if (playerPositionNumber==3){
-        centerX = -5*X/8;
-        centerY=Y/4;
+    } else if (playerPositionNumber == 3) {
+        centerX = -5 * X / 8;
+        centerY = Y / 4;
 
-    }else if (playerPositionNumber==4){
-        centerX = -5*X/8;
-        centerY=-Y/4;
+    } else if (playerPositionNumber == 4) {
+        centerX = -5 * X / 8;
+        centerY = -Y / 4;
 
-    }
-    else if (playerPositionNumber==5){
-        centerX = -5*X/8;
-        centerY= -3*Y/4;
+    } else if (playerPositionNumber == 5) {
+        centerX = -5 * X / 8;
+        centerY = -3 * Y / 4;
 
-    }
-    else if (playerPositionNumber==6){
-        centerX = -3*X/8;
-        centerY= 3*Y/4;
+    } else if (playerPositionNumber == 6) {
+        centerX = -3 * X / 8;
+        centerY = 3 * Y / 4;
 
-    }
-    else if (playerPositionNumber==7){
-        centerX = -3*X/8;
-        centerY=Y/4;
+    } else if (playerPositionNumber == 7) {
+        centerX = -3 * X / 8;
+        centerY = Y / 4;
 
-    }
-    else if (playerPositionNumber==8){
-        centerX = -3*X/8;
-        centerY=-Y/4;
+    } else if (playerPositionNumber == 8) {
+        centerX = -3 * X / 8;
+        centerY = -Y / 4;
 
-    }
-    else if (playerPositionNumber==9){
-        centerX = -3*X/8;
-        centerY=-3*Y/4;
+    } else if (playerPositionNumber == 9) {
+        centerX = -3 * X / 8;
+        centerY = -3 * Y / 4;
 
-    }
-    else if (playerPositionNumber==10){
-        centerX = -X/8;
-        centerY=Y/4;
+    } else if (playerPositionNumber == 10) {
+        centerX = -X / 8;
+        centerY = Y / 4;
 
-    }
-    else if (playerPositionNumber==11){
-        centerX = -X/8;
-        centerY=-Y/4;
+    } else if (playerPositionNumber == 11) {
+        centerX = -X / 8;
+        centerY = -Y / 4;
 
     }
 
 
+    bottomLeftX = centerX - 1;
+    bottomLeftY = centerY + 1;
 
-    bottomLeftX=centerX-1;
-    bottomLeftY=centerY+1;
+    topRightX = centerX + 1;
+    topRightY = centerY - 1;
 
-    topRightX=centerX+1;
-    topRightY=centerY-1;
+    VecPosition bottomLeft(bottomLeftX, bottomLeftY, 0);
+    VecPosition topRight(topRightX, topRightY, 0);
 
-    VecPosition bottomLeft(bottomLeftX,bottomLeftY,0);
-    VecPosition topRight(topRightX,topRightY,0);
-
-    FieldRange range(bottomLeft,topRight);
+    FieldRange range(bottomLeft, topRight);
     return range;
 
 }
 
-Player getPlayerObject(WorldModel *worldModel){
+Player getPlayerObject(WorldModel *worldModel) {
 
-    for (int i=0;i<players.size();i++){
-           if(worldModel->getUNum()==players[i].getPlayerNumber()){
+    for (int i = 0; i < players.size(); i++) {
+        if (worldModel->getUNum() == players[i].getPlayerNumber()) {
 
-               return players[i];
-           }
+            return players[i];
+        }
     }
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    Player player(worldModel->getUNum(),worldModel->getUNum(),worldModel->getUNum(),range);
+    Player player(worldModel->getUNum(), worldModel->getUNum(), worldModel->getUNum(), range);
     players.push_back(player);
 
-    cout<<"players size after push"<<players.size();
+    cout << "players size after push" << players.size();
 
     return player;
 
