@@ -322,14 +322,14 @@ void *asuBackgroundFunction(void *playerNumberargs) {
 FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
 
     if(playerPositionNumber==0){
-         VecPosition bottomLeft(-HALF_FIELD_X-1,1,0);
-         VecPosition topRight(-HALF_FIELD_X,0,0);
+         VecPosition bottomLeft(-HALF_FIELD_X/2-1,1,0);
+         VecPosition topRight(-HALF_FIELD_X/2,0,0);
 
          FieldRange range(bottomLeft,topRight);
          return range;
     } else {
-        VecPosition bottomLeft(HALF_FIELD_X-1,1,0);
-        VecPosition topRight(HALF_FIELD_X,0,0);
+        VecPosition bottomLeft(HALF_FIELD_X/2-1,1,0);
+        VecPosition topRight(HALF_FIELD_X/2,0,0);
 
         FieldRange range(bottomLeft,topRight);
         return range;
@@ -349,7 +349,7 @@ Player getPlayerObject(WorldModel *worldModel){
 
     FieldRange range = getRangeForPlayerPositionNumber(players.size()-1);
 
-    Player player(worldModel->getUNum(),players.size()-1,players.size()-1,range);
+    Player player(worldModel->getUNum(),players.size(),players.size(),range);
     players.push_back(player);
 
     return player;
