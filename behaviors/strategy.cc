@@ -32,6 +32,9 @@ int opponent_action_index = 0;
 
 string opponent_random_goal = "";
 
+std::vector<Player> players;
+
+
 
 class PlayerTask {
 
@@ -314,8 +317,19 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
+Player getPlayerObject(WorldModel *worldModel){
+
+    for (int i=0;i<players.size();i++){
+            players[i].getPlayerNumber();
+    }
+
+}
+
 
 SkillType NaoBehavior::selectSkill() {
+
+    getPlayerObject(worldModel)
+
     gworldModel = worldModel;
 
     pthread_t thread;
