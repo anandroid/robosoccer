@@ -6,10 +6,14 @@
 #define UTAUSTINVILLABASE_PLAYER_H
 
 
+#include "../math/vecposition.h"
+#include "fieldRange.h"
 
-class player {
+class Player {
 
 private:
+    //Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating, FieldRange range);
+
     int playerNumber;
     int playerPositionNumber;
     VecPosition position;
@@ -17,17 +21,19 @@ private:
     SkillType actionInvolved;
     FieldRange range;
 public :
-    Player(int playerNumber,int playerPositionNumber,int aggressiveRating);
+    Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
+           FieldRange range);
 
-    void setAggressiveRating();
-    void setActionInvolved();
-    void setRange();
-    void setPlayerPosition();
+    void setAggressiveRating(int aggressiveRating);
+    void setActionInvolved(SkillType mAction);
+    void setRange(FieldRange mRange);
+    void setPlayerPosition(VecPosition mPosition);
+
 
 
     int getPlayerNumber();
     int getPlayerPositionNumber();
-    VecPosition getPlayerPosition();
+    VecPosition getPosition();
     int getAggressiveRating();
     SkillType getActionInvolved();
     FieldRange getRange();

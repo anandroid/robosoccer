@@ -3,19 +3,24 @@
 //
 
 #include "player.h"
+#include "../headers/headers.h"
+#include "../math/vecposition.h"
+#include "fieldRange.h"
 
-Player::Player(int mPlayerNumber,int mPlayerPositionNumber,int mAggressiveRating){
+Player::Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
+               FieldRange mRange) : range(mRange) {
     playerNumber = mPlayerNumber;
     playerPositionNumber = mPlayerPositionNumber;
-    aggressiveRating = mAggressiveRating;
+    agressiveRating = mAggressiveRating;
+    range = mRange;
 }
 
 void Player::setAggressiveRating(int mAggressiveRating){
-    aggressiveRating = mAggressiveRating;
+    agressiveRating = mAggressiveRating;
 }
 
 void Player::setActionInvolved(SkillType mAction){
-    action = mAction;
+    actionInvolved = mAction;
 }
 
 void Player::setRange(FieldRange mRange){
@@ -39,9 +44,11 @@ VecPosition Player::getPosition(){
 }
 
 int Player::getAggressiveRating(){
-    return aggressiveRating;
+    return agressiveRating;
 }
 
 FieldRange Player::getRange(){
     return range;
 }
+
+//FieldRange::FieldRange() {}

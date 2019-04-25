@@ -1,5 +1,6 @@
 #include <teammode.h>
 
+
 void TeamMode::setCurrentTime(long mtime){
     currentTime = mtime;
 }

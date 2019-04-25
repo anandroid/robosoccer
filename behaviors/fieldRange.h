@@ -12,6 +12,7 @@ private:
 
 public:
     FieldRange(VecPosition bottomLeft, VecPosition topRight);
+
     VecPosition getBottomLeft();
     VecPosition getTopRight();
 };

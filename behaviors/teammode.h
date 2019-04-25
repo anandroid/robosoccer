@@ -18,7 +18,7 @@ private:
 
 
 public:
-    void setCurrentTime():
+    void setCurrentTime(long time):
     void setGoals(int ourgoals,int opponentgoals);
     Mode getMode();
     ActionAllocator getActionallocator();

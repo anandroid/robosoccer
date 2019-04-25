@@ -3,6 +3,10 @@
 
 #include "fieldRange.h"
 
+FieldRange::FieldRange() {
+
+}
+
 FieldRange :: FieldRange(VecPosition mBottomLeft, VecPosition mTopRight){
     bottomLeft = mBottomLeft;
     topRight = mTopRight;
