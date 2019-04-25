@@ -1,5 +1,7 @@
 #include "naobehavior.h"
 #include "../rvdraw/rvdraw.h"
+#include "fieldRange.h"
+#include "player.h"
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
@@ -317,20 +319,51 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
+FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber){
+
+    if(playerPositionNumber==0){
+         VecPosition bottomLeft(-HALF_FIELD_X-1,1,0);
+         VecPosition topRight(-HALF_FIELD_X,0,0);
+
+         FieldRange range(bottomLeft,topRight);
+         return range;
+    } else {
+        VecPosition bottomLeft(HALF_FIELD_X-1,1,0);
+        VecPosition topRight(HALF_FIELD_X,0,0);
+
+        FieldRange range(bottomLeft,topRight);
+        return range;
+
+    }
+
+}
+
 Player getPlayerObject(WorldModel *worldModel){
 
     for (int i=0;i<players.size();i++){
-            players[i].getPlayerNumber();
+           if(worldModel->getUNum()==players[i].getPlayerNumber()){
+
+               return players[i];
+           }
     }
+
+    FieldRange range = getRangeForPlayerPositionNumber(players.size()-1);
+
+    Player player(worldModel->getUNum(),players.size()-1,players.size()-1,range);
+    players.push_back(player);
+
+    return player;
 
 }
 
 
 SkillType NaoBehavior::selectSkill() {
 
-    getPlayerObject(worldModel)
+    Player player = getPlayerObject(worldModel);
 
-    gworldModel = worldModel;
+    goToTarget(player.getRange().getCenterOfRange());
+
+    /*gworldModel = worldModel;
 
     pthread_t thread;
 
@@ -351,61 +384,6 @@ SkillType NaoBehavior::selectSkill() {
         }
     }
 
-    // My position and angle
-    //cout << worldModel->getUNum() << ": " << worldModel->getMyPosition() << ",\t" << worldModel->getMyAngDeg() << "\n";
-
-    // Position of the ball
-    //cout << worldModel->getBall() << "\n";
-
-    // Example usage of the roboviz drawing system and RVSender in rvdraw.cc.
-    // Agents draw the position of where they think the ball is
-    // Also see example in naobahevior.cc for drawing agent position and
-    // orientation.
-    /*
-    worldModel->getRVSender()->clear(); // erases drawings from previous cycle
-    worldModel->getRVSender()->drawPoint("ball", ball.getX(), ball.getY(), 10.0f, RVSender::MAGENTA);
-    */
-
-    // ### Demo Behaviors ###
-
-    // Walk in different directions
-    //return goToTargetRelative(VecPosition(1,0,0), 0); // Forward
-    //return goToTargetRelative(VecPosition(-1,0,0), 0); // Backward
-    //return goToTargetRelative(VecPosition(0,1,0), 0); // Left
-    //return goToTargetRelative(VecPosition(0,-1,0), 0); // Right
-    //return goToTargetRelative(VecPosition(1,1,0), 0); // Diagonal
-    //return goToTargetRelative(VecPosition(0,1,0), 90); // Turn counter-clockwise
-    //return goToTargetRelative(VecPdosition(0,-1,0), -90); // Turn clockwise
-    //return goToTargetRelative(VecPosition(1,0,0), 15); // Circle
-
-    // Walk to the ball
-    //return goToTarget(ball);
-
-    // Turn in place to face ball
-    /*double distance, angle;
-    getTargetDistanceAndAngle(ball, distance, angle);
-    if (abs(angle) > 10) {
-      return goToTargetRelative(VecPosition(), angle);
-    } else {
-      return SKILL_STAND;
-    }*/
-
-    // Walk to ball while always facing forward
-    //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
-
-    // Dribble ball toward opponent's goal
-    //return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
-
-    // Kick ball toward opponent's goal
-    //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
-    //return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0)); // IK kick
-
-    // Just stand in place
-    //return SKILL_STAND;
-
-    // Demo behavior where players form a rotating circle and kick the ball
-    // back and forth
-    //return demoKickingCircle();
 
 
     if (tasksQueue.size() > 0 || enrolled_in_task[worldModel->getUNum()]) {
@@ -422,7 +400,7 @@ SkillType NaoBehavior::selectSkill() {
         return reachPosition(target_positions_for_player[worldModel->getUNum()]);
 
     }
-    return SKILL_STAND;
+    return SKILL_STAND;*/
 }
 
 SkillType NaoBehavior::reachPosition(VecPosition target) {

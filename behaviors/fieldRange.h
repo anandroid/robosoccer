@@ -2,8 +2,8 @@
 // Created by Anand kumar on 2019-04-24.
 //
 
-#ifndef UTAUSTINVILLA3D_RANGE_H
-#define UTAUSTINVILLA3D_RANGE_H
+#ifndef UTAUSTINVILLABASE_RANGE_H
+#define UTAUSTINVILLABASE_RANGE_H
 
 class FieldRange {
 private:
@@ -11,11 +11,20 @@ private:
     VecPosition topRight;
 
 public:
-    FieldRange(VecPosition bottomLeft, VecPosition topRight);
+//    FieldRange(VecPosition bottomLeft, VecPosition topRight);
 
     VecPosition getBottomLeft();
     VecPosition getTopRight();
+//    VecPosition getCenterOfRange();
+
+    FieldRange(VecPosition mBottomLeft, VecPosition mTopRight){
+        bottomLeft = mBottomLeft;
+        topRight = mTopRight;
+    }
+    VecPosition getCenterOfRange() {
+        return VecPosition((bottomLeft.getX()+topRight.getX())/2, (bottomLeft.getY()+topRight.getY())/2,0);
+    }
 };
 
-#endif //UTAUSTINVILLA3D_RANGE_H
+#endif //UTAUSTINVILLABASE_RANGE_H
 
