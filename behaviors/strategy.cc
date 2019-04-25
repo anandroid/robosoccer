@@ -203,89 +203,6 @@ string getStringFromOpponentActionsAndStates() {
 }
 
 
-void *opponentBackgroundFunction(void *playerNumberargs) {
-
-    int playerNumber = *((int *) playerNumberargs);
-    free(playerNumberargs);
-
-    cout << "player " << playerNumber << "\n";
-
-    threadExecutionForPlayer[playerNumber] = true;
-
-    /*** ----------------------------------------  ***/
-
-    float horizontal_tile_size = FIELD_X / 10;
-    int horizontal_tile = 5 + ((gworldModel->getMyPosition().getX()) / horizontal_tile_size);
-
-    float vertical_tile_size = FIELD_Y / 10;
-    int vertical_tile = 5 + ((gworldModel->getMyPosition().getY()) / vertical_tile_size);
-
-    //opponent_position_array[opponent_position_index++] = row_array[vertical_tile]+" "+column_array[horizontal_tile];
-
-    string command =
-            "python opp.py '" + opponent_random_goal + "' '" + row_array[vertical_tile] + " " +
-            column_array[horizontal_tile] + "' '0'";
-
-    // cout<<command;
-
-    string result = exec(command.c_str());
-    cout << result;
-
-    //it reached the state
-    if (result.find("step") != string::npos) {
-        //check threading issue
-        enrolled_in_task[playerNumber] = false;
-
-    } else {
-
-        vector <string> sep = split(result, ' ');
-
-        int row = 0;
-        int column = 0;
-
-        if (sep.size() > 3) {
-            row = ((int) sep[2].at(1)) - 48;
-            column = ((int) sep[3].at(1)) - 48;
-
-            int randomValue = getRandom();
-
-            if (randomValue >= 4 && randomValue < 5) {
-                row = row + 1;
-            }
-            if (randomValue >= 5 && randomValue < 7) {
-                row = row - 1;
-            }
-            if (randomValue >= 7 && randomValue < 8) {
-                column = column - 1;
-            }
-            if (randomValue >= 8 && randomValue < 10) {
-                column = column + 1;
-            }
-
-        }
-
-        //opponent_action_array[opponent_action_index++] = calculateActionInString(vertical_tile,horizontal_tile,
-        // row,column);
-
-
-        float vertical_y = vertical_tile_size * (row - 5);
-        float horizontal_x = horizontal_tile_size * (column - 5);
-
-        VecPosition shouldMoveTo = VecPosition(horizontal_x, vertical_y, 0);
-
-
-        PlayerTask playerTask = PlayerTask(playerNumber, shouldMoveTo);
-        tasksQueue.push(playerTask);
-
-    }
-
-    /*** ----------------------------------------  ***/
-
-    threadExecutionForPlayer[playerNumber] = false;
-
-    pthread_exit(NULL);
-}
-
 void *asuBackgroundFunction(void *playerNumberargs) {
 
     int playerNumber = *((int *) playerNumberargs);
@@ -412,11 +329,7 @@ SkillType NaoBehavior::selectSkill() {
 
         int rc;
 
-        if (worldModel->getUNum() == 1) {
-            rc = pthread_create(&thread, NULL, opponentBackgroundFunction, (void *) arg);
-        } else {
-            rc = pthread_create(&thread, NULL, asuBackgroundFunction, (void *) arg);
-        }
+        rc = pthread_create(&thread, NULL, asuBackgroundFunction, (void *) arg);
 
         if (rc) {
             cout << "Error:unable to create thread," << rc << endl;
