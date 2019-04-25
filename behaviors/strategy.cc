@@ -347,7 +347,7 @@ Player getPlayerObject(WorldModel *worldModel){
            }
     }
 
-    FieldRange range = getRangeForPlayerPositionNumber(players.size()-1);
+    FieldRange range = getRangeForPlayerPositionNumber(players.size());
 
     Player player(worldModel->getUNum(),players.size(),players.size(),range);
     players.push_back(player);
