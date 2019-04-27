@@ -385,8 +385,8 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
     FieldRange range =  getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    beamX = range.getCenterOfRange.getX();
-    beamY = range.getCenterOfRange.getY();
+    beamX = range.getCenterOfRange().getX();
+    beamY = range.getCenterOfRange().getY();
     beamAngle = 0;
 
 
