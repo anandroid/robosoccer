@@ -383,7 +383,7 @@ Player getPlayerObject(WorldModel *worldModel) {
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
-    FieldRange range =  getRangeForPlayerPositionNumber(worldModel->getUNum())
+    FieldRange range =  getRangeForPlayerPositionNumber(worldModel->getUNum());
 
     beamX = range.getCenterOfRange.getX();
     beamY = range.getCenterOfRange.getY();
