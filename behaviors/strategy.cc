@@ -58,38 +58,7 @@ int getRandomInRange(int range) {
 }
 
 
-/*
- * Real game beaming.
- * Filling params x y angle
- */
-void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
-
-    beamX = -HALF_FIELD_X + (HALF_FIELD_X/11)*worldModel->getUNum();
-    beamY = 0;
-    beamAngle = 0;
-
-
-    int randomValue = getRandomInRange(4);
-    if (randomValue < 1) {
-        opponent_random_goal = "R1 ";
-    } else if (randomValue < 2) {
-        opponent_random_goal = "R4 ";
-    } else if (randomValue < 3) {
-        opponent_random_goal = "R6 ";
-    } else if (randomValue < 4) {
-        opponent_random_goal = "R8 ";
-    }
-
-    randomValue = getRandomInRange(2);
-    if (randomValue < 1) {
-        opponent_random_goal = opponent_random_goal + "C1";
-    } else {
-        opponent_random_goal = opponent_random_goal + "C2";
-    }
-
-
-}
 
 std::string exec(const char *cmd) {
     char buffer[128];
@@ -405,6 +374,21 @@ Player getPlayerObject(WorldModel *worldModel) {
     cout << "players size after push" << players.size();
 
     return player;
+
+}
+
+/*
+ * Real game beaming.
+ * Filling params x y angle
+ */
+void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
+
+    FieldRange range =  getRangeForPlayerPositionNumber(worldModel->getUNum())
+
+    beamX = range.getCenterOfRange.getX();
+    beamY = range.getCenterOfRange.getY();
+    beamAngle = 0;
+
 
 }
 
