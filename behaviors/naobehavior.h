@@ -228,6 +228,8 @@ protected:
 
     SkillType demoKickingCircle();
 
+    SkillType playPassingToHigherAggressive();
+
     SkillType reachPosition(VecPosition target);
 
 public:
