@@ -426,7 +426,7 @@ std::vector <int> getPlayersWithInRange(WorldModel *worldModel){
 
     std::vector <int> playersInRange;
 
-    int RANGE = 5 ;
+    int RANGE = 10 ;
 
     double closestDistanceToPlayer = 10000;
 
@@ -465,7 +465,8 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
     int higherAggressiveRating = -1;
 
     std::vector <int> playersWitInRange = getPlayersWithInRange(worldModel);
-    //cout<<"players with in range "<<playersWitInRange.size();
+    cout<<"--------------------------"<<"\n"
+    cout<<"players with in range "<<playersWitInRange.size()<<"\n";
     for (int i=0;i<playersWitInRange.size();i++){
          int agressiveRating = 11 - playersWitInRange[i];
          if(higherAggressiveRating<agressiveRating){
@@ -474,7 +475,7 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
          }
     }
 
-    //cout<<"players with high aggressive rating "<<playerWithHigherAggressiveRating;
+    cout<<"players with high aggressive rating "<<playerWithHigherAggressiveRating<<"\n";
 
     return playerWithHigherAggressiveRating;
 }
