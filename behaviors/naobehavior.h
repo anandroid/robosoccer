@@ -230,6 +230,8 @@ protected:
 
     SkillType playPassingToHigherAggressive();
 
+    SkillType kickAccordingToDistance(const VecPosition &target)
+
     SkillType reachPosition(VecPosition target);
 
 public:

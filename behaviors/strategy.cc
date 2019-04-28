@@ -36,6 +36,8 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
+Player player;
+
 
 
 class PlayerTask {
@@ -426,7 +428,7 @@ std::vector <int> getPlayersWithInRange(WorldModel *worldModel){
 
     std::vector <int> playersInRange;
 
-    int RANGE = 10 ;
+    int RANGE = 7 ;
 
     double closestDistanceToPlayer = 10000;
 
@@ -480,13 +482,29 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
     return playerWithHigherAggressiveRating;
 }
 
+
+Skill NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
+
+    VecPosition myPos = worldModel->getMyPosition();
+    VecPosition distance = myPos.getDistanceTo(target);
+    if(distance<3){
+        return kickBall(KICK_DRIBBLE,target);
+    }else if(distance<6){
+        return kickBall(KICK_FORWARD,target);
+    }else if(distance>6){
+        return kickBall(KICK_IK,target);
+    }
+}
+
+
+
 SkillType NaoBehavior::playPassingToHigherAggressive(){
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
-        return kickBall(KICK_FORWARD, nearPlayerPosition);
+        return kickAccordingToDistance(nearPlayerPosition);
     }else{
         return SKILL_STAND;
     }
@@ -498,7 +516,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 
 SkillType NaoBehavior::selectSkill() {
 
-    Player player = getPlayerObject(worldModel);
+    player = getPlayerObject(worldModel);
 
     return playPassingToHigherAggressive();
 
