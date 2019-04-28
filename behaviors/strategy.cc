@@ -522,7 +522,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 
 SkillType NaoBehavior::selectSkill() {
 
-    player = &(getPlayerObject(worldModel));
+    player = &getPlayerObject(worldModel);
 
     return playPassingToHigherAggressive();
 
