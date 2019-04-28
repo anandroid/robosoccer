@@ -492,7 +492,7 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
 SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
     VecPosition myPos = worldModel->getMyPosition();
-    VecPosition distance = myPos.getDistanceTo(target);
+    double distance = myPos.getDistanceTo(target);
     if(distance<3){
         return kickBall(KICK_DRIBBLE,target);
     }else if(distance<6){
