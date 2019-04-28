@@ -36,7 +36,6 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
-Player *player = NULL;
 
 
 
@@ -360,20 +359,16 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
 }
 
-Player* getPlayerObject(WorldModel *worldModel) {
+Player getPlayerObject(WorldModel *worldModel) {
 
-    if(player!=NULL){
-        return player;
-    }
 
-    cout<<"Player was NULL"<<"\n";
 
-    /*for (int i = 0; i < players.size(); i++) {
+    for (int i = 0; i < players.size(); i++) {
         if (worldModel->getUNum() == players[i].getPlayerNumber()) {
 
             return players[i];
         }
-    }*/
+    }
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
@@ -382,7 +377,7 @@ Player* getPlayerObject(WorldModel *worldModel) {
 
     cout << "players size after push" << players.size();
 
-    return &player;
+    return player;
 
 }
 
@@ -522,7 +517,9 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 
 SkillType NaoBehavior::selectSkill() {
 
-    player = getPlayerObject(worldModel);
+    Player player = getPlayerObject(worldModel);
+
+
 
     return playPassingToHigherAggressive();
 
