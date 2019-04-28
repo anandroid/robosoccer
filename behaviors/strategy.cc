@@ -479,6 +479,9 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
 SkillType NaoBehavior::playPassingToHigherAggressive(){
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
+    if(worldModel->getUNum()==11){
+        cout<<"closestPlayer "<<closestPlayerToBall;
+    }
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
