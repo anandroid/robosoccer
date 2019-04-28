@@ -368,7 +368,7 @@ Player getPlayerObject(WorldModel *worldModel) {
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    Player player(worldModel->getUNum(), worldModel->getUNum(), worldModel->getUNum(), range);
+    Player player(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
     players.push_back(player);
 
     cout << "players size after push" << players.size();
@@ -392,12 +392,99 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
 }
 
+int getPlayerClosestToTheBall(){
+    int playerClosestToBall = -1;
+    double closestDistanceToBall = 10000;
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
+            temp = worldModel->getMyPosition();
+        } else {
+            WorldObject *teammate = worldModel->getWorldObject(i);
+            if (teammate->validPosition) {
+                temp = teammate->pos;
+            } else {
+                continue;
+            }
+        }
+        temp.setZ(0);
+
+        double distanceToBall = temp.getDistanceTo(ball);
+        if (distanceToBall < closestDistanceToBall) {
+            playerClosestToBall = playerNum;
+            closestDistanceToBall = distanceToBall;
+        }
+    }
+
+    return playerClosestToBall
+}
+
+std::vector <int> getPlayersWithInRange(){
+
+    std::vector <int> playersInRange;
+
+    int RANGE = 2 ;
+
+    double closestDistanceToPlayer = 10000;
+
+    VecPosition myPos;
+
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
+            temp = worldModel->getMyPosition();
+            myPos = temp;
+            temp.setZ(0);
+            continue;
+        } else {
+            WorldObject *teammate = worldModel->getWorldObject(i);
+            if (teammate->validPosition) {
+                temp = teammate->pos;
+            } else {
+                continue;
+            }
+        }
+        temp.setZ(0);
+
+        double distanceToPlayer = temp.getDistanceTo(myPos);
+        if (distanceToPlayer < RANGE) {
+            playersInRange.push_back(playerNum);
+        }
+    }
+
+    return playersInRange;
+}
+
+int getPlayerNearWithBetterAggressionInTheRange(int currentPlayerNumber){
+    int playerWithHigherAggressiveRating =-1;
+    int higherAggressiveRating = -1;
+
+    std::vector <int> playersWitInRange = getPlayersWithInRange();
+    for (int i=0;i<playersWitInRange.size();i++){
+         int agressiveRating = 11 - playersWitInRange[i];
+         if(higherAggressiveRating<agressiveRating){
+             higherAggressiveRating = agressiveRating;
+             playerWithHigherAggressiveRating = playersWitInRange[i];
+         }
+    }
+
+    return playerWithHigherAggressiveRating;
+}
+
+
+Player player;
 
 SkillType NaoBehavior::selectSkill() {
 
-    Player player = getPlayerObject(worldModel);
+    player = getPlayerObject(worldModel);
 
-    goToTarget(player.getRange().getCenterOfRange());
+    return playPassingToHigherAggressive(worldModel);
+
+    //goToTarget(player.getRange().getCenterOfRange());
 
     /*gworldModel = worldModel;
 
@@ -437,6 +524,19 @@ SkillType NaoBehavior::selectSkill() {
 
     }
     return SKILL_STAND;*/
+}
+
+SkillType playPassingToHigherAggressive(WorldModel *worldModel){
+
+    int closestPlayerToBall =  getPlayerClosestToTheBall();
+    if(worldModel->getUNum()==closestPlayerToBall) {
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel->getUNum());
+        VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer);
+        NaoBehavior::kickBall(KICK_FORWARD, nearPlayerPosition);
+    }else{
+        return SKILL_STAND;
+    }
+
 }
 
 SkillType NaoBehavior::reachPosition(VecPosition target) {
