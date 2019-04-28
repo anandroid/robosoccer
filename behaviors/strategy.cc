@@ -392,7 +392,7 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
 }
 
-int getPlayerClosestToTheBall(){
+int getPlayerClosestToTheBall(WorldModel *worldModel){
     int playerClosestToBall = -1;
     double closestDistanceToBall = 10000;
     for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
@@ -421,7 +421,7 @@ int getPlayerClosestToTheBall(){
     return playerClosestToBall
 }
 
-std::vector <int> getPlayersWithInRange(){
+std::vector <int> getPlayersWithInRange(WorldModel *worldModel){
 
     std::vector <int> playersInRange;
 
