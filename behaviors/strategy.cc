@@ -519,6 +519,10 @@ SkillType NaoBehavior::selectSkill() {
 
     Player player = getPlayerObject(worldModel);
 
+    if(player.getPlayerNumber()==11){
+        cout<<"Player address"<<&player;
+    }
+
 
 
     return playPassingToHigherAggressive();
