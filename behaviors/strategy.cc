@@ -36,6 +36,8 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
+Player player;
+
 
 class PlayerTask {
 
@@ -475,13 +477,13 @@ int getPlayerNearWithBetterAggressionInTheRange(int currentPlayerNumber){
     return playerWithHigherAggressiveRating;
 }
 
-SkillType playPassingToHigherAggressive(WorldModel *worldModel){
+SkillType playPassingToHigherAggressive(NaoBehavior naoBehavior,WorldModel *worldModel){
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
-        kickBall(KICK_FORWARD, nearPlayerPosition);
+        naoBehavior.kickBall(KICK_FORWARD, nearPlayerPosition);
     }else{
         return SKILL_STAND;
     }
@@ -489,13 +491,13 @@ SkillType playPassingToHigherAggressive(WorldModel *worldModel){
 }
 
 
-Player player;
+
 
 SkillType NaoBehavior::selectSkill() {
 
     player = getPlayerObject(worldModel);
 
-    return playPassingToHigherAggressive(worldModel);
+    return playPassingToHigherAggressive(*this,worldModel);
 
     //goToTarget(player.getRange().getCenterOfRange());
 
