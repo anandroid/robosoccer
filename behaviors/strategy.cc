@@ -285,7 +285,7 @@ void *asuBackgroundFunction(void *playerNumberargs) {
 
 FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
-    cout << "playerPositionNumber" << playerPositionNumber << "\n";
+    //cout << "playerPositionNumber" << playerPositionNumber << "\n";
     int X = HALF_FIELD_X;
     int Y = HALF_FIELD_Y;
 
