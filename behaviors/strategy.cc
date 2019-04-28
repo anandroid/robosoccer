@@ -411,14 +411,14 @@ int getPlayerClosestToTheBall(WorldModel *worldModel){
         }
         temp.setZ(0);
 
-        double distanceToBall = temp.getDistanceTo(ball);
+        double distanceToBall = temp.getDistanceTo(worldModel->getBall());
         if (distanceToBall < closestDistanceToBall) {
             playerClosestToBall = playerNum;
             closestDistanceToBall = distanceToBall;
         }
     }
 
-    return playerClosestToBall
+    return playerClosestToBall;
 }
 
 std::vector <int> getPlayersWithInRange(WorldModel *worldModel){
