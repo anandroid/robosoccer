@@ -500,12 +500,21 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 
 
-SkillType NaoBehavior::playPassingToHigherAggressive(){
+SkillType NaoBehavior::playPassingToHigherAggressive(Player player){
+
+    if(player.getActionInvolved()!=NULL){
+        cout<<"returning action involved";
+        return player.getActionInvolved();
+    }
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
+        if(player.getActionInvolved()==NULL){
+            cout<<"Action involved null";
+            player.setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
+        }
         return kickAccordingToDistance(nearPlayerPosition);
     }else{
         return SKILL_STAND;
@@ -520,13 +529,9 @@ SkillType NaoBehavior::selectSkill() {
 
     Player player = getPlayerObject(worldModel);
 
-    if(player.getPlayerNumber()==11){
-        cout<<"Player address"<<&player;
-    }
 
 
-
-    return playPassingToHigherAggressive();
+    return playPassingToHigherAggressive(player);
 
     //goToTarget(player.getRange().getCenterOfRange());
 
