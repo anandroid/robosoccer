@@ -480,7 +480,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
-        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel->getUNum());
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
         kickBall(KICK_FORWARD, nearPlayerPosition);
     }else{
@@ -496,7 +496,7 @@ SkillType NaoBehavior::selectSkill() {
 
     Player player = getPlayerObject(worldModel);
 
-    return playPassingToHigherAggressive(*this,worldModel);
+    return playPassingToHigherAggressive();
 
     //goToTarget(player.getRange().getCenterOfRange());
 
