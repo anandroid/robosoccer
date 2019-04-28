@@ -18,6 +18,7 @@
 #include <memory/JointCommandBlock.h>
 #include <memory/SimEffectorBlock.h>
 #include <memory/WalkRequestBlock.h>
+#include "player.h"
 
 using namespace std;
 
