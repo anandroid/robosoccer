@@ -368,12 +368,12 @@ Player* getPlayerObject(WorldModel *worldModel) {
 
     cout<<"Player was NULL"<<"\n";
 
-    for (int i = 0; i < players.size(); i++) {
+    /*for (int i = 0; i < players.size(); i++) {
         if (worldModel->getUNum() == players[i].getPlayerNumber()) {
 
             return players[i];
         }
-    }
+    }*/
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
