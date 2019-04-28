@@ -362,7 +362,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
 Player getPlayerObject(WorldModel *worldModel) {
 
-    if(*player!=NULL){
+    if(player!=NULL){
         return *player;
     }
 
