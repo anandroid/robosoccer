@@ -362,8 +362,8 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
 Player getPlayerObject(WorldModel *worldModel) {
 
-    if(player!=NULL){
-        return player;
+    if(*player!=NULL){
+        return *player;
     }
 
     cout<<"Player was NULL"<<"\n";
@@ -522,7 +522,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 
 SkillType NaoBehavior::selectSkill() {
 
-    player = &getPlayerObject(worldModel);
+    *player = getPlayerObject(worldModel);
 
     return playPassingToHigherAggressive();
 
