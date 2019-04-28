@@ -47,6 +47,10 @@ int Player::getAggressiveRating(){
     return agressiveRating;
 }
 
+SkillType Player::getActionInvolved(){
+    return actionInvolved;
+}
+
 FieldRange Player::getRange(){
     return range;
 }
