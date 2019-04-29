@@ -6,6 +6,7 @@
 #define UTAUSTINVILLABASE_ACTIONALLOCATOR_H
 
 #include "actionallocator.h"
+#include "teammode.h"
 
 class ActionAllocator{
 

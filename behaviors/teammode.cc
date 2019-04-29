@@ -32,7 +32,7 @@ FieldRange TeamMode::getFieldRange(int playerPositionNumber){
     return getFormationFieldRange(playerPositionNumber);
 }
 
-FieldRange getFormationFieldRange(int playerPositionNumber) {
+FieldRange TeamMode::getFormationFieldRange(int playerPositionNumber) {
 
     //cout << "playerPositionNumber" << playerPositionNumber << "\n";
     int X = HALF_FIELD_X;
@@ -107,7 +107,7 @@ FieldRange getFormationFieldRange(int playerPositionNumber) {
 
 }
 
-FieldRange getAttackFieldRange(int playerPositionNumber) {
+FieldRange TeamMode::getAttackFieldRange(int playerPositionNumber) {
 
     //cout << "playerPositionNumber" << playerPositionNumber << "\n";
     int X = HALF_FIELD_X;
