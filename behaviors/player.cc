@@ -13,6 +13,7 @@ Player::Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRati
     playerPositionNumber = mPlayerPositionNumber;
     agressiveRating = mAggressiveRating;
     range = mRange;
+    actionInvolved = -1;
 }
 
 void Player::setAggressiveRating(int mAggressiveRating){
