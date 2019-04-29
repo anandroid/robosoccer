@@ -7,6 +7,10 @@
 
 }*/
 
+FieldRange::FieldRange() {
+
+}
+
 FieldRange::FieldRange(VecPosition mBottomLeft, VecPosition mTopRight):topRight(mTopRight),bottomLeft(mBottomLeft){
     bottomLeft = mBottomLeft;
     topRight = mTopRight;
