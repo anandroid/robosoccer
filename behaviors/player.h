@@ -8,6 +8,7 @@
 
 #include "../math/vecposition.h"
 #include "fieldRange.h"
+#include "action.h"
 
 class Player {
 

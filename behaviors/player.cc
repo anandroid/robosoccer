@@ -6,6 +6,7 @@
 #include "../headers/headers.h"
 #include "../math/vecposition.h"
 #include "fieldRange.h"
+#include "action.h"
 
 Player::Player() {
     isInitialized = false;
