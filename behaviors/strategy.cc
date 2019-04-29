@@ -471,7 +471,7 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
     //cout<<"--------------------------"<<"\n";
     //cout<<"players with in range "<<playersWitInRange.size()<<"\n";
     for (int i=0;i<playersWitInRange.size();i++){
-        cout<<"player - "<<playersWitInRange[i];
+        //cout<<"player - "<<playersWitInRange[i];
          int agressiveRating = 11 - playersWitInRange[i];
          if(higherAggressiveRating<agressiveRating){
              higherAggressiveRating = agressiveRating;
@@ -511,7 +511,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
-        if(player.getIsInvolvedInAction()){
+        if(!player.getIsInvolvedInAction()){
             cout<<"Action involved null"<<player.getActionInvolved()<< "\n";
             cout<<"Action that will assign "<<kickAccordingToDistance(nearPlayerPosition);
             player.setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
