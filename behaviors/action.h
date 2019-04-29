@@ -18,7 +18,7 @@ public:
 
     }
 
-    Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
+    void Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
         isKickingAction= mIsKickingAction;
         targetPosition = mTargetPosition;
         kickType = mKickType;
