@@ -9,7 +9,7 @@
 class Action{
 
 private:
-    boolean isKickingAction;
+    bool isKickingAction;
     VecPosition targetPosition;
     int kickType;
 
