@@ -19,7 +19,7 @@ private:
     int playerPositionNumber;
     VecPosition position;
     int agressiveRating;
-    SkillType actionInvolved;
+    Action actionInvolved;
     FieldRange range;
     bool isInvolvedInAction;
     bool isInitialized;
