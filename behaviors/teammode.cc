@@ -18,7 +18,7 @@ void TeamMode::setGoals(int mOurgoals,int mOpponentgoals){
 Mode TeamMode::getMode(){
     //Defence,Normal,Attack,SetPiece
     //calculate mode
-    return Attack
+    return Attack;
 }
 
 

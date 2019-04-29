@@ -540,7 +540,7 @@ Action NaoBehavior :: playAggressive(Player *player){
         return action;
     }else{
 
-        VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber());
+        VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
         Action action;
         action.Init(false,targetPosition,0);
         player->setIsInvolvedInAction(true);
