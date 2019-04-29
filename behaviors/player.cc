@@ -11,7 +11,7 @@ Player::Player() {
     isInitialized = false;
 }
 
-Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating, FieldRange mRange) : range(mRange) {
+void Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating, FieldRange mRange) : range(mRange) {
     playerNumber = mPlayerNumber;
     playerPositionNumber = mPlayerPositionNumber;
     agressiveRating = mAggressiveRating;
