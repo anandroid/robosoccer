@@ -36,7 +36,7 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
-Player player;
+Player *player;
 
 
 
@@ -502,7 +502,7 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 
 
-SkillType NaoBehavior::playPassingToHigherAggressive(){
+SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
 
     if(player->getIsInvolvedInAction()){
         cout<<"returning action involved";
@@ -537,7 +537,7 @@ SkillType NaoBehavior::selectSkill() {
 
     if(player==NULL) {
         getPlayerObject(worldModel);
-        if(player.getPlayerNumber()==11){
+        if(player->getPlayerNumber()==11){
             cout<<"Address of player 11 "<<player;
         }
     }
@@ -547,7 +547,7 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
-    if(player.getIsInvolvedInAction()){
+    if(player->getIsInvolvedInAction()){
      cout <<"Invovlved in Action Before selectSkill"<<"\n";
     }
 
