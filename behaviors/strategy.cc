@@ -36,7 +36,7 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
-Player *player;
+Player player;
 
 
 
@@ -374,10 +374,10 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    player = Player(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
+    player.Init(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
     //players.push_back(player);
 
-    cout << "players size after push" << players.size();
+    //cout << "players size after push" << players.size();
 
    // return lplayer;
 
@@ -535,11 +535,9 @@ SkillType NaoBehavior::selectSkill() {
 
 
 
-    if(player==NULL) {
+    if(player.getIsInitialized()) {
         getPlayerObject(worldModel);
-        if(player->getPlayerNumber()==11){
-            cout<<"Address of player 11 "<<player;
-        }
+
     }
 
 
@@ -547,18 +545,18 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
-    if(player->getIsInvolvedInAction()){
+    if(player.getIsInvolvedInAction()){
      cout <<"Invovlved in Action Before selectSkill"<<"\n";
     }
 
 
-    //SkillType  skill = playPassingToHigherAggressive();
+    SkillType  skill = playPassingToHigherAggressive(&player);
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";
    // }
 
-    return SKILL_STAND;
+    return skill;
 
     //goToTarget(player.getRange().getCenterOfRange());
 

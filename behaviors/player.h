@@ -21,8 +21,10 @@ private:
     SkillType actionInvolved;
     FieldRange range;
     bool isInvolvedInAction;
+    bool isInitialized;
 public :
-    Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
+    Player();
+    void Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
            FieldRange range);
 
     void setAggressiveRating(int aggressiveRating);
@@ -40,6 +42,7 @@ public :
     SkillType getActionInvolved();
     FieldRange getRange();
     bool getIsInvolvedInAction();
+    bool getIsInitialized();
 
 };
 

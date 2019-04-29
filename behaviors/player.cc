@@ -7,13 +7,18 @@
 #include "../math/vecposition.h"
 #include "fieldRange.h"
 
-Player::Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
+Player::Player() {
+    isInitialized = false;
+}
+
+Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating, FieldRange range) {}(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
                FieldRange mRange) : range(mRange) {
     playerNumber = mPlayerNumber;
     playerPositionNumber = mPlayerPositionNumber;
     agressiveRating = mAggressiveRating;
     range = mRange;
     isInvolvedInAction = false;
+    isInitialized = true;
 }
 
 void Player::setAggressiveRating(int mAggressiveRating){
@@ -62,6 +67,10 @@ FieldRange Player::getRange(){
 
 bool  Player::getIsInvolvedInAction(){
     return isInvolvedInAction;
+}
+
+bool Player::getIsInitialized() {
+    return isInitialized;
 }
 
 //FieldRange::FieldRange() {}
