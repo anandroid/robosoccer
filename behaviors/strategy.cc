@@ -500,7 +500,7 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 
 
-SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
+SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
 
     if(player->getIsInvolvedInAction()){
         cout<<"returning action involved";
@@ -537,7 +537,7 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
-    return playPassingToHigherAggressive(player);
+    return playPassingToHigherAggressive(&player);
 
     //goToTarget(player.getRange().getCenterOfRange());
 
