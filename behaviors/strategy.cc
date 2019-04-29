@@ -3,6 +3,7 @@
 #include "fieldRange.h"
 #include "player.h"
 #include "action.h"
+#include "action.cc"
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
@@ -542,7 +543,7 @@ SkillType NaoBehavior::selectSkill() {
 
     if(player.getIsInvolvedInAction()){
         cout<<"Action involved "<<player.getPlayerNumber();
-          return getSkillTypeFromAction(player.getActionInvolved());
+        return getSkillTypeFromAction(player.getActionInvolved());
         //return SKILL_STAND;
     }
 
