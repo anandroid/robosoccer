@@ -361,7 +361,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
 }
 
-Player& getPlayerObject(WorldModel *worldModel) {
+Player getPlayerObject(WorldModel *worldModel) {
 
 
 
@@ -379,7 +379,7 @@ Player& getPlayerObject(WorldModel *worldModel) {
 
     cout << "players size after push" << players.size();
 
-    return &lplayer;
+    return lplayer;
 
 }
 
@@ -535,7 +535,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
     if(player==NULL) {
-        player = getPlayerObject(worldModel);
+        *player = getPlayerObject(worldModel);
         if(player->getPlayerNumber()==11){
             cout<<"Address of player 11 "<<player;
         }
