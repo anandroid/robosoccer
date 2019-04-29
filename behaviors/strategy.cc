@@ -11,6 +11,8 @@
 #include <vector>
 #include <sstream>
 #include <queue>
+#include "teammode.h"
+#include "teammode.cc"
 
 
 using namespace std;
@@ -40,6 +42,7 @@ string opponent_random_goal = "";
 std::vector <Player> players;
 
 Player player;
+TeamMode teamMode;
 
 
 
@@ -522,6 +525,32 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
 
 }
 
+Action NaoBehavior :: playAggressive(Player *player){
+    int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
+    if(worldModel->getUNum()==closestPlayerToBall) {
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
+        VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
+        if(!player->getIsInvolvedInAction()){
+            player->setIsInvolvedInAction(true);
+        }
+        cout<<"Action  set : "<<player->getPlayerNumber()<<"\n";
+        Action action = kickAccordingToDistance(nearPlayerPosition);
+        player->setActionInvolved(action);
+        // return action;
+        return action;
+    }else{
+
+        VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber());
+        Action action;
+        action.Init(false,targetPosition,0);
+        player->setIsInvolvedInAction(true);
+        player->setActionInvolved(action);
+        return action;
+    }
+}
+
+
+
 
 
 
@@ -535,18 +564,26 @@ SkillType NaoBehavior::selectSkill() {
     }
 
 
-    /*if(player.getPlayerNumber()==1){
-        cout<<"player address in select skill"<<&player;
-    }*/
-
     if(player.getIsInvolvedInAction()){
         cout<<"Action involved "<<player.getPlayerNumber();
         return getSkillTypeFromAction(player.getActionInvolved());
         //return SKILL_STAND;
     }
 
+     //Defence,Normal,Attack,SetPiece
+     if(teamMode.getMode()==Mode.Defence){
+         return playPassingToHigherAggressive(&player);
+     }
 
-    return playPassingToHigherAggressive(&player);
+     if(teamMode.getMode()==Mode.Attack){
+         return playAggressive(&player);
+     }
+
+     if(teamMode.getMode() == Mode.SetPiece){
+
+     }
+
+     return playPassingToHigherAggressive(&player);
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";

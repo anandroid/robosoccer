@@ -277,6 +277,8 @@ enum SkillType {
 
 };
 
+enum Mode{Defence,Normal,Attack,SetPiece};
+
 
 //Kick Parameters
 #define KICK_NONE -1

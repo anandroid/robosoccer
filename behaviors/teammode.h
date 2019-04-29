@@ -5,7 +5,7 @@
 #ifndef UTAUSTINVILLABASE_TEAMMODE_H
 #define UTAUSTINVILLABASE_TEAMMODE_H
 
-enum Mode{Defence,Normal,Attack,SetPiece};
+#include "../headers/headers.h"
 
 class TeamMode{
 
@@ -15,13 +15,18 @@ private:
     int opponentgoals;
     long currentTime;
     ActionAllocator actionAllocator;
+    FieldRange getAttackFieldRange(int playerPositionNumber);
 
 
 public:
+    TeamMode();
     void setCurrentTime(long time):
     void setGoals(int ourgoals,int opponentgoals);
     Mode getMode();
     ActionAllocator getActionallocator();
+    FieldRange getFieldRange(int playerPositionNumber);
+    FieldRange getFormationFieldRange(int playerPositionNumber);
+
 
 };
 
