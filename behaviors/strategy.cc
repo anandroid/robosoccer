@@ -468,8 +468,8 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
     int higherAggressiveRating = -1;
 
     std::vector <int> playersWitInRange = getPlayersWithInRange(worldModel);
-    cout<<"--------------------------"<<"\n";
-    cout<<"players with in range "<<playersWitInRange.size()<<"\n";
+    //cout<<"--------------------------"<<"\n";
+    //cout<<"players with in range "<<playersWitInRange.size()<<"\n";
     for (int i=0;i<playersWitInRange.size();i++){
         cout<<"player - "<<playersWitInRange[i];
          int agressiveRating = 11 - playersWitInRange[i];
@@ -479,7 +479,7 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
          }
     }
 
-    cout<<"players with high aggressive rating "<<playerWithHigherAggressiveRating<<"\n";
+    //cout<<"players with high aggressive rating "<<playerWithHigherAggressiveRating<<"\n";
 
     return playerWithHigherAggressiveRating;
 }
@@ -507,10 +507,6 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
         return player.getActionInvolved();
     }
 
-    if(player.getPlayerNumber()==1){
-        cout<<"Address insider function "<<&player<<"\n";
-    }
-
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
@@ -518,7 +514,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
         if(player.getActionInvolved()==NULL){
             cout<<"Action involved null";
             player.setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
-            cout<<"Player number - "<<player.getPlayerNumber()<<" action involved ";
+            cout<<"Player number - "<<player.getPlayerNumber()<<" action involved "<<player.getActionInvolved()<<"\n";
         }
         return kickAccordingToDistance(nearPlayerPosition);
     }else{
@@ -535,9 +531,9 @@ SkillType NaoBehavior::selectSkill() {
     Player player = getPlayerObject(worldModel);
 
 
-    if(player.getPlayerNumber()==1){
+    /*if(player.getPlayerNumber()==1){
         cout<<"player address in select skill"<<&player;
-    }
+    }*/
 
     return playPassingToHigherAggressive(player);
 
