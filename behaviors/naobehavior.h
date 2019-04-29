@@ -229,7 +229,7 @@ protected:
 
     SkillType demoKickingCircle();
 
-    SkillType playPassingToHigherAggressive(Player *player);
+    SkillType playPassingToHigherAggressive();
 
     SkillType kickAccordingToDistance(const VecPosition &target);
 

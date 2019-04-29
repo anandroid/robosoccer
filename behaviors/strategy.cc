@@ -374,12 +374,12 @@ Player& getPlayerObject(WorldModel *worldModel) {
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    Player player(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
-    players.push_back(player);
+    Player lplayer(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
+    //players.push_back(player);
 
     cout << "players size after push" << players.size();
 
-    return &player;
+    return &lplayer;
 
 }
 
@@ -502,7 +502,7 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 
 
-SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
+SkillType NaoBehavior::playPassingToHigherAggressive(){
 
     if(player->getIsInvolvedInAction()){
         cout<<"returning action involved";
@@ -546,12 +546,12 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
-    if(player.getIsInvolvedInAction()){
+    if(player->getIsInvolvedInAction()){
      cout <<"Invovlved in Action Before selectSkill"<<"\n";
     }
 
 
-    SkillType  skill = playPassingToHigherAggressive(player);
+    SkillType  skill = playPassingToHigherAggressive();
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";
