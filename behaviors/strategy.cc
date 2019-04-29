@@ -502,21 +502,21 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
 
-    if(player.getIsInvolvedInAction()){
+    if(player->getIsInvolvedInAction()){
         cout<<"returning action involved";
-        return player.getActionInvolved();
+        return player->getActionInvolved();
     }
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
-        if(!player.getIsInvolvedInAction()){
-            cout<<"Action involved null"<<player.getActionInvolved()<< "\n";
+        if(!player->getIsInvolvedInAction()){
+            cout<<"Action involved null"<<player->getActionInvolved()<< "\n";
             cout<<"Action that will assign "<<kickAccordingToDistance(nearPlayerPosition);
-            player.setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
-            player.setIsInvolvedInAction(true);
-            cout<<"Player number - "<<player.getPlayerNumber()<<" action involved "<<player.getActionInvolved()<<"\n";
+            player->setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
+            player->setIsInvolvedInAction(true);
+            cout<<"Player number - "<<player->getPlayerNumber()<<" action involved "<<player->getActionInvolved()<<"\n";
         }
         return kickAccordingToDistance(nearPlayerPosition);
     }else{
