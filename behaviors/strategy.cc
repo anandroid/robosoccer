@@ -534,9 +534,10 @@ SkillType NaoBehavior::playPassingToHigherAggressive(){
 SkillType NaoBehavior::selectSkill() {
 
 
+
     if(player==NULL) {
         getPlayerObject(worldModel);
-        if(player->getPlayerNumber()==11){
+        if(player.getPlayerNumber()==11){
             cout<<"Address of player 11 "<<player;
         }
     }
@@ -546,18 +547,18 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
-    if(player->getIsInvolvedInAction()){
+    if(player.getIsInvolvedInAction()){
      cout <<"Invovlved in Action Before selectSkill"<<"\n";
     }
 
 
-    SkillType  skill = playPassingToHigherAggressive();
+    //SkillType  skill = playPassingToHigherAggressive();
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";
    // }
 
-    return skill;
+    return SKILL_STAND;
 
     //goToTarget(player.getRange().getCenterOfRange());
 
