@@ -24,7 +24,7 @@ private:
     bool isInitialized;
 public :
     Player();
-    void Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating);
+    void Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,FieldRange range);
 
     void setAggressiveRating(int aggressiveRating);
     void setActionInvolved(SkillType mAction);
