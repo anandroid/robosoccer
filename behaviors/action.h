@@ -14,7 +14,7 @@ private:
     int kickType;
 
 public:
-    Action(){
+   /* Action(){
 
     }
 
@@ -22,9 +22,9 @@ public:
         isKickingAction= mIsKickingAction;
         targetPosition = mTargetPosition;
         kickType = mKickType;
-    }
-    //Action();
-    //void Init(bool isKickingAction,VecPosition targetPosition,int kickType);
+    }*/
+    Action();
+    void Init(bool isKickingAction,VecPosition targetPosition,int kickType);
     bool getIsKickingAction();
     int  getKickType();
     VecPosition getTargetPosition();
