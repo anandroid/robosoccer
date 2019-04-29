@@ -14,11 +14,11 @@ private:
     int kickType;
 
 public:
-    Action::Action(){
+    Action(){
 
     }
 
-    void Action::Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
+    Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
         isKickingAction= mIsKickingAction;
         targetPosition = mTargetPosition;
         kickType = mKickType;
