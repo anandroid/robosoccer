@@ -17,7 +17,7 @@ void TeamMode::setGoals(int mOurgoals,int mOpponentgoals){
 Mode TeamMode::getMode(){
     //Defence,Normal,Attack,SetPiece
     //calculate mode
-    return Mode.Attack
+    return Attack
 }
 
 ActionAllocator TeamMode::getActionallocator(){
@@ -29,7 +29,7 @@ FieldRange TeamMode::getFieldRange(int playerPositionNumber){
 
     //Defence,Normal,Attack,SetPiece
 
-    if(getMode() == Mode.Attack) {
+    if(getMode() == Attack) {
         return getAttackFieldRange(playerPositionNumber);
     }
     return getFormationFieldRange(playerPositionNumber);

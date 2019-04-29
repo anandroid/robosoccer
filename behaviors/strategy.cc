@@ -571,15 +571,16 @@ SkillType NaoBehavior::selectSkill() {
     }
 
      //Defence,Normal,Attack,SetPiece
-     if(teamMode.getMode()==Mode.Defence){
+     if(teamMode.getMode()==Defence){
          return playPassingToHigherAggressive(&player);
      }
 
-     if(teamMode.getMode()==Mode.Attack){
-         return playAggressive(&player);
+     if(teamMode.getMode()==Attack){
+         Action action = playAggressive(&player);
+         return getSkillTypeFromAction(action);
      }
 
-     if(teamMode.getMode() == Mode.SetPiece){
+     if(teamMode.getMode() == SetPiece){
 
      }
 
