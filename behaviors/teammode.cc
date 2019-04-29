@@ -21,10 +21,6 @@ Mode TeamMode::getMode(){
     return Attack
 }
 
-ActionAllocator TeamMode::getActionallocator(){
-    //call ActionAllocator Method to return something
-    return actionAllocator
-}
 
 FieldRange TeamMode::getFieldRange(int playerPositionNumber){
 

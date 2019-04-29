@@ -6,7 +6,7 @@
 #define UTAUSTINVILLABASE_TEAMMODE_H
 
 #include "../headers/headers.h"
-#include "actionallocator.h"
+
 
 class TeamMode{
 
@@ -15,7 +15,6 @@ private:
     int ourgoals;
     int opponentgoals;
     long currentTime;
-    ActionAllocator actionAllocator;
     FieldRange getAttackFieldRange(int playerPositionNumber);
 
 
@@ -24,7 +23,6 @@ public:
     void setCurrentTime(long time):
     void setGoals(int ourgoals,int opponentgoals);
     Mode getMode();
-    ActionAllocator getActionallocator();
     FieldRange getFieldRange(int playerPositionNumber);
     FieldRange getFormationFieldRange(int playerPositionNumber);
 

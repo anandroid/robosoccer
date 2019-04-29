@@ -5,6 +5,7 @@
 #ifndef UTAUSTINVILLABASE_ACTIONALLOCATOR_H
 #define UTAUSTINVILLABASE_ACTIONALLOCATOR_H
 
+#include "actionallocator.h"
 
 class ActionAllocator{
 
