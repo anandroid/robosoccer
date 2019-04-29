@@ -27,7 +27,7 @@ public :
     void Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,FieldRange range);
 
     void setAggressiveRating(int aggressiveRating);
-    void setActionInvolved(SkillType mAction);
+    void setActionInvolved(Action mAction);
     void setRange(FieldRange mRange);
     void setPlayerPosition(VecPosition mPosition);
     void setIsInvolvedInAction(bool value);

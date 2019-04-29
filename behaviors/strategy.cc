@@ -2,6 +2,7 @@
 #include "../rvdraw/rvdraw.h"
 #include "fieldRange.h"
 #include "player.h"
+#include "action.h"
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
@@ -475,17 +476,19 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
 }
 
 
-SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
+Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
     VecPosition myPos = worldModel->getMyPosition();
     double distance = myPos.getDistanceTo(target);
+    Action action;
     if(distance<3){
-        return kickBall(KICK_DRIBBLE,target);
+        action.Init(true,target,KICK_DRIBBLE);
     }else if(distance<6){
-        return kickBall(KICK_FORWARD,target);
+        action.Init(true,target,KICK_FORWARD);
     }else if(distance>6){
-        return kickBall(KICK_IK,target);
+        action.Init(true,target,KICK_IK);
     }
+    return action;
 }
 
 
@@ -500,9 +503,11 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
         if(!player->getIsInvolvedInAction()){
             player->setIsInvolvedInAction(true);
         }
-        SkillType  action = kickAccordingToDistance(nearPlayerPosition);
+        cout<<"Action  set : "<<player->getPlayerNumber()<<"\n"
+        Action action = kickAccordingToDistance(nearPlayerPosition);
         player->setActionInvolved(action);
-        return action;
+       // return action;
+        return kick(KICK_FORWARD,nearPlayerPosition);
     }else{
         return SKILL_STAND;
     }
@@ -517,6 +522,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
     if(!player.getIsInitialized()) {
+        cout<<"Player is not initialsed"<<"\n"
         initPlayerObject(worldModel);
     }
 
