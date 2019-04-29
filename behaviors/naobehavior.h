@@ -19,6 +19,7 @@
 #include <memory/SimEffectorBlock.h>
 #include <memory/WalkRequestBlock.h>
 #include "player.h"
+#include "action.h"
 
 using namespace std;
 

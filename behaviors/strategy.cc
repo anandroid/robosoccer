@@ -11,6 +11,7 @@
 #include <sstream>
 #include <queue>
 
+
 using namespace std;
 
 extern int agentBodyType;
@@ -507,7 +508,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
         Action action = kickAccordingToDistance(nearPlayerPosition);
         player->setActionInvolved(action);
        // return action;
-        return kick(KICK_FORWARD,nearPlayerPosition);
+        return kickBall(KICK_FORWARD,nearPlayerPosition);
     }else{
         return SKILL_STAND;
     }
@@ -522,7 +523,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
     if(!player.getIsInitialized()) {
-        cout<<"Player is not initialsed"<<"\n"
+        cout<<"Player is not initialsed"<<"\n";
         initPlayerObject(worldModel);
     }
 
@@ -533,7 +534,8 @@ SkillType NaoBehavior::selectSkill() {
 
     if(player.getIsInvolvedInAction()){
         cout<<"Action involved "<<player.getPlayerNumber();
-        return player.getActionInvolved();
+          #return player.getActionInvolved();
+        return SKILL_STAND;
     }
 
 
