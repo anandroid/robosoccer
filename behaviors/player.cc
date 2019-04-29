@@ -26,7 +26,7 @@ void Player::setAggressiveRating(int mAggressiveRating){
     agressiveRating = mAggressiveRating;
 }
 
-void Player::setActionInvolved(SkillType mAction){
+void Player::setActionInvolved(Action mAction){
     actionInvolved = mAction;
 }
 
@@ -58,7 +58,7 @@ int Player::getAggressiveRating(){
     return agressiveRating;
 }
 
-SkillType Player::getActionInvolved(){
+Action Player::getActionInvolved(){
     return actionInvolved;
 }
 

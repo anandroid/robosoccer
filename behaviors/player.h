@@ -39,7 +39,7 @@ public :
     int getPlayerPositionNumber();
     VecPosition getPosition();
     int getAggressiveRating();
-    SkillType getActionInvolved();
+    Action getActionInvolved();
     FieldRange getRange();
     bool getIsInvolvedInAction();
     bool getIsInitialized();
