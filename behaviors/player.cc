@@ -12,10 +12,11 @@ Player::Player() {
     range = FieldRange();
 }
 
-void Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating){
+void Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,FieldRange mRange){
     playerNumber = mPlayerNumber;
     playerPositionNumber = mPlayerPositionNumber;
     agressiveRating = mAggressiveRating;
+    range = mRange;
     isInvolvedInAction = false;
     isInitialized = true;
 }

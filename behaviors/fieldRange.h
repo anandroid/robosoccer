@@ -17,7 +17,9 @@ public:
     VecPosition getTopRight();
 //    VecPosition getCenterOfRange();
 
-    FieldRange();
+    FieldRange(){
+
+    }
     FieldRange(VecPosition mBottomLeft, VecPosition mTopRight){
         bottomLeft = mBottomLeft;
         topRight = mTopRight;
