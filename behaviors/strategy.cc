@@ -36,7 +36,7 @@ string opponent_random_goal = "";
 
 std::vector <Player> players;
 
-Player *player=NULL;
+Player player;
 
 
 
@@ -374,7 +374,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
-    *player = Player(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
+    player = Player(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(), range);
     //players.push_back(player);
 
     cout << "players size after push" << players.size();
