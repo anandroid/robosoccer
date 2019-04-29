@@ -366,11 +366,9 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
  void initPlayerObject(WorldModel *worldModel) {
 
-
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
     player.Init(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(),range);
-
 
 }
 
@@ -609,9 +607,9 @@ SkillType NaoBehavior::reachPosition(VecPosition target) {
         // Move toward target location
         return goToTarget(target);
     }
-
-
 }
+
+
 
 /*
  * Demo behavior where players form a rotating circle and kick the ball
