@@ -6,6 +6,7 @@
 #define UTAUSTINVILLABASE_TEAMMODE_H
 
 #include "../headers/headers.h"
+#include "actionallocator.h"
 
 class TeamMode{
 

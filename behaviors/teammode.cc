@@ -1,6 +1,7 @@
 #include "teammode.h"
 #include "fieldRange.h"
 
+
 TeamMode::TeamMode(){
 
 }
@@ -22,7 +23,7 @@ Mode TeamMode::getMode(){
 
 ActionAllocator TeamMode::getActionallocator(){
     //call ActionAllocator Method to return something
-
+    return actionAllocator
 }
 
 FieldRange TeamMode::getFieldRange(int playerPositionNumber){
