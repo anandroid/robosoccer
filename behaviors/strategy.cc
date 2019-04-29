@@ -505,8 +505,8 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
             player->setIsInvolvedInAction(true);
         }
         cout<<"Action  set : "<<player->getPlayerNumber()<<"\n"
-        Action action = kickAccordingToDistance(nearPlayerPosition);
-        player->setActionInvolved(action);
+// Action action = kickAccordingToDistance(nearPlayerPosition);
+//player->setActionInvolved(action);
        // return action;
         return kickBall(KICK_FORWARD,nearPlayerPosition);
     }else{
@@ -534,7 +534,7 @@ SkillType NaoBehavior::selectSkill() {
 
     if(player.getIsInvolvedInAction()){
         cout<<"Action involved "<<player.getPlayerNumber();
-          #return player.getActionInvolved();
+          //return player.getActionInvolved();
         return SKILL_STAND;
     }
 

@@ -232,7 +232,7 @@ protected:
 
     SkillType playPassingToHigherAggressive(Player *player);
 
-    SkillType kickAccordingToDistance(const VecPosition &target);
+    Action kickAccordingToDistance(const VecPosition &target);
 
     SkillType reachPosition(VecPosition target);
 
