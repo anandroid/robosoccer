@@ -513,6 +513,7 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player &player){
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
         if(player.getActionInvolved()==NULL){
             cout<<"Action involved null"<<player.getActionInvolved()<< "\n";
+            cout<<"Action that will assign "<<kickAccordingToDistance(nearPlayerPosition);
             player.setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
             cout<<"Player number - "<<player.getPlayerNumber()<<" action involved "<<player.getActionInvolved()<<"\n";
         }
