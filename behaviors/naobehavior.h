@@ -234,6 +234,8 @@ protected:
 
     Action kickAccordingToDistance(const VecPosition &target);
 
+    SkillType getSkillTypeFromAction(Action action);
+
     SkillType reachPosition(VecPosition target);
 
 public:

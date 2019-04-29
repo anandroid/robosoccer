@@ -492,6 +492,14 @@ Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
     return action;
 }
 
+SkillType NaoBehavior::getSkillTypeFromAction(Action action){
+
+    if(action.getIsKickingAction()){
+        return kickBall(action.getKickType(),action.getTargetPosition());
+    }
+
+    return goToTarget(action.getTargetPosition());
+}
 
 
 SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
@@ -505,8 +513,8 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
             player->setIsInvolvedInAction(true);
         }
         cout<<"Action  set : "<<player->getPlayerNumber()<<"\n";
-// Action action = kickAccordingToDistance(nearPlayerPosition);
-//player->setActionInvolved(action);
+        Action action = kickAccordingToDistance(nearPlayerPosition);
+        player->setActionInvolved(action);
        // return action;
         return kickBall(KICK_FORWARD,nearPlayerPosition);
     }else{
@@ -534,8 +542,8 @@ SkillType NaoBehavior::selectSkill() {
 
     if(player.getIsInvolvedInAction()){
         cout<<"Action involved "<<player.getPlayerNumber();
-          //return player.getActionInvolved();
-        return SKILL_STAND;
+          return getSkillTypeFromAction(player.getActionInvolved());
+        //return SKILL_STAND;
     }
 
 

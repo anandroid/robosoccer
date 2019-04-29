@@ -3,6 +3,8 @@
 //
 
 #include "action.h"
+#include "../headers/headers.h"
+#include "../math/vecposition.h"
 
 Action::Action(){
 
