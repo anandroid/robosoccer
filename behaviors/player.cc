@@ -9,6 +9,7 @@
 
 Player::Player() {
     isInitialized = false;
+    range = FieldRange();
 }
 
 void Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating){
