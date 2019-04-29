@@ -15,7 +15,6 @@ void Player::Init(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveR
     playerNumber = mPlayerNumber;
     playerPositionNumber = mPlayerPositionNumber;
     agressiveRating = mAggressiveRating;
-    range = mRange;
     isInvolvedInAction = false;
     isInitialized = true;
 }
