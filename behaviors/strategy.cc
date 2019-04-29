@@ -361,26 +361,13 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
 }
 
- void getPlayerObject(WorldModel *worldModel) {
+ void initPlayerObject(WorldModel *worldModel) {
 
-
-
-    /*for (int i = 0; i < players.size(); i++) {
-        if (worldModel->getUNum() == players[i].getPlayerNumber()) {
-
-            return players[i];
-        }
-    }*/
 
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
     player.Init(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(),range);
-    //player.setRange(range);
-    //players.push_back(player);
 
-    //cout << "players size after push" << players.size();
-
-   // return lplayer;
 
 }
 
@@ -505,22 +492,13 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
 SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
 
-    if(player->getIsInvolvedInAction()){
-        cout<<"returning action involved";
-        return player->getActionInvolved();
-    }
 
     int closestPlayerToBall =  getPlayerClosestToTheBall(worldModel);
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
         if(!player->getIsInvolvedInAction()){
-            //cout<<"Action involved null"<<player->getActionInvolved()<< "\n";
-            //cout<<"Action that will assign "<<kickAccordingToDistance(nearPlayerPosition);
-            player->setActionInvolved(kickAccordingToDistance(nearPlayerPosition));
             player->setIsInvolvedInAction(true);
-            //cout<<"\n"<<"Is action involved "<<player->getIsInvolvedInAction()<<"\n";
-            //cout<<"Player number - "<<player->getPlayerNumber()<<" action involved "<<player->getActionInvolved()<<"\n";
         }
         return kickAccordingToDistance(nearPlayerPosition);
     }else{
@@ -536,9 +514,8 @@ SkillType NaoBehavior::selectSkill() {
 
 
 
-    if(player.getIsInitialized()) {
-        getPlayerObject(worldModel);
-
+    if(!player.getIsInitialized()) {
+        initPlayerObject(worldModel);
     }
 
 
@@ -547,17 +524,17 @@ SkillType NaoBehavior::selectSkill() {
     }*/
 
     if(player.getIsInvolvedInAction()){
-     cout <<"Invovlved in Action Before selectSkill"<<"\n";
+        cout<<"Action involved "<<player.getPlayerNumber();
+        return player.getActionInvolved();
     }
 
 
-    SkillType  skill = playPassingToHigherAggressive(&player);
+    return playPassingToHigherAggressive(&player);
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";
    // }
 
-    return skill;
 
     //goToTarget(player.getRange().getCenterOfRange());
 
