@@ -375,7 +375,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
     FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
 
     player.Init(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum());
-    player.setRange(range)
+    player.setRange(range);
     //players.push_back(player);
 
     //cout << "players size after push" << players.size();
