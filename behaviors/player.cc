@@ -24,6 +24,10 @@ void Player::setActionInvolved(SkillType mAction){
     actionInvolved = mAction;
 }
 
+void Player::setIsInvolvedInAction(bool value) {
+    isInvolvedInAction = value;
+}
+
 void Player::setRange(FieldRange mRange){
     range = mRange;
 }
@@ -54,6 +58,10 @@ SkillType Player::getActionInvolved(){
 
 FieldRange Player::getRange(){
     return range;
+}
+
+bool  Player::getIsInvolvedInAction(){
+    return isInvolvedInAction;
 }
 
 //FieldRange::FieldRange() {}
