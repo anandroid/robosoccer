@@ -538,11 +538,16 @@ SkillType NaoBehavior::selectSkill() {
         cout<<"player address in select skill"<<&player;
     }*/
 
+    if(player.getIsInvolvedInAction()){
+     cout <<"Invovlved in Action Before selectSkill"<<"\n";
+    }
+
+
     SkillType  skill = playPassingToHigherAggressive(&player);
 
-    if(player.getIsInvolvedInAction()){
-        cout <<"Invovlved in Action selectSkill"<<"\n";
-    }
+    //if(player.getIsInvolvedInAction()){
+        //cout <<"Invovlved in Action selectSkill"<<"\n";
+   // }
 
     return skill;
 
