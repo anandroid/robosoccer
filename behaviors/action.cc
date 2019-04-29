@@ -4,7 +4,7 @@
 
 Action::Action(){
 
-};
+}
 
 void Action::Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
     isKickingAction= mIsKickingAction;
