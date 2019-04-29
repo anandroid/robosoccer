@@ -500,7 +500,9 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player){
         if(!player->getIsInvolvedInAction()){
             player->setIsInvolvedInAction(true);
         }
-        return kickAccordingToDistance(nearPlayerPosition);
+        SkillType  action = kickAccordingToDistance(nearPlayerPosition);
+        player->setActionInvolved(action);
+        return action;
     }else{
         return SKILL_STAND;
     }
