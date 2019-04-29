@@ -20,6 +20,7 @@ private:
     int agressiveRating;
     SkillType actionInvolved;
     FieldRange range;
+    bool isInvolvedInAction;
 public :
     Player(int mPlayerNumber, int mPlayerPositionNumber, int mAggressiveRating,
            FieldRange range);
@@ -28,6 +29,7 @@ public :
     void setActionInvolved(SkillType mAction);
     void setRange(FieldRange mRange);
     void setPlayerPosition(VecPosition mPosition);
+    void setIsInvolvedInAction(bool value);
 
 
 
@@ -37,6 +39,7 @@ public :
     int getAggressiveRating();
     SkillType getActionInvolved();
     FieldRange getRange();
+    bool getIsInvolvedInAction();
 
 };
 
