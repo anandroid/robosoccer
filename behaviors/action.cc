@@ -2,6 +2,9 @@
 // Created by Anand kumar on 2019-04-28.
 //
 
+Action::Action(){
+
+};
 
 void Action::Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
     isKickingAction= mIsKickingAction;
