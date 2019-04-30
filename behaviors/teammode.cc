@@ -113,6 +113,12 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
             }
         }
 
+        if(aggressiveRating==1){
+            cout<<"Player 1 New Targer "<<newX<<":"<<newY<<"\n";
+        }
+
+
+
         return VecPosition(newX,newY,currentPosition.getZ());
 
 }
