@@ -931,7 +931,7 @@ SkillType NaoBehavior::selectSkill() {
 
         if(worldModel->getUNum()==11){
 
-
+              playAggressive(player,11);
         }
 
     }
