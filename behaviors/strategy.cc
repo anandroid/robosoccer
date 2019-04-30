@@ -595,11 +595,11 @@ SkillType NaoBehavior::selectSkill() {
 
      //Defence,Normal,Attack,SetPiece
      if(teamMode.getMode()==Defence){
-         return playPassingToHigherAggressive(&player);
+         return playPassingToHigherAggressive(&player,playerClosestToBall);
      }
 
      if(teamMode.getMode()==Attack){
-         Action action = playAggressive(&player);
+         Action action = playAggressive(&player,playerClosestToBall);
          return getSkillTypeFromAction(action);
      }
 
@@ -607,7 +607,7 @@ SkillType NaoBehavior::selectSkill() {
 
      }
 
-     return playPassingToHigherAggressive(&player);
+     return playPassingToHigherAggressive(&player,playerClosestToBall);
 
     //if(player.getIsInvolvedInAction()){
         //cout <<"Invovlved in Action selectSkill"<<"\n";
