@@ -26,47 +26,44 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
     double newX = currentPosition.getX();
     double newY = currentPosition.getY();
 
+    if(getMode()==Attack) {
         int MAX_RANGE_X;
         int MIN_RANGE_X;
 
         bool isAttackPlayer = true;
 
-        if(aggressiveRating==1){
+        if (aggressiveRating == 1) {
             isAttackPlayer = false;
-            MIN_RANGE_X = -7 * HALF_FIELD_X/8;
+            MIN_RANGE_X = -7 * HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==2 || aggressiveRating==3){
+        if (aggressiveRating == 2 || aggressiveRating == 3) {
             isAttackPlayer = false;
             MIN_RANGE_X = -5 * HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==4 || aggressiveRating==5){
+        if (aggressiveRating == 4 || aggressiveRating == 5) {
             isAttackPlayer = false;
-            MIN_RANGE_X =  -3 * HALF_FIELD_X / 8;
+            MIN_RANGE_X = -3 * HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==5){
+
+        if (aggressiveRating == 6 || aggressiveRating == 7) {
             isAttackPlayer = true;
-            MAX_RANGE_X =  HALF_FIELD_X/8;
+            MAX_RANGE_X =  HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==6 || aggressiveRating==7){
+        if (aggressiveRating == 8 || aggressiveRating == 9) {
             isAttackPlayer = true;
-            MAX_RANGE_X =  2*HALF_FIELD_X/8;
+            MAX_RANGE_X = 4 * HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==8 || aggressiveRating==9){
+        if (aggressiveRating == 10 || aggressiveRating == 11) {
             isAttackPlayer = true;
-            MAX_RANGE_X =  4 * HALF_FIELD_X/8;
+            MAX_RANGE_X = 6 * HALF_FIELD_X / 8;
         }
 
-        if(aggressiveRating==10 || aggressiveRating==11){
-            isAttackPlayer = true;
-            MAX_RANGE_X =  6 * HALF_FIELD_X/8;
-        }
-
-        if(isAttackPlayer) {
+        if (isAttackPlayer) {
 
             if (newX + 1 < MAX_RANGE_X) {
                 newX++;
@@ -90,7 +87,7 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
 
         }
 
-        if(!isAttackPlayer){
+        if (!isAttackPlayer) {
 
             if (newX + 1 > MIN_RANGE_X) {
                 newX--;
@@ -112,6 +109,100 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
                 }
             }
         }
+
+    }
+
+    if (getMode()==Defence){
+
+        int MAX_RANGE_X;
+        int MIN_RANGE_X;
+
+        bool isAttackPlayer = true;
+
+        if (aggressiveRating == 1) {
+            isAttackPlayer = false;
+            MIN_RANGE_X = -7 * HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 2 || aggressiveRating == 3) {
+            isAttackPlayer = false;
+            MIN_RANGE_X = -5 * HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 4 || aggressiveRating == 5) {
+            isAttackPlayer = false;
+            MIN_RANGE_X = -3 * HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 5 || aggressiveRating==6) {
+            isAttackPlayer = false;
+            MAX_RANGE_X = -HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 7) {
+            isAttackPlayer = false;
+            MAX_RANGE_X = 2 * HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 8 || aggressiveRating == 9) {
+            isAttackPlayer = true;
+            MAX_RANGE_X = 4 * HALF_FIELD_X / 8;
+        }
+
+        if (aggressiveRating == 10 || aggressiveRating == 11) {
+            isAttackPlayer = true;
+            MAX_RANGE_X = 6 * HALF_FIELD_X / 8;
+        }
+
+        if (isAttackPlayer) {
+
+            if (newX + 1 < MAX_RANGE_X) {
+                newX++;
+            } else {
+                newX = newX - 1;
+            }
+
+            if (newY > HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY - 1;
+                } else {
+                    newY = newY - 0.5;
+                }
+            } else if (newY < -HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY + 1;
+                } else {
+                    newY = newY + 0.5;
+                }
+            }
+
+        }
+
+        if (!isAttackPlayer) {
+
+            if (newX + 1 > MIN_RANGE_X) {
+                newX--;
+            } else {
+                newX = newX + 1;
+            }
+
+            if (newY > HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY - 1;
+                } else {
+                    newY = newY - 0.5;
+                }
+            } else if (newY < -HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY + 1;
+                } else {
+                    newY = newY + 0.5;
+                }
+            }
+        }
+
+
+       }
 
         return VecPosition(newX,newY,currentPosition.getZ());
 
