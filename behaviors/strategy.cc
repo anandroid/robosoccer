@@ -553,9 +553,9 @@ std::string readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
         ss << temp.getY() << "\n";
         out_string = ss.str();
         positions.append(out_string);
-        cout << playerNum << endl;
-        cout << temp.getY() << endl;
-        cout << temp.getX() << endl;
+        //cout << playerNum << endl;
+        //cout << temp.getY() << endl;
+        //cout << temp.getX() << endl;
         writeToFile(positions, playerNum);
 
         if (temp.getX() < 0) {
