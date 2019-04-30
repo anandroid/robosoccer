@@ -857,7 +857,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
     std::string opp_pos = readOpponentPositions(worldModel);
-    cout << opp_pos;
+    //cout << opp_pos;
 
     if (player.getPlayerNumber() == 10) {
         VecPosition opponentPosition = follow(12);
