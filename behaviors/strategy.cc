@@ -740,9 +740,9 @@ std::string readOpponentPositions(WorldModel *worldModel) {
         ss << temp.getY() << "\n";
         out_string = ss.str();
         positions.append(out_string);
-        cout << playerNum << endl;
-        cout << temp.getY() << endl;
-        cout << temp.getX() << endl;
+        //cout << playerNum << endl;
+        //cout << temp.getY() << endl;
+        //cout << temp.getX() << endl;
         writeToFile(positions, playerNum);
     }
 
@@ -760,7 +760,7 @@ VecPosition follow(int playerNumber) {
     string content = "";
     string goal;
     char c = '\0';
-    cout << "Reading file\n";
+   // cout << "Reading file\n";
     int length = 0;
     std::stringstream sss;
     sss << "goal" << playerNumber;
@@ -779,12 +779,12 @@ VecPosition follow(int playerNumber) {
         }
 
         std::getline(infile, goal);//read last line
-        std::cout << goal << std::endl; // print it
+        //std::cout << goal << std::endl; // print it
     }
     VecPosition temp;
     int number;
     std::istringstream iss(goal);
-    cout << goal << endl;
+    cout << "Goal :"<<goal << endl;
     iss >> number;
     float x = 1.5 + ((number / 10) - 1) * 3 - 15;
     float y = 1 + ((number % 10) - 1) * 2 - 10;
@@ -861,6 +861,7 @@ SkillType NaoBehavior::selectSkill() {
 
     if (player.getPlayerNumber() == 10) {
         VecPosition opponentPosition = follow(12);
+        cout<<"Opponent Position"<<opponentPosition<<"\n";
         if (isValidOpponentPosition(opponentPosition)) {
             return setTargetPositionAction(&player,opponentPosition);
         }
