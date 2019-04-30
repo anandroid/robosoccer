@@ -424,7 +424,7 @@ int getPlayerClosestToTheBall(WorldModel *worldModel) {
     return playerClosestToBall;
 }
 
-std::vector<int> getPlayersWithInRange(WorldModel *worldModel) {
+std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
     std::vector<int> playersInRange;
 
@@ -454,7 +454,7 @@ std::vector<int> getPlayersWithInRange(WorldModel *worldModel) {
         temp.setZ(0);
 
         double distanceToPlayer = temp.getDistanceTo(myPos);
-        if (distanceToPlayer < RANGE) {
+        if (distanceToPlayer < RANGE && temp.getX()>myPos.getX()) {
             playersInRange.push_back(playerNum);
         }
     }
@@ -466,7 +466,9 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel, int curr
     int playerWithHigherAggressiveRating = -1;
     int higherAggressiveRating = -1;
 
-    std::vector<int> playersWitInRange = getPlayersWithInRange(worldModel);
+    VecPosition myPosition = worldModel->getMyPosition();
+
+    std::vector<int> playersWitInRange = getPlayersAheadWithInRange(worldModel);
     //cout<<"--------------------------"<<"\n";
     //cout<<"players with in range "<<playersWitInRange.size()<<"\n";
     for (int i = 0; i < playersWitInRange.size(); i++) {
@@ -584,7 +586,7 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
         }
 
         VecPosition currentPosition = worldModel->getMyPosition();
-        VecPosition targetPosition(currentPosition.getX()+1,currentPosition.getY(),currentPosition.getZ());
+        VecPosition targetPosition(currentPosition.getX()+2,currentPosition.getY(),currentPosition.getZ());
         player->setIsInvolvedInAction(true);
         //cout<<"Kick Action  set : "<<player->getPlayerNumber()<<"\n";
         Action action = kickAccordingToDistance(targetPosition);
