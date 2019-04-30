@@ -600,7 +600,7 @@ SkillType NaoBehavior::selectSkill() {
     if(player.getIsInvolvedInAction()  && !player.getActionInvolved().getIsKickingAction()){
         bool isTargetReached =  didReachTargetPosition(me,player.getActionInvolved().getTargetPosition());
         if(isTargetReached){
-            player.setActionInvolved(false);
+            player.setIsInvolvedInAction(false);
             shouldOVerrideAction = true;
         }
     }
