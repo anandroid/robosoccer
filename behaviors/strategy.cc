@@ -581,11 +581,12 @@ SkillType NaoBehavior::selectSkill() {
                 shouldOVerrideAction = true;
             }
         }
+    } else {
+        if (player.getActionInvolved().getIsKickingAction()){
+            shouldOVerrideAction = true;
+        }
     }
 
-    if(player.getActionInvolved().getIsKickingAction()){
-        shouldOVerrideAction = true;
-    }
 
     if(player.getIsInvolvedInAction() && !shouldOVerrideAction){
         cout<<"Action involved "<<player.getPlayerNumber();
