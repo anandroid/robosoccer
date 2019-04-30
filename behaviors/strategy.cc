@@ -574,6 +574,7 @@ bool isModeNeedsToBeRetrieved(){
     }
 
     if(previousModeReadTime - currentTime >10){
+        cout<<"Mode called because of time change";
         return true;
     }
 
