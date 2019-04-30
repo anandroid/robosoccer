@@ -517,8 +517,8 @@ SkillType NaoBehavior::getSkillTypeFromAction(Action action){
 bool isNearToGoal(WorldModel *worldModel){
 
     double GOAL_RANGE = (3*HALF_FIELD_X)/8;
-
-    double distanceToGoal = worldModel->distanceToOppGoal(worldModel->getMyPosition());
+    VecPosition myPosition = worldModel->getMyPosition();
+    double distanceToGoal = worldModel->distanceToOppGoal(myPosition);
 
     if(distanceToGoal < GOAL_RANGE){
         return true;
