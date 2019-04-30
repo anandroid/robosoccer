@@ -19,7 +19,6 @@
 #include "ctime"
 
 
-
 using namespace std;
 
 extern int agentBodyType;
@@ -52,9 +51,6 @@ TeamMode teamMode;
 bool firstPass = true;
 
 ofstream writefile;
-
-
-
 
 
 class PlayerTask {
@@ -329,7 +325,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = 0;
     } else if (playerPositionNumber == 2) {
         centerX = -6 * X / 8;
-        centerY = Y/2;
+        centerY = Y / 2;
 
     } else if (playerPositionNumber == 3) {
         centerX = -6 * X / 8;
@@ -341,11 +337,11 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
     } else if (playerPositionNumber == 5) {
         centerX = -4 * X / 8;
-        centerY = - Y / 4;
+        centerY = -Y / 4;
 
     } else if (playerPositionNumber == 6) {
         centerX = -3 * X / 8;
-        centerY =  Y / 2;
+        centerY = Y / 2;
 
     } else if (playerPositionNumber == 7) {
         centerX = -3 * X / 8;
@@ -357,11 +353,11 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
     } else if (playerPositionNumber == 9) {
         centerX = -2 * X / 8;
-        centerY =  3*Y / 8;
+        centerY = 3 * Y / 8;
 
     } else if (playerPositionNumber == 10) {
-        centerX = -2*X / 8;
-        centerY = -3*Y / 8;
+        centerX = -2 * X / 8;
+        centerY = -3 * Y / 8;
 
     } else if (playerPositionNumber == 11) {
         centerX = -X / 8;
@@ -465,15 +461,15 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
         double distanceToPlayer = temp.getDistanceTo(myPos);
 
-        if(worldModel->getUNum()==11){
-            if(firstPass){
+        if (worldModel->getUNum() == 11) {
+            if (firstPass) {
                 playersInRange.push_back(10);
                 firstPass = false;
             }
         }
 
-        if (distanceToPlayer < RANGE && temp.getX()>myPos.getX()) {
-            cout<<"My pos "<<myPos.getX()<<" Passed pos "<<temp.getX()<<"\n";
+        if (distanceToPlayer < RANGE && temp.getX() > myPos.getX()) {
+            cout << "My pos " << myPos.getX() << " Passed pos " << temp.getX() << "\n";
             playersInRange.push_back(playerNum);
         }
     }
@@ -555,14 +551,14 @@ SkillType NaoBehavior::goalingAction() {
 
     VecPosition targetBallPosition = VecPosition(randomX, randomY, me.getZ());
 
-    cout<<"Goaling Action"<<"\n";
+    cout << "Goaling Action" << "\n";
 
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
-        cout<<"Goaling Action Dribble "<<"\n";
+        cout << "Goaling Action Dribble " << "\n";
         return kickBall(KICK_DRIBBLE, targetBallPosition);
     } else {
-        cout<<"Goaling Action Kick "<<"\n";
+        cout << "Goaling Action Kick " << "\n";
         return kickBall(KICK_IK, targetBallPosition);
     }
 
@@ -588,6 +584,13 @@ SkillType NaoBehavior::playPassingToHigherAggressive(Player *player, int closest
 
 }
 
+SkillType NaoBehavior::setTargetPositionAction(Player *player, VecPosition targetPosition) {
+    VecPosition currentPosition = worldModel->getMyPosition();
+    targetPosition = collisionAvoidance(true /*teammate*/, false/*opponent*/, false/*ball*/, 1/*proximity thresh*/,
+                                        .5/*collision thresh*/, targetPosition, true/*keepDistance*/);
+    return goToTarget(targetPosition);
+}
+
 Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
     if (worldModel->getUNum() == closestPlayerToBall) {
         int nearPlayerNumber = getPlayerNearWithBetterAggressionInTheRange(worldModel, worldModel->getUNum());
@@ -605,7 +608,7 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
         }
 
         VecPosition currentPosition = worldModel->getMyPosition();
-        VecPosition targetPosition(currentPosition.getX()+2,currentPosition.getY(),currentPosition.getZ());
+        VecPosition targetPosition(currentPosition.getX() + 2, currentPosition.getY(), currentPosition.getZ());
         player->setIsInvolvedInAction(true);
         //cout<<"Kick Action  set : "<<player->getPlayerNumber()<<"\n";
         Action action = kickAccordingToDistance(targetPosition);
@@ -617,7 +620,7 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
         //VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
         VecPosition targetPosition = teamMode.getNextTargetPosition(player->getAggressiveRating(), currentPosition);
         targetPosition = collisionAvoidance(true /*teammate*/, false/*opponent*/, true/*ball*/, 1/*proximity thresh*/,
-                                    .5/*collision thresh*/, targetPosition, true/*keepDistance*/);
+                                            .5/*collision thresh*/, targetPosition, true/*keepDistance*/);
         VecPosition dummyPosition(0, 0, 0);
         Action action;
         action.Init(false, targetPosition, 0, dummyPosition);
@@ -629,19 +632,15 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
 }
 
 
-
-
-
-
-void writeToFile(string content, int p_no){
+void writeToFile(string content, int p_no) {
     std::stringstream ss;
-    ss<<"positions_"<<p_no<<".txt";
-    string fname=ss.str();
-    cout<<fname;
-    cout<<p_no<<endl;
+    ss << "positions_" << p_no << ".txt";
+    string fname = ss.str();
+    cout << fname;
+    cout << p_no << endl;
     ofstream myfile;
-    myfile.open(fname.c_str(),std::ios_base::app);
-    myfile<< content;
+    myfile.open(fname.c_str(), std::ios_base::app);
+    myfile << content;
 //    writefile.open("positions.txt", std::ios_base::app | std::ios_base::out);
 //    writefile<< content;
 //    writefile.flush();
@@ -650,24 +649,22 @@ void writeToFile(string content, int p_no){
     myfile.close();
 }
 
-void readFile(){
-    string content="";
+void readFile() {
+    string content = "";
     std::string tmp;
     char c = '\0';
-    cout<<"Reading file\n";
+    cout << "Reading file\n";
     int length = 0;
     ifstream infile("positions.txt");
-    if( infile )
-    {
+    if (infile) {
         length = infile.tellg();//Get file size
 
         // loop backward over the file
 
-        for(int i = length-2; i > 0; i-- )
-        {
+        for (int i = length - 2; i > 0; i--) {
             infile.seekg(i);
             c = infile.get();
-            if( c == '\r' || c == '\n' )//new line?
+            if (c == '\r' || c == '\n')//new line?
                 break;
         }
 
@@ -679,12 +676,11 @@ void readFile(){
 
 }
 
-
-std::string readOpponentPositions(WorldModel *worldModel){
-    std::string positions="";
+std::string readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
+    std::string positions = "";
     time_t now = time(0);
-    char* dt = ctime(&now);
-    int playerNum =0;
+    char *dt = ctime(&now);
+    int playerNum = 0;
     for (int i = WO_OPPONENT1; i < WO_OPPONENT1 + NUM_AGENTS; ++i) {
         VecPosition temp;
 
@@ -701,7 +697,7 @@ std::string readOpponentPositions(WorldModel *worldModel){
         std::string out_string;
         std::stringstream ss;
 
-        ss<<dt<<"\t";
+        ss << dt << "\t";
         ss << playerNum << "\t";
         ss << temp.getX() << "\t";
         ss << temp.getY() << "\n";
@@ -710,40 +706,75 @@ std::string readOpponentPositions(WorldModel *worldModel){
         cout << playerNum << endl;
         cout << temp.getY() << endl;
         cout << temp.getX() << endl;
-        writeToFile(positions,playerNum);
+        writeToFile(positions, playerNum);
     }
 
     return positions;
 }
 
-VecPosition follow(int playerNumber){
-    string str = "python ../../Desktop/Question3/dbnq3_2.py ";
+
+std::string readOpponentPositions(WorldModel *worldModel) {
+    std::string positions = "";
+    time_t now = time(0);
+    char *dt = ctime(&now);
+    int playerNum = 0;
+    for (int i = WO_OPPONENT1; i < WO_OPPONENT1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+
+
+        WorldObject *opponent = worldModel->getWorldObject(i);
+        if (opponent->validPosition) {
+            temp = opponent->pos;
+            playerNum = i;
+        } else {
+            continue;
+        }
+
+        temp.setZ(0);
+        std::string out_string;
+        std::stringstream ss;
+
+        ss << dt << "\t";
+        ss << playerNum << "\t";
+        ss << temp.getX() << "\t";
+        ss << temp.getY() << "\n";
+        out_string = ss.str();
+        positions.append(out_string);
+        cout << playerNum << endl;
+        cout << temp.getY() << endl;
+        cout << temp.getX() << endl;
+        writeToFile(positions, playerNum);
+    }
+
+    return positions;
+}
+
+VecPosition follow(int playerNumber) {
+    string str = "python dbnq3_2.py ";
     std::stringstream s;
-    s<<playerNumber;
+    s << playerNumber;
     str.append(s.str());
-    const char *command =str.c_str();
+    const char *command = str.c_str();
     system(command);
 
-    string content="";
+    string content = "";
     string goal;
     char c = '\0';
-    cout<<"Reading file\n";
+    cout << "Reading file\n";
     int length = 0;
     std::stringstream sss;
-    sss<<"goal"<<playerNumber;
-    string fname=sss.str();
+    sss << "goal" << playerNumber;
+    string fname = sss.str();
     ifstream infile(fname.c_str());
-    if( infile )
-    {
+    if (infile) {
         length = infile.tellg();//Get file size
 
         // loop backward over the file
 
-        for(int i = length-2; i > 0; i-- )
-        {
+        for (int i = length - 2; i > 0; i--) {
             infile.seekg(i);
             c = infile.get();
-            if( c == '\r' || c == '\n' )//new line?
+            if (c == '\r' || c == '\n')//new line?
                 break;
         }
 
@@ -752,40 +783,39 @@ VecPosition follow(int playerNumber){
     }
     VecPosition temp;
     int number;
-    std::istringstream iss (goal);
-    cout<<goal<<endl;
+    std::istringstream iss(goal);
+    cout << goal << endl;
     iss >> number;
-    float x=1.5+((number/10)-1)*3-15;
-    float y=1+((number%10)-1)*2-10;
-    temp.setX(x);
-    temp.setY(y);
-    temp.setZ(0);
+    float x = 1.5 + ((number / 10) - 1) * 3 - 15;
+    float y = 1 + ((number % 10) - 1) * 2 - 10;
+    if (number >= 1 and number <= 100) {
+        temp.setX(x);
+        temp.setY(y);
+        temp.setZ(0);
+    } else {
+        temp.setX(-30);
+        temp.setY(0);
+        temp.setZ(0);
+    }
     return temp;
+}
+
+bool isValidOpponentPosition(VecPosition position) {
+
+    if (position.getX() < -HALF_FIELD_X) {
+        return false;
+    }
+
+    return true;
 }
 
 SkillType NaoBehavior::selectSkill() {
 
 
-
-    if(!player.getIsInitialized()) {
-        cout<<"Player is not initialsed"<<"\n";
-        if(worldModel->getUNum()==1){
-            writeToFile("hello",0);
-        }
-
-
-
+    if (!player.getIsInitialized()) {
         initPlayerObject(worldModel);
     }
-    std::string opp_pos=readOpponentPositions(worldModel);
-    cout<<opp_pos;
-//writeToFile(opp_pos);
 
-    if(worldModel->getUNum()==10){
-//        readFile();
-        follow(12);
-        cout<<"following 12";
-    }
 
     int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
     bool isCurrentPlayerClosestToBall = false;
@@ -804,6 +834,8 @@ SkillType NaoBehavior::selectSkill() {
         }
     }
 
+
+
     // if ball came to current player change his current action
     if (isCurrentPlayerClosestToBall) {
         if (player.getIsInvolvedInAction()) {
@@ -811,9 +843,9 @@ SkillType NaoBehavior::selectSkill() {
             if (!action.getIsKickingAction()) {
                 //let the code continue
                 shouldOVerrideAction = true;
-            }else{
-                cout<<"Action "<<player.getPlayerNumber()<<" "<<action.getKickType()
-                <<" "<<action.getTargetPosition()<<"\n";
+            } else {
+                cout << "Action " << player.getPlayerNumber() << " " << action.getKickType()
+                     << " " << action.getTargetPosition() << "\n";
             }
         }
     } else {
@@ -822,6 +854,21 @@ SkillType NaoBehavior::selectSkill() {
             shouldOVerrideAction = true;
         }
     }
+
+
+    std::string opp_pos = readOpponentPositions(worldModel);
+    cout << opp_pos;
+
+    if (player.getPlayerNumber() == 10) {
+        VecPosition opponentPosition = follow(12);
+        if (isValidOpponentPosition(opponentPosition)) {
+            return setTargetPositionAction(opponentPosition);
+        }
+    }
+
+
+
+
 
     //check if targetIsReached
     if (player.getIsInvolvedInAction() && !player.getActionInvolved().getIsKickingAction()) {
