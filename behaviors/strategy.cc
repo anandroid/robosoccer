@@ -572,7 +572,7 @@ SkillType NaoBehavior::goalingAction() {
 SkillType NaoBehavior::playPassingToHigherAggressive(Player *player, int closestPlayerToBall) {
 
     if (worldModel->getUNum() == closestPlayerToBall) {
-        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel, worldModel->getUNum());
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel, worldModel->getUNum(),Normal);
         VecPosition nearPlayerPosition = worldModel->getWorldObject(nearPlayer)->pos;
         if (!player->getIsInvolvedInAction()) {
             player->setIsInvolvedInAction(true);
