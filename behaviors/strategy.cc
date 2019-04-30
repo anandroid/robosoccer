@@ -514,7 +514,7 @@ SkillType NaoBehavior::getSkillTypeFromAction(Action action){
     return goToTarget(action.getTargetPosition());
 }
 
-bool isNearToGoal(){
+bool isNearToGoal(WorldModel *worldModel){
 
     double GOAL_RANGE = (3*HALF_FIELD_X)/8;
 
@@ -621,7 +621,7 @@ SkillType NaoBehavior::selectSkill() {
 
     //goal action is highest prioirty
     if(isCurrentPlayerClosestToBall){
-        if(isNearToGoal()){
+        if(isNearToGoal(worldModel)){
             return goalingAction();
         }
     }
