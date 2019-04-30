@@ -598,7 +598,7 @@ SkillType NaoBehavior::selectSkill() {
 
     //check if targetIsReached
     if(player.getIsInvolvedInAction()  && !player.getActionInvolved().getIsKickingAction()){
-        bool isTargetReached =  didReachTargetPosition(me,player.getActionInvolved().getTargetPosition());
+        bool isTargetReached =  didReachTargetPosition(worldModel->getMyPosition(),player.getActionInvolved().getTargetPosition());
         if(isTargetReached){
             player.setIsInvolvedInAction(false);
             shouldOVerrideAction = true;
