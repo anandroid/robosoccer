@@ -476,7 +476,7 @@ int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int curre
     //cout<<"players with in range "<<playersWitInRange.size()<<"\n";
     for (int i=0;i<playersWitInRange.size();i++){
         //cout<<"player - "<<playersWitInRange[i];
-         int agressiveRating = 11 - playersWitInRange[i];
+         int agressiveRating = playersWitInRange[i];
          if(higherAggressiveRating<agressiveRating){
              higherAggressiveRating = agressiveRating;
              playerWithHigherAggressiveRating = playersWitInRange[i];
