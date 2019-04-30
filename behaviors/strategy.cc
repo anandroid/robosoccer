@@ -44,6 +44,8 @@ std::vector <Player> players;
 Player player;
 TeamMode teamMode;
 
+bool firstPass = true;
+
 
 class PlayerTask {
 
@@ -316,45 +318,44 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerX = -7 * X / 8;
         centerY = 0;
     } else if (playerPositionNumber == 2) {
-        centerX = -5 * X / 8;
-        centerY = 3 * Y / 4;
+        centerX = -6 * X / 8;
+        centerY = Y/2;
 
     } else if (playerPositionNumber == 3) {
-        centerX = -5 * X / 8;
-        centerY = Y / 4;
+        centerX = -6 * X / 8;
+        centerY = -Y / 2;
 
     } else if (playerPositionNumber == 4) {
-        centerX = -5 * X / 8;
-        centerY = -Y / 4;
+        centerX = -4 * X / 8;
+        centerY = Y / 4;
 
     } else if (playerPositionNumber == 5) {
-        centerX = -5 * X / 8;
-        centerY = -3 * Y / 4;
+        centerX = -4 * X / 8;
+        centerY = - Y / 4;
 
     } else if (playerPositionNumber == 6) {
         centerX = -3 * X / 8;
-        centerY = 3 * Y / 4;
+        centerY =  Y / 2;
 
     } else if (playerPositionNumber == 7) {
         centerX = -3 * X / 8;
-        centerY = Y / 4;
+        centerY = 0;
 
     } else if (playerPositionNumber == 8) {
         centerX = -3 * X / 8;
-        centerY = -Y / 4;
+        centerY = Y / 2;
 
     } else if (playerPositionNumber == 9) {
-        centerX = -3 * X / 8;
-        centerY = -3 * Y / 4;
+        centerX = -2 * X / 8;
+        centerY =  3*Y / 8;
 
     } else if (playerPositionNumber == 10) {
-        centerX = -X / 8;
-        centerY = Y / 4;
+        centerX = -2*X / 8;
+        centerY = -3*Y / 8;
 
     } else if (playerPositionNumber == 11) {
         centerX = -X / 8;
-        centerY = -Y / 4;
-
+        centerY = 0;
     }
 
 
@@ -453,6 +454,14 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
         temp.setZ(0);
 
         double distanceToPlayer = temp.getDistanceTo(myPos);
+
+        if(worldModel->getUNum()==11){
+            if(firstPass){
+                playersInRange.push_back(10);
+                firstPass = false;
+            }
+        }
+
         if (distanceToPlayer < RANGE && temp.getX()>myPos.getX()) {
             cout<<"My pos "<<myPos.getX()<<" Passed pos "<<temp.getX()<<"\n";
             playersInRange.push_back(playerNum);
