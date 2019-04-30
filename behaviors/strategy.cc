@@ -56,6 +56,8 @@ ofstream writefile;
 
 time_t previousModeReadTime;
 
+time_t
+
 
 class PlayerTask {
 
@@ -570,25 +572,28 @@ bool isModeNeedsToBeRetrieved(){
     time_t currentTime =  time(0);
 
     if(retrieveTeamModeAsPlayModeChanged){
+        retrieveTeamModeAsPlayModeChanged = false;
         return true;
     }
 
     if(previousModeReadTime - currentTime >10){
         cout<<"Mode called because of time change";
+        previousModeReadTime = time(0);
         return true;
     }
 
     return false;
 }
 
-void retrieveMode() {
+void retrieveMode(double time, int goal_diff) {
 
-    string str = "python dbnq3_2.py ";
+    string str = "python bn.py ";
     std::stringstream s;
-    s << playerNumber;
+    s <<goal_diff<<" "<<time;
     str.append(s.str());
     const char *command = str.c_str();
     system(command);
+    cout<<"Retrieve Mode command "<<str;
 
     string content = "";
     string goal;
@@ -596,7 +601,7 @@ void retrieveMode() {
     // cout << "Reading file\n";
     int length = 0;
     std::stringstream sss;
-    sss << "goal" << playerNumber;
+    sss << "mode.txt";
     string fname = sss.str();
     ifstream infile(fname.c_str());
     if (infile) {
@@ -614,10 +619,9 @@ void retrieveMode() {
         std::getline(infile, goal);//read last line
         //std::cout << goal << std::endl; // print it
     }
-    VecPosition temp;
     int number;
     std::istringstream iss(goal);
-    cout << "Goal :" << goal << endl;
+    cout << "Mode :" << goal << endl;
     iss >> number;
     if(number==Defence){
         teamMode.setMode(Defence);
@@ -1063,7 +1067,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
         if(isModeNeedsToBeRetrieved()){
-            retrieveMode();
+            retrieveMode(worldModel->getGameTime(),scoreMe-scoreOpp);
         }
 
 

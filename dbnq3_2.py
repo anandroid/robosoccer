@@ -197,7 +197,8 @@ a=dbn_inf.query(variables=[('G',100)], evidence=data)['G',100]
 
 max=a.values[0]
 g=1
-for x in range(4):
+# print a.size()
+for x in range(25):
    if max<a.values[x]:
       max=a.values[x]
       g=x+1
