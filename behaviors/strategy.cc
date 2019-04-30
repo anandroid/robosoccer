@@ -584,6 +584,7 @@ SkillType NaoBehavior::selectSkill() {
         }
     } else {
         if (player.getActionInvolved().getIsKickingAction()){
+            cout<<"Other player closer to ball "<<playerClosestToBall<<"\n";
             shouldOVerrideAction = true;
         }
     }
