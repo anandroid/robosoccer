@@ -539,14 +539,16 @@ SkillType NaoBehavior::goalingAction() {
     //choosing random X which is in the goal post range
     double randomX = HALF_FIELD_X;
 
-    VecPosition targetBallPosition = VecPosition(randomX, randomY, 0);
+    VecPosition targetBallPosition = VecPosition(randomX, randomY, me.getZ());
 
     cout<<"Goaling Action"<<"\n";
 
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
+        cout<<"Goaling Action Dribble "<<"\n";
         return kickBall(KICK_DRIBBLE, targetBallPosition);
     } else {
+        cout<<"Goaling Action Kick "<<"\n";
         return kickBall(KICK_IK, targetBallPosition);
     }
 
