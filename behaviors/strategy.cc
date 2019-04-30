@@ -48,9 +48,13 @@ std::vector <Player> players;
 Player player;
 TeamMode teamMode;
 
+bool retrieveTeamModeAsPlayModeChanged = false;
+
 bool firstPass = true;
 
 ofstream writefile;
+
+time_t previousModeReadTime;
 
 
 class PlayerTask {
@@ -405,6 +409,10 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
         beamAngle = 270;
     }
 
+    if(worldModel->getUNum()){
+        previousModeReadTime = time(0);
+    }
+
 
 }
 
@@ -557,6 +565,70 @@ void writeToFile(string content, int p_no) {
     myfile << content;
     myfile.close();
 }
+
+bool isModeNeedsToBeRetrieved(){
+    time_t currentTime =  time(0);
+
+    if(retrieveTeamModeAsPlayModeChanged){
+        return true;
+    }
+
+    if(previousModeReadTime - currentTime >10){
+        return true;
+    }
+
+    return false;
+}
+
+void retrieveMode() {
+
+    string str = "python dbnq3_2.py ";
+    std::stringstream s;
+    s << playerNumber;
+    str.append(s.str());
+    const char *command = str.c_str();
+    system(command);
+
+    string content = "";
+    string goal;
+    char c = '\0';
+    // cout << "Reading file\n";
+    int length = 0;
+    std::stringstream sss;
+    sss << "goal" << playerNumber;
+    string fname = sss.str();
+    ifstream infile(fname.c_str());
+    if (infile) {
+        length = infile.tellg();//Get file size
+
+        // loop backward over the file
+
+        for (int i = length - 2; i > 0; i--) {
+            infile.seekg(i);
+            c = infile.get();
+            if (c == '\r' || c == '\n')//new line?
+                break;
+        }
+
+        std::getline(infile, goal);//read last line
+        //std::cout << goal << std::endl; // print it
+    }
+    VecPosition temp;
+    int number;
+    std::istringstream iss(goal);
+    cout << "Goal :" << goal << endl;
+    iss >> number;
+    if(number==Defence){
+        teamMode.setMode(Defence);
+    } else if (number == Attack){
+        teamMode.setMode(Attack);
+    } else if(number==Normal){
+        teamMode.setMode(Normal);
+    }
+
+}
+
+
 
 std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
 
@@ -924,11 +996,19 @@ bool isValidOpponentPosition(VecPosition position) {
 
 SkillType NaoBehavior::selectSkill() {
 
-    cout << "Game Mode" << worldModel->getPlayMode() << "\n";
+    int playMode = worldModel->getPlayMode();
+
+    cout << "Game Mode" << playMode << "\n";
 
     if (!player.getIsInitialized()) {
         initPlayerObject(worldModel);
     }
+
+    if(playMode!=PM_PLAY_ON){
+        retrieveTeamModeAsPlayModeChanged = true;
+    }
+
+
 
     if (isOurSideKick(worldModel)) {
 
@@ -938,7 +1018,7 @@ SkillType NaoBehavior::selectSkill() {
         }
     }
 
-    if (worldModel->getPlayMode() >= PM_PLAY_ON) {
+    if (playMode >= PM_PLAY_ON) {
 
 
         int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
@@ -979,6 +1059,12 @@ SkillType NaoBehavior::selectSkill() {
                 shouldOVerrideAction = true;
             }
         }
+
+
+        if(isModeNeedsToBeRetrieved()){
+            retrieveMode();
+        }
+
 
         int defencePlayerNumberMax;
 

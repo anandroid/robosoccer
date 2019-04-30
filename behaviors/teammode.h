@@ -19,6 +19,7 @@ private:
 
 public:
     TeamMode();
+    void setMode(Mode mMode);
     void setCurrentTime(long time);
     void setGoals(int ourgoals,int opponentgoals);
     Mode getMode();

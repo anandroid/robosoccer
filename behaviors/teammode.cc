@@ -3,7 +3,7 @@
 
 
 TeamMode::TeamMode(){
-
+    mode = Attack;
 }
 
 void TeamMode::setCurrentTime(long mtime){
@@ -15,10 +15,14 @@ void TeamMode::setGoals(int mOurgoals,int mOpponentgoals){
     opponentgoals = mOpponentgoals;
 }
 
+void TeamMode::setMode(Mode mMode){
+    mode=mMode;
+}
+
 Mode TeamMode::getMode(){
     //Defence,Normal,Attack,SetPiece
     //calculate mode
-    return Attack;
+    return mode;
 }
 
 VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition currentPosition){
