@@ -7,6 +7,7 @@
 #include <vector>
 #include <sstream>
 #include <queue>
+#include <fstream>
 
 using namespace std;
 
@@ -31,6 +32,11 @@ string opponent_action_array[100];
 int opponent_action_index = 0;
 
 string opponent_random_goal = "";
+
+ofstream writefile;
+writefile.open("positions.txt");
+
+ifstream infile("positions.txt");
 
 
 class PlayerTask {
@@ -395,6 +401,22 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     threadExecutionForPlayer[playerNumber] = false;
 
     pthread_exit(NULL);
+}
+
+
+void writeToFile(string content){
+    writefile<<"Hello";
+    writefile.flush();
+}
+
+void readFile(){
+    string content="";
+    string line;
+    while(std::getline(infile,line)){
+        content+=line;
+    }
+
+
 }
 
 
