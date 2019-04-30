@@ -927,13 +927,12 @@ SkillType NaoBehavior::selectSkill() {
         initPlayerObject(worldModel);
     }
 
-    if(worldModel->getPlayMode()==PM_KICK_OFF_LEFT){
+    if(isOurSideKick(worldModel)){
 
         if(worldModel->getUNum()==11){
-
-              playAggressive(player,11);
+            Action action = playAggressive(&player,11);
+            return getSkillTypeFromAction(action);
         }
-
     }
 
     if(worldModel->getPlayMode()>=PM_PLAY_ON) {
