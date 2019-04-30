@@ -716,6 +716,53 @@ std::string readOpponentPositions(WorldModel *worldModel){
     return positions;
 }
 
+VecPosition follow(int playerNumber){
+    string str = "python ../../Desktop/Question3/dbnq3_2.py ";
+    std::stringstream s;
+    s<<playerNumber;
+    str.append(s.str());
+    const char *command =str.c_str();
+    system(command);
+
+    string content="";
+    string goal;
+    char c = '\0';
+    cout<<"Reading file\n";
+    int length = 0;
+    std::stringstream sss;
+    sss<<"goal"<<playerNumber;
+    string fname=sss.str();
+    ifstream infile(fname.c_str());
+    if( infile )
+    {
+        length = infile.tellg();//Get file size
+
+        // loop backward over the file
+
+        for(int i = length-2; i > 0; i-- )
+        {
+            infile.seekg(i);
+            c = infile.get();
+            if( c == '\r' || c == '\n' )//new line?
+                break;
+        }
+
+        std::getline(infile, goal);//read last line
+        std::cout << goal << std::endl; // print it
+    }
+    VecPosition temp;
+    int number;
+    std::istringstream iss (goal);
+    cout<<goal<<endl;
+    iss >> number;
+    float x=1.5+((number/10)-1)*3-15;
+    float y=1+((number%10)-1)*2-10;
+    temp.setX(x);
+    temp.setY(y);
+    temp.setZ(0);
+    return temp;
+}
+
 SkillType NaoBehavior::selectSkill() {
 
 
@@ -735,8 +782,9 @@ SkillType NaoBehavior::selectSkill() {
 //writeToFile(opp_pos);
 
     if(worldModel->getUNum()==10){
-        readFile();
-        cout<<"trying to read";
+//        readFile();
+        follow(12);
+        cout<<"following 12";
     }
 
     int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
