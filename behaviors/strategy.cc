@@ -532,11 +532,6 @@ void writeToFile(string content, int p_no) {
     ofstream myfile;
     myfile.open(fname.c_str(), std::ios_base::app);
     myfile << content;
-//    writefile.open("positions.txt", std::ios_base::app | std::ios_base::out);
-//    writefile<< content;
-//    writefile.flush();
-//    cout <<"writing"<< content<<endl;
-//    writefile.close();
     myfile.close();
 }
 
