@@ -414,6 +414,10 @@ int getPlayerClosestToTheBall(WorldModel *worldModel) {
         }
         temp.setZ(0);
 
+        if(worldModel->getUNum()==5){
+            cout<<"Player positon "<<playerNum<<" : "<<temp.getX()<<"\n";
+        }
+
         double distanceToBall = temp.getDistanceTo(worldModel->getBall());
         if (distanceToBall < closestDistanceToBall) {
             playerClosestToBall = playerNum;
@@ -466,8 +470,6 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel, int currentPlayerNumber) {
     int playerWithHigherAggressiveRating = -1;
     int higherAggressiveRating = -1;
-
-    VecPosition myPosition = worldModel->getMyPosition();
 
     std::vector<int> playersWitInRange = getPlayersAheadWithInRange(worldModel);
     //cout<<"--------------------------"<<"\n";
