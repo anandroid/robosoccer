@@ -413,11 +413,6 @@ int getPlayerClosestToTheBall(WorldModel *worldModel) {
             }
         }
         temp.setZ(0);
-
-        if(worldModel->getUNum()==5){
-            cout<<"Player positon "<<playerNum<<" : "<<temp.getX()<<"\n";
-        }
-
         double distanceToBall = temp.getDistanceTo(worldModel->getBall());
         if (distanceToBall < closestDistanceToBall) {
             playerClosestToBall = playerNum;
@@ -647,6 +642,9 @@ SkillType NaoBehavior::selectSkill() {
             if (!action.getIsKickingAction()) {
                 //let the code continue
                 shouldOVerrideAction = true;
+            }else{
+                cout<<"Action "<<player.getPlayerNumber()<<" "<<action.getKickType()
+                <<" "<<action.getTargetPosition()<<"\n";
             }
         }
     } else {
