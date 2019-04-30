@@ -329,6 +329,25 @@ bool isOurSideKick(WorldModel *worldModel) {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 FieldRange getRangeForPlayerPositionNumber(WorldModel *worldModel, int playerPositionNumber) {
 
     //cout << "playerPositionNumber" << playerPositionNumber << "\n";
@@ -1002,7 +1021,7 @@ SkillType NaoBehavior::selectSkill() {
 
     int playMode = worldModel->getPlayMode();
 
-    cout << "Game Mode" << playMode << "\n";
+    //cout << "Game Mode" << playMode << "\n";
 
     if (!player.getIsInitialized()) {
         initPlayerObject(worldModel);
