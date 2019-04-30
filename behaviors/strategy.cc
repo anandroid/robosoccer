@@ -56,9 +56,6 @@ ofstream writefile;
 
 time_t previousModeReadTime;
 
-time_t
-
-
 class PlayerTask {
 
 public:
@@ -311,6 +308,27 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
+bool isOurSideKick(WorldModel *worldModel) {
+    int mode = worldModel->getPlayMode();
+    int side = worldModel->getSide();
+    if (side == SIDE_LEFT) {
+        if (mode == 1 || mode == 4 || mode == 6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if (side == SIDE_RIGHT) {
+        if (mode == 2 || mode == 5 || mode == 7) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
+
 FieldRange getRangeForPlayerPositionNumber(WorldModel *worldModel, int playerPositionNumber) {
 
     //cout << "playerPositionNumber" << playerPositionNumber << "\n";
@@ -418,26 +436,7 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
 }
 
-bool isOurSideKick(WorldModel *worldModel) {
-    int mode = worldModel->getPlayMode();
-    int side = worldModel->getSide();
-    if (side == SIDE_LEFT) {
-        if (mode == 1 || mode == 4 || mode == 6) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    if (side == SIDE_RIGHT) {
-        if (mode == 2 || mode == 5 || mode == 7) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-}
 
 int getPlayerClosestToOpponent(WorldModel *worldModel, int opponentNumber) {
     int playerClosestToBall = -1;
