@@ -18,6 +18,8 @@
 #include <memory/JointCommandBlock.h>
 #include <memory/SimEffectorBlock.h>
 #include <memory/WalkRequestBlock.h>
+#include "player.h"
+#include "action.h"
 
 using namespace std;
 
@@ -227,6 +229,14 @@ protected:
     void getSkillsForKickType(int kickType, SkillType skillsForType[]);
 
     SkillType demoKickingCircle();
+
+    SkillType playPassingToHigherAggressive(Player *player,int closestPlayerToBall);
+
+    Action playAggressive(Player *player,int closestPlayerToBall);
+
+    Action kickAccordingToDistance(const VecPosition &target);
+
+    SkillType getSkillTypeFromAction(Action action);
 
     SkillType reachPosition(VecPosition target);
 

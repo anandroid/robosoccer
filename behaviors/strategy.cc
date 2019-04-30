@@ -1,5 +1,9 @@
 #include "naobehavior.h"
 #include "../rvdraw/rvdraw.h"
+#include "fieldRange.h"
+#include "player.h"
+#include "action.h"
+#include "action.cc"
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
@@ -8,6 +12,9 @@
 #include <sstream>
 #include <queue>
 #include <fstream>
+#include "teammode.h"
+#include "teammode.cc"
+
 
 using namespace std;
 
@@ -32,6 +39,14 @@ string opponent_action_array[100];
 int opponent_action_index = 0;
 
 string opponent_random_goal = "";
+
+std::vector <Player> players;
+
+Player player;
+TeamMode teamMode;
+
+
+
 
 ofstream writefile;
 writefile.open("positions.txt");
@@ -60,43 +75,7 @@ int getRandomInRange(int range) {
 }
 
 
-/*
- * Real game beaming.
- * Filling params x y angle
- */
-void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
-    if (worldModel->getUNum() == 1) {
-        beamX = -HALF_FIELD_X / getRandomInRange(15);
-        beamY = 0;
-        beamAngle = 0;
-    } else {
-        beamX = -HALF_FIELD_X / 4;
-        beamY = 0;
-        beamAngle = 0;
-    }
-
-
-    int randomValue = getRandomInRange(4);
-    if (randomValue < 1) {
-        opponent_random_goal = "R1 ";
-    } else if (randomValue < 2) {
-        opponent_random_goal = "R4 ";
-    } else if (randomValue < 3) {
-        opponent_random_goal = "R6 ";
-    } else if (randomValue < 4) {
-        opponent_random_goal = "R8 ";
-    }
-
-    randomValue = getRandomInRange(2);
-    if (randomValue < 1) {
-        opponent_random_goal = opponent_random_goal + "C1";
-    } else {
-        opponent_random_goal = opponent_random_goal + "C2";
-    }
-
-
-}
 
 std::string exec(const char *cmd) {
     char buffer[128];
@@ -209,89 +188,6 @@ string getStringFromOpponentActionsAndStates() {
 }
 
 
-void *opponentBackgroundFunction(void *playerNumberargs) {
-
-    int playerNumber = *((int *) playerNumberargs);
-    free(playerNumberargs);
-
-    cout << "player " << playerNumber << "\n";
-
-    threadExecutionForPlayer[playerNumber] = true;
-
-    /*** ----------------------------------------  ***/
-
-    float horizontal_tile_size = FIELD_X / 10;
-    int horizontal_tile = 5 + ((gworldModel->getMyPosition().getX()) / horizontal_tile_size);
-
-    float vertical_tile_size = FIELD_Y / 10;
-    int vertical_tile = 5 + ((gworldModel->getMyPosition().getY()) / vertical_tile_size);
-
-    //opponent_position_array[opponent_position_index++] = row_array[vertical_tile]+" "+column_array[horizontal_tile];
-
-    string command =
-            "python opp.py '" + opponent_random_goal + "' '" + row_array[vertical_tile] + " " +
-            column_array[horizontal_tile] + "' '0'";
-
-    // cout<<command;
-
-    string result = exec(command.c_str());
-    cout << result;
-
-    //it reached the state
-    if (result.find("step") != string::npos) {
-        //check threading issue
-        enrolled_in_task[playerNumber] = false;
-
-    } else {
-
-        vector <string> sep = split(result, ' ');
-
-        int row = 0;
-        int column = 0;
-
-        if (sep.size() > 3) {
-            row = ((int) sep[2].at(1)) - 48;
-            column = ((int) sep[3].at(1)) - 48;
-
-            int randomValue = getRandom();
-
-            if (randomValue >= 4 && randomValue < 5) {
-                row = row + 1;
-            }
-            if (randomValue >= 5 && randomValue < 7) {
-                row = row - 1;
-            }
-            if (randomValue >= 7 && randomValue < 8) {
-                column = column - 1;
-            }
-            if (randomValue >= 8 && randomValue < 10) {
-                column = column + 1;
-            }
-
-        }
-
-        //opponent_action_array[opponent_action_index++] = calculateActionInString(vertical_tile,horizontal_tile,
-        // row,column);
-
-
-        float vertical_y = vertical_tile_size * (row - 5);
-        float horizontal_x = horizontal_tile_size * (column - 5);
-
-        VecPosition shouldMoveTo = VecPosition(horizontal_x, vertical_y, 0);
-
-
-        PlayerTask playerTask = PlayerTask(playerNumber, shouldMoveTo);
-        tasksQueue.push(playerTask);
-
-    }
-
-    /*** ----------------------------------------  ***/
-
-    threadExecutionForPlayer[playerNumber] = false;
-
-    pthread_exit(NULL);
-}
-
 void *asuBackgroundFunction(void *playerNumberargs) {
 
     int playerNumber = *((int *) playerNumberargs);
@@ -403,6 +299,264 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
+FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
+
+    //cout << "playerPositionNumber" << playerPositionNumber << "\n";
+    int X = HALF_FIELD_X;
+    int Y = HALF_FIELD_Y;
+
+    int bottomLeftX;
+    int bottomLeftY;
+
+    int topRightX;
+    int topRightY;
+
+    int centerX;
+    int centerY;
+
+    if (playerPositionNumber == 1) {
+        centerX = -7 * X / 8;
+        centerY = 0;
+    } else if (playerPositionNumber == 2) {
+        centerX = -5 * X / 8;
+        centerY = 3 * Y / 4;
+
+    } else if (playerPositionNumber == 3) {
+        centerX = -5 * X / 8;
+        centerY = Y / 4;
+
+    } else if (playerPositionNumber == 4) {
+        centerX = -5 * X / 8;
+        centerY = -Y / 4;
+
+    } else if (playerPositionNumber == 5) {
+        centerX = -5 * X / 8;
+        centerY = -3 * Y / 4;
+
+    } else if (playerPositionNumber == 6) {
+        centerX = -3 * X / 8;
+        centerY = 3 * Y / 4;
+
+    } else if (playerPositionNumber == 7) {
+        centerX = -3 * X / 8;
+        centerY = Y / 4;
+
+    } else if (playerPositionNumber == 8) {
+        centerX = -3 * X / 8;
+        centerY = -Y / 4;
+
+    } else if (playerPositionNumber == 9) {
+        centerX = -3 * X / 8;
+        centerY = -3 * Y / 4;
+
+    } else if (playerPositionNumber == 10) {
+        centerX = -X / 8;
+        centerY = Y / 4;
+
+    } else if (playerPositionNumber == 11) {
+        centerX = -X / 8;
+        centerY = -Y / 4;
+
+    }
+
+
+    bottomLeftX = centerX - 1;
+    bottomLeftY = centerY + 1;
+
+    topRightX = centerX + 1;
+    topRightY = centerY - 1;
+
+    VecPosition bottomLeft(bottomLeftX, bottomLeftY, 0);
+    VecPosition topRight(topRightX, topRightY, 0);
+
+    FieldRange range(bottomLeft, topRight);
+    return range;
+
+}
+
+ void initPlayerObject(WorldModel *worldModel) {
+
+    FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
+
+    player.Init(worldModel->getUNum(), worldModel->getUNum(), 11-worldModel->getUNum(),range);
+
+}
+
+/*
+ * Real game beaming.
+ * Filling params x y angle
+ */
+void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
+
+    FieldRange range =  getRangeForPlayerPositionNumber(worldModel->getUNum());
+
+    beamX = range.getCenterOfRange().getX();
+    beamY = range.getCenterOfRange().getY();
+    beamAngle = 0;
+
+
+}
+
+int getPlayerClosestToTheBall(WorldModel *worldModel){
+    int playerClosestToBall = -1;
+    double closestDistanceToBall = 10000;
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
+            temp = worldModel->getMyPosition();
+        } else {
+            WorldObject *teammate = worldModel->getWorldObject(i);
+            if (teammate->validPosition) {
+                temp = teammate->pos;
+            } else {
+                continue;
+            }
+        }
+        temp.setZ(0);
+
+        double distanceToBall = temp.getDistanceTo(worldModel->getBall());
+        if (distanceToBall < closestDistanceToBall) {
+            playerClosestToBall = playerNum;
+            closestDistanceToBall = distanceToBall;
+        }
+    }
+
+    return playerClosestToBall;
+}
+
+std::vector <int> getPlayersWithInRange(WorldModel *worldModel){
+
+    std::vector <int> playersInRange;
+
+    int RANGE = 7 ;
+
+    double closestDistanceToPlayer = 10000;
+
+    VecPosition myPos;
+
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
+            temp = worldModel->getMyPosition();
+            myPos = temp;
+            temp.setZ(0);
+            continue;
+        } else {
+            WorldObject *teammate = worldModel->getWorldObject(i);
+            if (teammate->validPosition) {
+                temp = teammate->pos;
+            } else {
+                continue;
+            }
+        }
+        temp.setZ(0);
+
+        double distanceToPlayer = temp.getDistanceTo(myPos);
+        if (distanceToPlayer < RANGE) {
+            playersInRange.push_back(playerNum);
+        }
+    }
+
+    return playersInRange;
+}
+
+int getPlayerNearWithBetterAggressionInTheRange(WorldModel *worldModel,int currentPlayerNumber){
+    int playerWithHigherAggressiveRating =-1;
+    int higherAggressiveRating = -1;
+
+    std::vector <int> playersWitInRange = getPlayersWithInRange(worldModel);
+    //cout<<"--------------------------"<<"\n";
+    //cout<<"players with in range "<<playersWitInRange.size()<<"\n";
+    for (int i=0;i<playersWitInRange.size();i++){
+        //cout<<"player - "<<playersWitInRange[i];
+         int agressiveRating = 11 - playersWitInRange[i];
+         if(higherAggressiveRating<agressiveRating){
+             higherAggressiveRating = agressiveRating;
+             playerWithHigherAggressiveRating = playersWitInRange[i];
+         }
+    }
+
+    //cout<<"players with high aggressive rating "<<playerWithHigherAggressiveRating<<"\n";
+
+    return playerWithHigherAggressiveRating;
+}
+
+
+Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
+
+    VecPosition myPos = worldModel->getMyPosition();
+    double distance = myPos.getDistanceTo(target);
+    VecPosition ballPosition = worldModel->getBall();
+    Action action;
+    if(distance<3){
+        action.Init(true,target,KICK_DRIBBLE,ballPosition);
+    }else if(distance<6){
+        action.Init(true,target,KICK_FORWARD,ballPosition);
+    }else if(distance>6){
+        action.Init(true,target,KICK_IK,ballPosition);
+    }
+    return action;
+}
+
+SkillType NaoBehavior::getSkillTypeFromAction(Action action){
+
+    if(action.getIsKickingAction()){
+        return kickBall(action.getKickType(),action.getTargetPosition());
+    }
+
+    return goToTarget(action.getTargetPosition());
+}
+
+
+SkillType NaoBehavior::playPassingToHigherAggressive(Player *player,int closestPlayerToBall){
+
+    if(worldModel->getUNum()==closestPlayerToBall) {
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
+        VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
+        if(!player->getIsInvolvedInAction()){
+            player->setIsInvolvedInAction(true);
+        }
+        cout<<"Action  set : "<<player->getPlayerNumber()<<"\n";
+        Action action = kickAccordingToDistance(nearPlayerPosition);
+        player->setActionInvolved(action);
+       // return action;
+        return kickBall(KICK_FORWARD,nearPlayerPosition);
+    }else{
+        return SKILL_STAND;
+    }
+
+}
+
+Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
+    if(worldModel->getUNum()==closestPlayerToBall) {
+        int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
+        VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
+        player->setIsInvolvedInAction(true);
+        cout<<"Kick Action  set : "<<player->getPlayerNumber()<<"\n";
+        Action action = kickAccordingToDistance(nearPlayerPosition);
+        player->setActionInvolved(action);
+        // return action;
+        return action;
+    }else{
+        VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
+        VecPosition ballPosition = worldModel->getBall();
+        Action action;
+        action.Init(false,targetPosition,0,ballPosition);
+        player->setIsInvolvedInAction(true);
+        player->setActionInvolved(action);
+        cout<<"Move Action  set : "<<player->getPlayerNumber()<<"\n";
+        return action;
+    }
+}
+
+
+
+
+
 
 void writeToFile(string content){
     writefile<<"Hello";
@@ -421,7 +575,70 @@ void readFile(){
 
 
 SkillType NaoBehavior::selectSkill() {
-    gworldModel = worldModel;
+
+
+
+    if(!player.getIsInitialized()) {
+        cout<<"Player is not initialsed"<<"\n";
+        initPlayerObject(worldModel);
+    }
+
+    int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
+    bool isCurrentPlayerClosestToBall = false;
+
+    if (worldModel->getUNum()==playerClosestToBall){
+        isCurrentPlayerClosestToBall = true;
+    }
+
+    bool shouldOVerrideAction = false;
+
+    // if ball came to current player change his current action
+    if(isCurrentPlayerClosestToBall){
+        if(player.getIsInvolvedInAction()){
+            Action action = player.getActionInvolved();
+            if(!action.getIsKickingAction()){
+                //let the code continue
+                shouldOVerrideAction = true;
+            }
+        }
+    } else {
+        if (player.getActionInvolved().getIsKickingAction()){
+            cout<<"Other player closer to ball "<<playerClosestToBall<<"\n";
+            shouldOVerrideAction = true;
+        }
+    }
+
+
+    if(player.getIsInvolvedInAction() && !shouldOVerrideAction){
+        //cout<<"Action involved "<<player.getPlayerNumber();
+        return getSkillTypeFromAction(player.getActionInvolved());
+        //return SKILL_STAND;
+    }
+
+     //Defence,Normal,Attack,SetPiece
+     if(teamMode.getMode()==Defence){
+         return playPassingToHigherAggressive(&player,playerClosestToBall);
+     }
+
+     if(teamMode.getMode()==Attack){
+         Action action = playAggressive(&player,playerClosestToBall);
+         return getSkillTypeFromAction(action);
+     }
+
+     if(teamMode.getMode() == SetPiece){
+
+     }
+
+     return playPassingToHigherAggressive(&player,playerClosestToBall);
+
+    //if(player.getIsInvolvedInAction()){
+        //cout <<"Invovlved in Action selectSkill"<<"\n";
+   // }
+
+
+    //goToTarget(player.getRange().getCenterOfRange());
+
+    /*gworldModel = worldModel;
 
     pthread_t thread;
 
@@ -434,11 +651,7 @@ SkillType NaoBehavior::selectSkill() {
 
         int rc;
 
-        if (worldModel->getUNum() == 1) {
-            rc = pthread_create(&thread, NULL, opponentBackgroundFunction, (void *) arg);
-        } else {
-            rc = pthread_create(&thread, NULL, asuBackgroundFunction, (void *) arg);
-        }
+        rc = pthread_create(&thread, NULL, asuBackgroundFunction, (void *) arg);
 
         if (rc) {
             cout << "Error:unable to create thread," << rc << endl;
@@ -446,61 +659,6 @@ SkillType NaoBehavior::selectSkill() {
         }
     }
 
-    // My position and angle
-    //cout << worldModel->getUNum() << ": " << worldModel->getMyPosition() << ",\t" << worldModel->getMyAngDeg() << "\n";
-
-    // Position of the ball
-    //cout << worldModel->getBall() << "\n";
-
-    // Example usage of the roboviz drawing system and RVSender in rvdraw.cc.
-    // Agents draw the position of where they think the ball is
-    // Also see example in naobahevior.cc for drawing agent position and
-    // orientation.
-    /*
-    worldModel->getRVSender()->clear(); // erases drawings from previous cycle
-    worldModel->getRVSender()->drawPoint("ball", ball.getX(), ball.getY(), 10.0f, RVSender::MAGENTA);
-    */
-
-    // ### Demo Behaviors ###
-
-    // Walk in different directions
-    //return goToTargetRelative(VecPosition(1,0,0), 0); // Forward
-    //return goToTargetRelative(VecPosition(-1,0,0), 0); // Backward
-    //return goToTargetRelative(VecPosition(0,1,0), 0); // Left
-    //return goToTargetRelative(VecPosition(0,-1,0), 0); // Right
-    //return goToTargetRelative(VecPosition(1,1,0), 0); // Diagonal
-    //return goToTargetRelative(VecPosition(0,1,0), 90); // Turn counter-clockwise
-    //return goToTargetRelative(VecPdosition(0,-1,0), -90); // Turn clockwise
-    //return goToTargetRelative(VecPosition(1,0,0), 15); // Circle
-
-    // Walk to the ball
-    //return goToTarget(ball);
-
-    // Turn in place to face ball
-    /*double distance, angle;
-    getTargetDistanceAndAngle(ball, distance, angle);
-    if (abs(angle) > 10) {
-      return goToTargetRelative(VecPosition(), angle);
-    } else {
-      return SKILL_STAND;
-    }*/
-
-    // Walk to ball while always facing forward
-    //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
-
-    // Dribble ball toward opponent's goal
-    //return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
-
-    // Kick ball toward opponent's goal
-    //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
-    //return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0)); // IK kick
-
-    // Just stand in place
-    //return SKILL_STAND;
-
-    // Demo behavior where players form a rotating circle and kick the ball
-    // back and forth
-    //return demoKickingCircle();
 
 
     if (tasksQueue.size() > 0 || enrolled_in_task[worldModel->getUNum()]) {
@@ -517,8 +675,10 @@ SkillType NaoBehavior::selectSkill() {
         return reachPosition(target_positions_for_player[worldModel->getUNum()]);
 
     }
-    return SKILL_STAND;
+    return SKILL_STAND;*/
 }
+
+
 
 SkillType NaoBehavior::reachPosition(VecPosition target) {
 
@@ -530,9 +690,9 @@ SkillType NaoBehavior::reachPosition(VecPosition target) {
         // Move toward target location
         return goToTarget(target);
     }
-
-
 }
+
+
 
 /*
  * Demo behavior where players form a rotating circle and kick the ball
