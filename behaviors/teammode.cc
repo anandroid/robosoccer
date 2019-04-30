@@ -127,43 +127,43 @@ FieldRange TeamMode::getAttackFieldRange(int playerPositionNumber) {
         centerY = 0;
     } else if (playerPositionNumber == 2) {
         centerX = -5 * X / 8;
-        centerY = 3 * Y / 4;
+        centerY =  Y / 4;
 
     } else if (playerPositionNumber == 3) {
         centerX = -5 * X / 8;
-        centerY = Y / 4;
-
-    } else if (playerPositionNumber == 4) {
-        centerX = -5 * X / 8;
         centerY = -Y / 4;
 
+    } else if (playerPositionNumber == 4) {
+        centerX = -3 * X / 8;
+        centerY = 3*Y / 4;
+
     } else if (playerPositionNumber == 5) {
-        centerX = -5 * X / 8;
+        centerX = -3 * X / 8;
         centerY = -3 * Y / 4;
 
-    } else if (playerPositionNumber == 11) {
-        centerX = 3 * X / 8;
-        centerY = 3 * Y / 4;
-
-    } else if (playerPositionNumber == 10) {
-        centerX = 3 * X / 8;
+    }  else if (playerPositionNumber == 6) {
+        centerX = X / 8;
         centerY = Y / 4;
 
-    } else if (playerPositionNumber == 9) {
-        centerX = 3 * X / 8;
+    } else if (playerPositionNumber == 7) {
+        centerX = X / 8;
         centerY = -Y / 4;
 
     } else if (playerPositionNumber == 8) {
         centerX = 3 * X / 8;
+        centerY = 3 * Y / 4;
+
+    } else if (playerPositionNumber == 9) {
+        centerX = 3 * X / 8;
         centerY = -3 * Y / 4;
 
-    } else if (playerPositionNumber == 7) {
-        centerX = X / 8;
+    } else if (playerPositionNumber == 10) {
+        centerX = 5 * X / 8;
         centerY = Y / 4;
 
-    } else if (playerPositionNumber == 6) {
-        centerX = X / 8;
-        centerY = Y / 4;
+    } else if (playerPositionNumber == 11) {
+        centerX = 5 * X / 8;
+        centerY = - Y / 4;
 
     }
 
