@@ -232,6 +232,8 @@ protected:
 
     SkillType playPassingToHigherAggressive(Player *player,int closestPlayerToBall);
 
+    Action playDefensive(Player *player,int closestPlayerToBall);
+
     Action playAggressive(Player *player,int closestPlayerToBall);
 
     Action kickAccordingToDistance(const VecPosition &target);
