@@ -659,7 +659,7 @@ SkillType NaoBehavior::goalingAction() {
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
         cout << "Goaling Action Dribble " << targetBallPosition << "\n";
-        return kickBall(KICK_DRIBBLE, targetBallPosition);
+        return kickBall(KICK_FORWARD, targetBallPosition);
     } else {
         cout << "Goaling Action Kick " << targetBallPosition << "\n";
         return kickBall(KICK_IK, targetBallPosition);
@@ -956,7 +956,7 @@ SkillType NaoBehavior::selectSkill() {
     }
 
 
-    if (player.getPlayerNumber() <= defencePlayerNumberMax) {
+    if (player.getPlayerNumber() <= defencePlayerNumberMax && player.getAggressiveRating()!=1) {
         std::vector<int> opponentsPlayersInOurField = readOpponentPositionsAndReturnWithInRange(worldModel);
 
         for (int i = 0; i < opponentsPlayersInOurField.size(); i++) {
