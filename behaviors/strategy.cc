@@ -533,7 +533,7 @@ Action NaoBehavior :: playAggressive(Player *player){
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
         player->setIsInvolvedInAction(true);
-        cout<<"Action  set : "<<player->getPlayerNumber()<<"\n";
+        cout<<"Kick Action  set : "<<player->getPlayerNumber()<<"\n";
         Action action = kickAccordingToDistance(nearPlayerPosition);
         player->setActionInvolved(action);
         // return action;
@@ -545,6 +545,7 @@ Action NaoBehavior :: playAggressive(Player *player){
         action.Init(false,targetPosition,0,ballPosition);
         player->setIsInvolvedInAction(true);
         player->setActionInvolved(action);
+        cout<<"Move Action  set : "<<player->getPlayerNumber()<<"\n";
         return action;
     }
 }
@@ -589,7 +590,7 @@ SkillType NaoBehavior::selectSkill() {
 
 
     if(player.getIsInvolvedInAction() && !shouldOVerrideAction){
-        cout<<"Action involved "<<player.getPlayerNumber();
+        //cout<<"Action involved "<<player.getPlayerNumber();
         return getSkillTypeFromAction(player.getActionInvolved());
         //return SKILL_STAND;
     }
