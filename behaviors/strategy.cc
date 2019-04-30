@@ -639,7 +639,7 @@ void retrieveMode(double time, int goal_diff) {
     }
     int number;
     std::istringstream iss(goal);
-    cout << "Mode :" << goal << endl;
+    cout << " Mode : " << goal << endl;
     iss >> number;
     if(number==Defence){
         teamMode.setMode(Defence);
