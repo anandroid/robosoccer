@@ -518,7 +518,7 @@ bool isNearToGoal(WorldModel *worldModel){
 
     double GOAL_RANGE = (3*HALF_FIELD_X)/8;
 
-    double distanceToGoal = worldModel->distanceToOppGoal(me);
+    double distanceToGoal = worldModel->distanceToOppGoal(worldModel->getMyPosition());
 
     if(distanceToGoal < GOAL_RANGE){
         return true;
