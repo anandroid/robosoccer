@@ -522,6 +522,24 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel, Mode mode) {
     return playersInRange;
 }
 
+
+void writeToFile(string content, int p_no) {
+    std::stringstream ss;
+    ss << "positions_" << p_no << ".txt";
+    string fname = ss.str();
+    //cout << fname;
+    //cout << p_no << endl;
+    ofstream myfile;
+    myfile.open(fname.c_str(), std::ios_base::app);
+    myfile << content;
+//    writefile.open("positions.txt", std::ios_base::app | std::ios_base::out);
+//    writefile<< content;
+//    writefile.flush();
+//    cout <<"writing"<< content<<endl;
+//    writefile.close();
+    myfile.close();
+}
+
 std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
 
     std::vector<int> playersInRange;
@@ -762,22 +780,6 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
 }
 
 
-void writeToFile(string content, int p_no) {
-    std::stringstream ss;
-    ss << "positions_" << p_no << ".txt";
-    string fname = ss.str();
-    //cout << fname;
-    //cout << p_no << endl;
-    ofstream myfile;
-    myfile.open(fname.c_str(), std::ios_base::app);
-    myfile << content;
-//    writefile.open("positions.txt", std::ios_base::app | std::ios_base::out);
-//    writefile<< content;
-//    writefile.flush();
-//    cout <<"writing"<< content<<endl;
-//    writefile.close();
-    myfile.close();
-}
 
 void readFile() {
     string content = "";
