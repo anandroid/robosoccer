@@ -181,7 +181,7 @@ string getStringFromOpponentActionsAndStates() {
     return result;
 }
 
-bool didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
+bool didReachTargetPosition(VecPosition currentPosition,  VecPosition targetPosition){
 
     if(currentPosition.getDistanceTo(targetPosition)<0.2){
         return true;
