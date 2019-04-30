@@ -680,7 +680,7 @@ SkillType NaoBehavior::reachPosition(VecPosition target) {
     }
 }
 
-boolean didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
+bool didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
 
     if(currentPosition.getDistanceTo(targetPosition)<0.2){
         return true;
