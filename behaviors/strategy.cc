@@ -47,6 +47,7 @@ TeamMode teamMode;
 
 
 
+
 class PlayerTask {
 
 public:
@@ -530,16 +531,13 @@ Action NaoBehavior :: playAggressive(Player *player){
     if(worldModel->getUNum()==closestPlayerToBall) {
         int nearPlayer = getPlayerNearWithBetterAggressionInTheRange(worldModel,worldModel->getUNum());
         VecPosition nearPlayerPosition =  worldModel->getWorldObject(nearPlayer)->pos;
-        if(!player->getIsInvolvedInAction()){
-            player->setIsInvolvedInAction(true);
-        }
+        player->setIsInvolvedInAction(true);
         cout<<"Action  set : "<<player->getPlayerNumber()<<"\n";
         Action action = kickAccordingToDistance(nearPlayerPosition);
         player->setActionInvolved(action);
         // return action;
         return action;
     }else{
-
         VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
         Action action;
         action.Init(false,targetPosition,0);
@@ -563,8 +561,26 @@ SkillType NaoBehavior::selectSkill() {
         initPlayerObject(worldModel);
     }
 
+    int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
+    bool isCurrentPlayerClosestToBall = false;
 
-    if(player.getIsInvolvedInAction()){
+    if (worldModel->getUNum()==playerClosestToBall){
+        isCurrentPlayerClosestToBall = true;
+    }
+
+    bool shouldOVerrideAction = false;
+
+    if(isCurrentPlayerClosestToBall){
+        if(player.getIsInvolvedInAction()){
+            Action action = player.getActionInvolved();
+            if(!action.getIsKickingAction()){
+                //let the code continue
+                shouldOVerrideAction = true;
+            }
+        }
+    }
+
+    if(player.getIsInvolvedInAction() && !shouldOVerrideAction){
         cout<<"Action involved "<<player.getPlayerNumber();
         return getSkillTypeFromAction(player.getActionInvolved());
         //return SKILL_STAND;
