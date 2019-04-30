@@ -431,7 +431,7 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
     std::vector<int> playersInRange;
 
-    int RANGE = 7;
+    int RANGE = 5;
 
     double closestDistanceToPlayer = 10000;
 
