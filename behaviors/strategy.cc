@@ -514,6 +514,44 @@ SkillType NaoBehavior::getSkillTypeFromAction(Action action){
     return goToTarget(action.getTargetPosition());
 }
 
+bool isNearToGoal(){
+
+    double GOAL_RANGE = (3*HALF_FIELD_X)/8;
+
+    double distanceToGoal = worldModel->distanceToOppGoal(me);
+
+    if(distanceToGoal < GOAL_RANGE){
+        return true;
+    }
+
+    return false;
+
+}
+
+SkillType NaoBehavior::goalingAction() {
+
+    // Choose any random point in in 2d window
+
+    //choosing random Y which is in the goal post range
+    double randomY = worldModel->getOppRightGoalPost().getY() +
+                     random(GOAL_Y);
+
+    //choosing random X which is in the goal post range
+    double randomX = HALF_FIELD_X - random(GOAL_X);
+
+    VecPosition targetBallPosition = VecPosition(randomX, randomY, 0);
+
+    LOG_MSG("targetBallPosition",targetBallPosition);
+
+    //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
+    if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
+        return kickBall(KICK_DRIBBLE,targetBallPosition);
+    } else {
+        return kickBall(KICK_IK, targetBallPosition);
+    }
+
+}
+
 
 SkillType NaoBehavior::playPassingToHigherAggressive(Player *player,int closestPlayerToBall){
 
@@ -579,6 +617,14 @@ SkillType NaoBehavior::selectSkill() {
     }
 
     bool shouldOVerrideAction = false;
+
+
+    //goal action is highest prioirty
+    if(isCurrentPlayerClosestToBall){
+        if(isNearToGoal()){
+            return goalingAction();
+        }
+    }
 
     // if ball came to current player change his current action
     if(isCurrentPlayerClosestToBall){
