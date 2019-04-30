@@ -319,11 +319,11 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = 0;
     } else if (playerPositionNumber == 2) {
         centerX = -6 * X / 8;
-        centerY = Y/2;
+        centerY = 3*Y/8;
 
     } else if (playerPositionNumber == 3) {
         centerX = -6 * X / 8;
-        centerY = -Y / 2;
+        centerY = -3*Y / 8;
 
     } else if (playerPositionNumber == 4) {
         centerX = -4 * X / 8;
@@ -354,7 +354,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = -3*Y / 8;
 
     } else if (playerPositionNumber == 11) {
-        centerX = 0;
+        centerX = X/10;
         centerY = 1;
     }
 
