@@ -355,7 +355,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
 
     } else if (playerPositionNumber == 11) {
         centerX = 0;
-        centerY = 0;
+        centerY = 1;
     }
 
 
@@ -391,7 +391,10 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
     beamX = range.getCenterOfRange().getX();
     beamY = range.getCenterOfRange().getY();
-    beamAngle = 0;
+    if(worldModel->getUNum()==11){
+        beamAngle = 270;
+    }
+
 
 
 }
