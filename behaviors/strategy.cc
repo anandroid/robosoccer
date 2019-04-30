@@ -844,20 +844,19 @@ SkillType NaoBehavior::selectSkill() {
                 //let the code continue
                 shouldOVerrideAction = true;
             } else {
-                cout << "Action " << player.getPlayerNumber() << " " << action.getKickType()
-                     << " " << action.getTargetPosition() << "\n";
+                //cout << "Action " << player.getPlayerNumber() << " " << action.getKickType()
+                 //    << " " << action.getTargetPosition() << "\n";
             }
         }
     } else {
         if (player.getActionInvolved().getIsKickingAction()) {
-            cout << "Other player closer to ball " << playerClosestToBall << "\n";
+            //cout << "Other player closer to ball " << playerClosestToBall << "\n";
             shouldOVerrideAction = true;
         }
     }
 
 
-    std::string opp_pos = readOpponentPositions(worldModel);
-    //cout << opp_pos;
+    readOpponentPositions(worldModel);
 
     if (player.getPlayerNumber() == 10) {
         VecPosition opponentPosition = follow(12);
