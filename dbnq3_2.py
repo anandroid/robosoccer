@@ -12,14 +12,14 @@ dbn = DBN()
 def mean(a):
     return sum(a) / len(a)
 file_name="positions_"+sys.argv[1]+".txt"
-with open("../../CLionProjects/robosoccer/"+file_name,"r")as f:
+with open(file_name,"r")as f:
 	a=f.readlines()
 
 pos_dict={}
 for x in range(1,10000):
 	# print x,a[-x]
 	if 'Tue' in a[-x]:
-		print 'yo'
+		# print 'yo'
 
 		b=a[-x].split(" ")
 		d=b[3].split(":")
@@ -45,9 +45,10 @@ for key, value in pos_dict.iteritems():
 	x=x/len(value)		
 	y=y/len(value)
 	pos=pos/len(value)
+	# print x,y
 	
-	x=math.ceil(x/3)+6
-	y=math.ceil(y/2)+6
+	x=math.floor(x/3)+5
+	y=math.floor(y/2)+5
 	pos_corret[key]=[pos,x,y]
 
 # print pos_corret.keys()
@@ -62,6 +63,7 @@ data={}
 for key,value in pos_true.iteritems():
 	current_state_x=int(value[1])
 	current_state_y=int(value[2])
+	# print current_state_x,current_state_y
 	if key+1 not in pos_true.keys():
 		print key+1,"not present"
 		continue

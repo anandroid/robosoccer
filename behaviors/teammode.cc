@@ -47,14 +47,10 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
             MIN_RANGE_X = -3 * HALF_FIELD_X / 8;
         }
 
-        if (aggressiveRating == 5) {
-            isAttackPlayer = true;
-            MAX_RANGE_X = HALF_FIELD_X / 8;
-        }
 
         if (aggressiveRating == 6 || aggressiveRating == 7) {
             isAttackPlayer = true;
-            MAX_RANGE_X = 2 * HALF_FIELD_X / 8;
+            MAX_RANGE_X =  HALF_FIELD_X / 8;
         }
 
         if (aggressiveRating == 8 || aggressiveRating == 9) {
