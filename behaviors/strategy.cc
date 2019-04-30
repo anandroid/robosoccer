@@ -522,7 +522,7 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel, Mode mode) {
     return playersInRange;
 }
 
-std::string readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
+std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldModel) {
 
     std::vector<int> playersInRange;
 
