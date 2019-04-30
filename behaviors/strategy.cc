@@ -305,7 +305,7 @@ void *asuBackgroundFunction(void *playerNumberargs) {
     pthread_exit(NULL);
 }
 
-FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
+FieldRange getRangeForPlayerPositionNumber(WorldModel *worldModel, int playerPositionNumber) {
 
     //cout << "playerPositionNumber" << playerPositionNumber << "\n";
     int X = HALF_FIELD_X;
@@ -360,7 +360,11 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = -3 * Y / 8;
 
     } else if (playerPositionNumber == 11) {
-        centerX = - X / 8;
+        if (isOurSideKick(worldModel)) {
+            centerX = -X / 8;
+        } else {
+            centerX = -2 * X / 8;
+        }
         centerY = 0.5;
     }
 
@@ -393,7 +397,7 @@ void initPlayerObject(WorldModel *worldModel) {
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
-    FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
+    FieldRange range = getRangeForPlayerPositionNumber(worldModel, worldModel->getUNum());
 
     beamX = range.getCenterOfRange().getX();
     beamY = range.getCenterOfRange().getY();
@@ -404,19 +408,19 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
 }
 
-bool isOurSideKick(WorldModel *worldModel){
+bool isOurSideKick(WorldModel *worldModel) {
     int mode = worldModel->getPlayMode();
-    int side  = worldModel->getSide();
-    if(side==SIDE_LEFT){
-        if(mode == 1 || mode==4 || mode==6){
+    int side = worldModel->getSide();
+    if (side == SIDE_LEFT) {
+        if (mode == 1 || mode == 4 || mode == 6) {
             return true;
-        } else{
+        } else {
             return false;
         }
     }
 
-    if(side==SIDE_RIGHT){
-        if(mode==2 || mode==5 || mode==7){
+    if (side == SIDE_RIGHT) {
+        if (mode == 2 || mode == 5 || mode == 7) {
             return true;
         } else {
             return false;
@@ -521,8 +525,8 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel, Mode mode) {
         double distanceToPlayer = temp.getDistanceTo(myPos);
 
         if (isOurSideKick(worldModel)) {
-                playersInRange.push_back(10);
-                firstPass = false;
+            playersInRange.push_back(10);
+            firstPass = false;
         }
 
         if (distanceToPlayer < RANGE) {
@@ -794,7 +798,6 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
 }
 
 
-
 void readFile() {
     string content = "";
     std::string tmp;
@@ -921,21 +924,21 @@ bool isValidOpponentPosition(VecPosition position) {
 
 SkillType NaoBehavior::selectSkill() {
 
-    cout<<"Game Mode"<<worldModel->getPlayMode()<<"\n";
+    cout << "Game Mode" << worldModel->getPlayMode() << "\n";
 
     if (!player.getIsInitialized()) {
         initPlayerObject(worldModel);
     }
 
-    if(isOurSideKick(worldModel)){
+    if (isOurSideKick(worldModel)) {
 
-        if(worldModel->getUNum()==11){
-            Action action = playAggressive(&player,11);
+        if (worldModel->getUNum() == 11) {
+            Action action = playAggressive(&player, 11);
             return getSkillTypeFromAction(action);
         }
     }
 
-    if(worldModel->getPlayMode()>=PM_PLAY_ON) {
+    if (worldModel->getPlayMode() >= PM_PLAY_ON) {
 
 
         int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
