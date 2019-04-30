@@ -541,7 +541,7 @@ SkillType NaoBehavior::goalingAction() {
                      random(GOAL_Y);
 
     //choosing random X which is in the goal post range
-    double randomX = HALF_FIELD_X;
+    double randomX = HALF_FIELD_X - random(GOAL_X);
 
     VecPosition targetBallPosition = VecPosition(randomX, randomY, me.getZ());
 
@@ -549,10 +549,10 @@ SkillType NaoBehavior::goalingAction() {
 
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
-        cout<<"Goaling Action Dribble "<<"\n";
+        cout<<"Goaling Action Dribble "<<targetBallPosition"\n";
         return kickBall(KICK_DRIBBLE, targetBallPosition);
     } else {
-        cout<<"Goaling Action Kick "<<"\n";
+        cout<<"Goaling Action Kick "<<targetBallPosition"\n";
         return kickBall(KICK_IK, targetBallPosition);
     }
 
@@ -640,6 +640,7 @@ SkillType NaoBehavior::selectSkill() {
     //goal action is highest prioirty
     if (isCurrentPlayerClosestToBall) {
         if (isNearToGoal(worldModel)) {
+            player.setIsInvolvedInAction(false);
             return goalingAction();
         }
     }
@@ -668,7 +669,6 @@ SkillType NaoBehavior::selectSkill() {
         bool isTargetReached = didReachTargetPosition(worldModel->getMyPosition(),
                                                       player.getActionInvolved().getTargetPosition());
         if (isTargetReached) {
-            player.setIsInvolvedInAction(false);
             shouldOVerrideAction = true;
         }
     }
