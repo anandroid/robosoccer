@@ -12,6 +12,7 @@ private:
     bool isKickingAction;
     VecPosition targetPosition;
     int kickType;
+    VecPosition initialBallPosition;
 
 public:
    /* Action(){
@@ -24,10 +25,11 @@ public:
         kickType = mKickType;
     }*/
     Action();
-    void Init(bool isKickingAction,VecPosition targetPosition,int kickType);
+    void Init(bool isKickingAction,VecPosition targetPosition,int kickType,VecPosition initialBallPosition);
     bool getIsKickingAction();
     int  getKickType();
     VecPosition getTargetPosition();
+    VecPosition getInitialBallPosition();
 
 };
 

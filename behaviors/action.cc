@@ -10,10 +10,13 @@ Action::Action(){
 
 }
 
-void Action::Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType){
+void Action::Init(bool mIsKickingAction,VecPosition mTargetPosition,int mKickType,
+        VecPosition mInitialBallPosition){
     isKickingAction= mIsKickingAction;
     targetPosition = mTargetPosition;
     kickType = mKickType;
+    initialBallPosition = mInitialBallPosition;
+
 }
 
 bool Action::getIsKickingAction(){
@@ -26,4 +29,8 @@ int Action::getKickType(){
 
 VecPosition Action::getTargetPosition(){
     return targetPosition;
+}
+
+VecPosition Action::getInitialBallPosition(){
+    return initialBallPosition;
 }

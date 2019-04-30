@@ -484,13 +484,14 @@ Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
     VecPosition myPos = worldModel->getMyPosition();
     double distance = myPos.getDistanceTo(target);
+    VecPosition ballPosition = worldModel->getBall();
     Action action;
     if(distance<3){
-        action.Init(true,target,KICK_DRIBBLE);
+        action.Init(true,target,KICK_DRIBBLE,ballPosition);
     }else if(distance<6){
-        action.Init(true,target,KICK_FORWARD);
+        action.Init(true,target,KICK_FORWARD,ballPosition);
     }else if(distance>6){
-        action.Init(true,target,KICK_IK);
+        action.Init(true,target,KICK_IK,ballPosition);
     }
     return action;
 }
@@ -539,8 +540,9 @@ Action NaoBehavior :: playAggressive(Player *player){
         return action;
     }else{
         VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
+        VecPosition ballPosition = worldModel->getBall();
         Action action;
-        action.Init(false,targetPosition,0);
+        action.Init(false,targetPosition,0,ballPosition);
         player->setIsInvolvedInAction(true);
         player->setActionInvolved(action);
         return action;
@@ -570,6 +572,7 @@ SkillType NaoBehavior::selectSkill() {
 
     bool shouldOVerrideAction = false;
 
+    // if ball came to current player change his current action
     if(isCurrentPlayerClosestToBall){
         if(player.getIsInvolvedInAction()){
             Action action = player.getActionInvolved();
@@ -578,6 +581,10 @@ SkillType NaoBehavior::selectSkill() {
                 shouldOVerrideAction = true;
             }
         }
+    }
+
+    if(player.getActionInvolved().getIsKickingAction()){
+        shouldOVerrideAction = true;
     }
 
     if(player.getIsInvolvedInAction() && !shouldOVerrideAction){
