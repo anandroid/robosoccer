@@ -391,7 +391,7 @@ FieldRange getRangeForPlayerPositionNumber(WorldModel *worldModel, int playerPos
 
 void initPlayerObject(WorldModel *worldModel) {
 
-    FieldRange range = getRangeForPlayerPositionNumber(worldModel->getUNum());
+    FieldRange range = getRangeForPlayerPositionNumber(worldModel,worldModel->getUNum());
 
     player.Init(worldModel->getUNum(), worldModel->getUNum(), worldModel->getUNum(), range);
 

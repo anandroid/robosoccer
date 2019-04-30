@@ -30,7 +30,7 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
     double newX = currentPosition.getX();
     double newY = currentPosition.getY();
 
-    if(getMode()==Attack) {
+    if(getMode()>Defence) {
         int MAX_RANGE_X;
         int MIN_RANGE_X;
 
@@ -207,6 +207,7 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
 
 
        }
+
 
         return VecPosition(newX,newY,currentPosition.getZ());
 
