@@ -1025,7 +1025,7 @@ SkillType NaoBehavior::selectSkill() {
             Action action = playAggressive(&player, playerClosestToBall);
             return getSkillTypeFromAction(action);
         } else {
-            Action action = playAggressive(&player, playerClosestToBall);
+            Action action = playDefensive(&player, playerClosestToBall);
             return getSkillTypeFromAction(action);
         }
 
