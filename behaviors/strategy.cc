@@ -862,7 +862,7 @@ SkillType NaoBehavior::selectSkill() {
     if (player.getPlayerNumber() == 10) {
         VecPosition opponentPosition = follow(12);
         if (isValidOpponentPosition(opponentPosition)) {
-            return setTargetPositionAction(opponentPosition);
+            return setTargetPositionAction(player,opponentPosition);
         }
     }
 
