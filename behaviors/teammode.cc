@@ -113,14 +113,6 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
             }
         }
 
-        if(aggressiveRating==1){
-            cout<<"Player 1 New Target "<<newX<<":"<<newY<<"\n";
-        }else{
-            cout<<aggressiveRating;
-        }
-
-
-
         return VecPosition(newX,newY,currentPosition.getZ());
 
 }
