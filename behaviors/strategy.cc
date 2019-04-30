@@ -902,104 +902,106 @@ bool isValidOpponentPosition(VecPosition position) {
 
 SkillType NaoBehavior::selectSkill() {
 
+    cout<<"Game Mode"<<worldModel->getPlayMode()<<"\n";
 
     if (!player.getIsInitialized()) {
         initPlayerObject(worldModel);
     }
 
-
-    int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
-    bool isCurrentPlayerClosestToBall = false;
-
-    if (worldModel->getUNum() == playerClosestToBall) {
-        isCurrentPlayerClosestToBall = true;
-    }
-
-    bool shouldOVerrideAction = false;
+    if(worldModel->getPlayMode()==PM_PLAY_ON) {
 
 
-    //goal action is highest prioirty
-    if (isCurrentPlayerClosestToBall) {
-        if (isNearToGoal(worldModel)) {
-            player.setIsInvolvedInAction(false);
-            return goalingAction();
+        int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
+        bool isCurrentPlayerClosestToBall = false;
+
+        if (worldModel->getUNum() == playerClosestToBall) {
+            isCurrentPlayerClosestToBall = true;
         }
-    }
+
+        bool shouldOVerrideAction = false;
 
 
-
-    // if ball came to current player change his current action
-    if (isCurrentPlayerClosestToBall) {
-        if (player.getIsInvolvedInAction()) {
-            Action action = player.getActionInvolved();
-            if (!action.getIsKickingAction()) {
-                //let the code continue
-                shouldOVerrideAction = true;
-            } else {
-                //cout << "Action " << player.getPlayerNumber() << " " << action.getKickType()
-                //    << " " << action.getTargetPosition() << "\n";
+        //goal action is highest prioirty
+        if (isCurrentPlayerClosestToBall) {
+            if (isNearToGoal(worldModel)) {
+                player.setIsInvolvedInAction(false);
+                return goalingAction();
             }
         }
-    } else {
-        if (player.getActionInvolved().getIsKickingAction()) {
-            //cout << "Other player closer to ball " << playerClosestToBall << "\n";
-            shouldOVerrideAction = true;
+
+
+
+        // if ball came to current player change his current action
+        if (isCurrentPlayerClosestToBall) {
+            if (player.getIsInvolvedInAction()) {
+                Action action = player.getActionInvolved();
+                if (!action.getIsKickingAction()) {
+                    //let the code continue
+                    shouldOVerrideAction = true;
+                } else {
+                    //cout << "Action " << player.getPlayerNumber() << " " << action.getKickType()
+                    //    << " " << action.getTargetPosition() << "\n";
+                }
+            }
+        } else {
+            if (player.getActionInvolved().getIsKickingAction()) {
+                //cout << "Other player closer to ball " << playerClosestToBall << "\n";
+                shouldOVerrideAction = true;
+            }
         }
-    }
 
-    int defencePlayerNumberMax;
+        int defencePlayerNumberMax;
 
-    if (teamMode.getMode() == Attack) {
-        defencePlayerNumberMax = WO_TEAMMATE1 + 4;
-    } else {
-        defencePlayerNumberMax = WO_TEAMMATE1 + 5;
-    }
+        if (teamMode.getMode() == Attack) {
+            defencePlayerNumberMax = WO_TEAMMATE1 + 4;
+        } else {
+            defencePlayerNumberMax = WO_TEAMMATE1 + 5;
+        }
 
 
-    if (player.getPlayerNumber() <= defencePlayerNumberMax && player.getAggressiveRating()!=1) {
-        std::vector<int> opponentsPlayersInOurField = readOpponentPositionsAndReturnWithInRange(worldModel);
+        if (player.getPlayerNumber() <= defencePlayerNumberMax && player.getAggressiveRating() != 1) {
+            std::vector<int> opponentsPlayersInOurField = readOpponentPositionsAndReturnWithInRange(worldModel);
 
-        for (int i = 0; i < opponentsPlayersInOurField.size(); i++) {
-            int closePlayerToOpponent = getPlayerClosestToOpponent(worldModel, opponentsPlayersInOurField[i]);
-            if (closePlayerToOpponent == worldModel->getUNum()) {
-                VecPosition opponentPosition = follow(opponentsPlayersInOurField[i]);
-                cout << "Opponent Position" << opponentPosition << "\n";
-                if (isValidOpponentPosition(opponentPosition)) {
-                    return setTargetPositionAction(&player, opponentPosition);
+            for (int i = 0; i < opponentsPlayersInOurField.size(); i++) {
+                int closePlayerToOpponent = getPlayerClosestToOpponent(worldModel, opponentsPlayersInOurField[i]);
+                if (closePlayerToOpponent == worldModel->getUNum()) {
+                    VecPosition opponentPosition = follow(opponentsPlayersInOurField[i]);
+                    cout << "Opponent Position" << opponentPosition << "\n";
+                    if (isValidOpponentPosition(opponentPosition)) {
+                        return setTargetPositionAction(&player, opponentPosition);
+                    }
                 }
             }
         }
-    }
 
 
-    //check if targetIsReached
-    if (player.getIsInvolvedInAction() && !player.getActionInvolved().getIsKickingAction()) {
-        bool isTargetReached = didReachTargetPosition(worldModel->getMyPosition(),
-                                                      player.getActionInvolved().getTargetPosition());
-        if (isTargetReached) {
-            shouldOVerrideAction = true;
+        //check if targetIsReached
+        if (player.getIsInvolvedInAction() && !player.getActionInvolved().getIsKickingAction()) {
+            bool isTargetReached = didReachTargetPosition(worldModel->getMyPosition(),
+                                                          player.getActionInvolved().getTargetPosition());
+            if (isTargetReached) {
+                shouldOVerrideAction = true;
+            }
         }
-    }
 
 
-    if (player.getIsInvolvedInAction() && !shouldOVerrideAction) {
-        //cout<<"Action involved "<<player.getPlayerNumber();
-        return getSkillTypeFromAction(player.getActionInvolved());
-        //return SKILL_STAND;
-    }
+        if (player.getIsInvolvedInAction() && !shouldOVerrideAction) {
+            //cout<<"Action involved "<<player.getPlayerNumber();
+            return getSkillTypeFromAction(player.getActionInvolved());
+            //return SKILL_STAND;
+        }
 
-    //Defence,Normal,Attack,SetPiece
-    if (teamMode.getMode() == Defence) {
-        Action action = playAggressive(&player, playerClosestToBall);
-        return getSkillTypeFromAction(action);
-    }
+        //Defence,Normal,Attack,SetPiece
 
-    if (teamMode.getMode() == Attack) {
-        Action action = playAggressive(&player, playerClosestToBall);
-        return getSkillTypeFromAction(action);
-    }
 
-    if (teamMode.getMode() == SetPiece) {
+        if (teamMode.getMode() == Attack) {
+            Action action = playAggressive(&player, playerClosestToBall);
+            return getSkillTypeFromAction(action);
+        } else {
+            Action action = playAggressive(&player, playerClosestToBall);
+            return getSkillTypeFromAction(action);
+        }
+
 
     }
 
