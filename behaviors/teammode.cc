@@ -32,6 +32,7 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
         bool isAttackPlayer = true;
 
         if(aggressiveRating==1){
+            isAttackPlayer = false;
             MIN_RANGE_X = -7 * HALF_FIELD_X/8;
         }
 
@@ -112,7 +113,7 @@ VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition cur
             }
         }
 
-        return VecPosition(newX,newY,0);
+        return VecPosition(newX,newY,currentPosition.getZ());
 
 }
 

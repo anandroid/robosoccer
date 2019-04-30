@@ -542,7 +542,7 @@ Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
         VecPosition dummyPosition(0,0,0);
         Action action;
         action.Init(false,targetPosition,0,dummyPosition);
-        player->setIsInvolvedInAction(false);
+        player->setIsInvolvedInAction(true);
         player->setActionInvolved(action);
         cout<<"Move Action  set : "<<player->getPlayerNumber()<<"\n";
         return action;
@@ -583,6 +583,15 @@ SkillType NaoBehavior::selectSkill() {
     } else {
         if (player.getActionInvolved().getIsKickingAction()){
             cout<<"Other player closer to ball "<<playerClosestToBall<<"\n";
+            shouldOVerrideAction = true;
+        }
+    }
+
+    //check if targetIsReached
+    if(player.getIsInvolvedInAction()  && !player.getActionInvolved().getIsKickingAction()){
+        bool isTargetReached =  didReachTargetPosition(me,player.getActionInvolved().getTargetPosition());
+        if(isTargetReached){
+            player.setActionInvolved(false);
             shouldOVerrideAction = true;
         }
     }
@@ -669,6 +678,15 @@ SkillType NaoBehavior::reachPosition(VecPosition target) {
         // Move toward target location
         return goToTarget(target);
     }
+}
+
+boolean didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
+
+    if(currentPosition.getDistanceTo(targetPosition)<0.2){
+        return true;
+    }
+
+    return false;
 }
 
 
