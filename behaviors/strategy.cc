@@ -493,7 +493,7 @@ Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
     VecPosition ballPosition = worldModel->getBall();
     Action action;
     if (distance < 3) {
-        action.Init(true, target, KICK_DRIBBLE, ballPosition);
+        action.Init(true, target, KICK_FORWARD, ballPosition);
     } else if (distance < 6) {
         action.Init(true, target, KICK_FORWARD, ballPosition);
     } else if (distance > 6) {
@@ -597,6 +597,8 @@ Action NaoBehavior::playAggressive(Player *player, int closestPlayerToBall) {
         VecPosition currentPosition = worldModel->getMyPosition();
         //VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
         VecPosition targetPosition = teamMode.getNextTargetPosition(player->getAggressiveRating(), currentPosition);
+        targetPosition = collisionAvoidance(true /*teammate*/, false/*opponent*/, true/*ball*/, 1/*proximity thresh*/,
+                                    .5/*collision thresh*/, targetPosition, true/*keepDistance*/);
         VecPosition dummyPosition(0, 0, 0);
         Action action;
         action.Init(false, targetPosition, 0, dummyPosition);
