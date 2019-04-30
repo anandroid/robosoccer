@@ -21,6 +21,101 @@ Mode TeamMode::getMode(){
     return Attack;
 }
 
+VecPosition TeamMode::getNextTargetPosition(int aggressiveRating,VecPosition currentPosition){
+
+    double newX = currentPosition.getX();
+    double newY = currentPosition.getY();
+
+        int MAX_RANGE_X;
+        int MIN_RANGE_X;
+
+        bool isAttackPlayer = true;
+
+        if(aggressiveRating==1){
+            MIN_RANGE_X = -7 * HALF_FIELD_X/8;
+        }
+
+        if(aggressiveRating==2 || aggressiveRating==3){
+            isAttackPlayer = false;
+            MIN_RANGE_X = -5 * HALF_FIELD_X / 8;
+        }
+
+        if(aggressiveRating==4 || aggressiveRating==5){
+            isAttackPlayer = false;
+            MIN_RANGE_X =  -3 * HALF_FIELD_X / 8
+        }
+
+        if(aggressiveRating==5){
+            isAttackPlayer = true;
+            MAX_RANGE_X =  HALF_FIELD_X/8;
+        }
+
+        if(aggressiveRating==6 || aggressiveRating==7){
+            isAttackPlayer = true;
+            MAX_RANGE_X =  2*HALF_FIELD_X/8;
+        }
+
+        if(aggressiveRating==8 || aggressiveRating==9){
+            isAttackPlayer = true;
+            MAX_RANGE_X =  4 * HALF_FIELD_X/8;
+        }
+
+        if(aggressiveRating==10 || aggressiveRating==11){
+            isAttackPlayer = true;
+            MAX_RANGE_X =  6 * HALF_FIELD_X/8;
+        }
+
+        if(isAttackPlayer) {
+
+            if (newX + 1 < MAX_RANGE_X) {
+                newX++;
+            } else {
+                newX = newX - 1;
+            }
+
+            if (newY > HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY - 1;
+                } else {
+                    newY = newY - 0.5;
+                }
+            } else if (newY < -HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY + 1;
+                } else {
+                    newY = newY + 0.5;
+                }
+            }
+
+        }
+
+        if(!isAttackPlayer){
+
+            if (newX + 1 > MIN_RANGE_X) {
+                newX--;
+            } else {
+                newX = newX + 1;
+            }
+
+            if (newY > HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY - 1;
+                } else {
+                    newY = newY - 0.5;
+                }
+            } else if (newY < -HALF_FIELD_Y / 2) {
+                if (newX > HALF_FIELD_X / 2) {
+                    newY = newY + 1;
+                } else {
+                    newY = newY + 0.5;
+                }
+            }
+        }
+
+        return VecPosition(newX,newY,0);
+
+}
+
 
 FieldRange TeamMode::getFieldRange(int playerPositionNumber){
 
@@ -31,6 +126,7 @@ FieldRange TeamMode::getFieldRange(int playerPositionNumber){
     }
     return getFormationFieldRange(playerPositionNumber);
 }
+
 
 FieldRange TeamMode::getFormationFieldRange(int playerPositionNumber) {
 

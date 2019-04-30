@@ -536,11 +536,13 @@ Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
         // return action;
         return action;
     }else{
-        VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
+        VecPosition currentPosition = worldModel->getWorldObject(player->getPlayerNumber())->pos;
+        //VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
+        VecPosition targetPosition = teamMode.getNextTargetPosition(player->getAggressiveRating(),currentPosition);
         VecPosition dummyPosition(0,0,0);
         Action action;
         action.Init(false,targetPosition,0,dummyPosition);
-        player->setIsInvolvedInAction(true);
+        player->setIsInvolvedInAction(false);
         player->setActionInvolved(action);
         cout<<"Move Action  set : "<<player->getPlayerNumber()<<"\n";
         return action;
@@ -553,7 +555,6 @@ Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
 
 
 SkillType NaoBehavior::selectSkill() {
-
 
 
     if(!player.getIsInitialized()) {
