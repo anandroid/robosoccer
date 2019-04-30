@@ -354,7 +354,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = -3*Y / 8;
 
     } else if (playerPositionNumber == 11) {
-        centerX = -X/10;
+        centerX = -X/15;
         centerY = 0.5;
     }
 
