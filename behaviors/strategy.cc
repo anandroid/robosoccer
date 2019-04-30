@@ -455,6 +455,7 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
         double distanceToPlayer = temp.getDistanceTo(myPos);
         if (distanceToPlayer < RANGE && temp.getX()>myPos.getX()) {
+            cout<<"My pos "<<myPos.getX()<<" Passed pos "<<temp.getX()<<"\n";
             playersInRange.push_back(playerNum);
         }
     }
@@ -534,11 +535,11 @@ SkillType NaoBehavior::goalingAction() {
                      random(GOAL_Y);
 
     //choosing random X which is in the goal post range
-    double randomX = HALF_FIELD_X - random(GOAL_X);
+    double randomX = HALF_FIELD_X;
 
     VecPosition targetBallPosition = VecPosition(randomX, randomY, 0);
 
-    LOG_MSG("targetBallPosition", targetBallPosition);
+    cout<<"Goaling Action"<<"\n";
 
     //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
     if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
