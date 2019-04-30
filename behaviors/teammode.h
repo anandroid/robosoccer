@@ -22,6 +22,7 @@ public:
     void setCurrentTime(long time);
     void setGoals(int ourgoals,int opponentgoals);
     Mode getMode();
+    VecPosition getNextTargetPosition(int aggressiveRating,VecPosition currentPosition);
     FieldRange getFieldRange(int playerPositionNumber);
     FieldRange getFormationFieldRange(int playerPositionNumber);
 
