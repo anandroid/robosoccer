@@ -636,8 +636,8 @@ void writeToFile(string content, int p_no) {
     std::stringstream ss;
     ss << "positions_" << p_no << ".txt";
     string fname = ss.str();
-    cout << fname;
-    cout << p_no << endl;
+    //cout << fname;
+    //cout << p_no << endl;
     ofstream myfile;
     myfile.open(fname.c_str(), std::ios_base::app);
     myfile << content;
