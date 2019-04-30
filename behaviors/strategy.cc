@@ -181,6 +181,15 @@ string getStringFromOpponentActionsAndStates() {
     return result;
 }
 
+bool didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
+
+    if(currentPosition.getDistanceTo(targetPosition)<0.2){
+        return true;
+    }
+
+    return false;
+}
+
 
 void *asuBackgroundFunction(void *playerNumberargs) {
 
@@ -680,14 +689,9 @@ SkillType NaoBehavior::reachPosition(VecPosition target) {
     }
 }
 
-bool didReachTargetPosition(VecPostion currentPosition, VecPosition targetPosition){
 
-    if(currentPosition.getDistanceTo(targetPosition)<0.2){
-        return true;
-    }
 
-    return false;
-}
+
 
 
 
