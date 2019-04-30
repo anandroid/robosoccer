@@ -545,7 +545,7 @@ Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
         // return action;
         return action;
     }else{
-        VecPosition currentPosition = worldModel->getWorldObject(player->getPlayerNumber())->pos;
+        VecPosition currentPosition = worldModel->getMyPosition();
         //VecPosition targetPosition = teamMode.getFieldRange(player->getPlayerNumber()).getCenterOfRange();
         VecPosition targetPosition = teamMode.getNextTargetPosition(player->getAggressiveRating(),currentPosition);
         VecPosition dummyPosition(0,0,0);
