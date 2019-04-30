@@ -14,6 +14,10 @@
 #include <fstream>
 #include "teammode.h"
 #include "teammode.cc"
+#include "string"
+#include "time.h"
+#include "ctime"
+
 
 
 using namespace std;
@@ -49,9 +53,9 @@ TeamMode teamMode;
 
 
 ofstream writefile;
-writefile.open("positions.txt");
 
-ifstream infile("positions.txt");
+
+
 
 
 class PlayerTask {
@@ -559,20 +563,74 @@ Action NaoBehavior :: playAggressive(Player *player,int closestPlayerToBall){
 
 
 void writeToFile(string content){
-    writefile<<"Hello";
+    writefile.open("positions.txt", std::ios_base::app | std::ios_base::out);
+    writefile<< content;
     writefile.flush();
+    cout <<"writing"<< content<<endl;
+    writefile.close();
 }
 
 void readFile(){
     string content="";
-    string line;
-    while(std::getline(infile,line)){
-        content+=line;
+    std::string tmp;
+    char c = '\0';
+    cout<<"Reading file\n";
+    int length = 0;
+    ifstream infile("positions.txt");
+    if( infile )
+    {
+        length = infile.tellg();//Get file size
+
+        // loop backward over the file
+
+        for(int i = length-2; i > 0; i-- )
+        {
+            infile.seekg(i);
+            c = infile.get();
+            if( c == '\r' || c == '\n' )//new line?
+                break;
+        }
+
+        std::getline(infile, tmp);//read last line
+        std::cout << tmp << std::endl; // print it
+
     }
 
 
 }
 
+
+std::string readOpponentPositions(WorldModel *worldModel){
+    std::string positions="";
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    for (int i = WO_OPPONENT1; i < WO_OPPONENT1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i;
+
+        WorldObject *opponent = worldModel->getWorldObject(i);
+        if (opponent->validPosition) {
+            temp = opponent->pos;
+        } else {
+            continue;
+        }
+
+        temp.setZ(0);
+        std::string out_string;
+        std::stringstream ss;
+
+        ss<<dt<<"\t";
+        ss << playerNum << "\t";
+        ss << temp.getX() << "\t";
+        ss << temp.getY() << "\n";
+        out_string = ss.str();
+        positions.append(out_string);
+        cout << playerNum << endl;
+        cout << temp.getY() << endl;
+        cout << temp.getX() << endl;
+    }
+    return positions;
+}
 
 SkillType NaoBehavior::selectSkill() {
 
@@ -580,7 +638,21 @@ SkillType NaoBehavior::selectSkill() {
 
     if(!player.getIsInitialized()) {
         cout<<"Player is not initialsed"<<"\n";
+        if(worldModel->getUNum()==1){
+            writeToFile("hello");
+        }
+
+
+
         initPlayerObject(worldModel);
+    }
+    std::string opp_pos=readOpponentPositions(worldModel);
+    cout<<opp_pos;
+    writeToFile(opp_pos);
+
+    if(worldModel->getUNum()==10){
+        readFile();
+        cout<<"trying to read";
     }
 
     int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
