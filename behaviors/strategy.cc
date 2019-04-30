@@ -360,7 +360,7 @@ FieldRange getRangeForPlayerPositionNumber(int playerPositionNumber) {
         centerY = -3 * Y / 8;
 
     } else if (playerPositionNumber == 11) {
-        centerX = -X / 15;
+        centerX = - X / 8;
         centerY = 0.5;
     }
 
@@ -401,6 +401,27 @@ void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
         beamAngle = 270;
     }
 
+
+}
+
+bool isOurSideKick(WorldModel *worldModel){
+    int mode = worldModel->getPlayMode();
+    int side  = worldModel->getSide();
+    if(side==SIDE_LEFT){
+        if(mode == 1 || mode==4 || mode==6){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    if(side==SIDE_RIGHT){
+        if(mode==2 || mode==5 || mode==7){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
 
@@ -499,11 +520,9 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel, Mode mode) {
 
         double distanceToPlayer = temp.getDistanceTo(myPos);
 
-        if (worldModel->getUNum() == 11) {
-            if (firstPass) {
+        if (isOurSideKick(worldModel)) {
                 playersInRange.push_back(10);
                 firstPass = false;
-            }
         }
 
         if (distanceToPlayer < RANGE) {
@@ -908,7 +927,16 @@ SkillType NaoBehavior::selectSkill() {
         initPlayerObject(worldModel);
     }
 
-    if(worldModel->getPlayMode()==PM_PLAY_ON) {
+    if(worldModel->getPlayMode()==PM_KICK_OFF_LEFT){
+
+        if(worldModel->getUNum()==11){
+
+
+        }
+
+    }
+
+    if(worldModel->getPlayMode()>=PM_PLAY_ON) {
 
 
         int playerClosestToBall = getPlayerClosestToTheBall(worldModel);
