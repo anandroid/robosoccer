@@ -13,8 +13,24 @@ void NaoBehavior::beam( double& beamX, double& beamY, double& beamAngle ) {
     beamAngle = 0;
 }
 
+SkillType NaoBehavior::getControlFunction(){
+
+    VecPosition myPosition = worldModel->getMyPosition();
+    double distanceToBall  = myPosition.getDistanceTo(ball);
+
+    VecPosition ballPosition = worldModel->getBall();
+
+    VecPosition targetPosition = ballPosition + VecPosition(1,0,ballPosition.getZ());
+
+    kickBall(KICK_FORWARD, targetPosition);
+
+}
+
 
 SkillType NaoBehavior::selectSkill() {
+
+    SkillType controlFunction = getControlFunction();
+    return controlFunction;
     // My position and angle
     //cout << worldModel->getUNum() << ": " << worldModel->getMyPosition() << ",\t" << worldModel->getMyAngDeg() << "\n";
 
