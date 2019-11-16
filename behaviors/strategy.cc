@@ -9,9 +9,11 @@ extern int agentBodyType;
  */
 void NaoBehavior::beam( double& beamX, double& beamY, double& beamAngle ) {
     beamX = -HALF_FIELD_X + worldModel->getUNum();
-    beamY = 0;
+    beamY =  -HALF_FIELD_Y/2;
     beamAngle = 0;
 }
+
+
 
 SkillType NaoBehavior::getControlFunction(){
 
@@ -22,7 +24,9 @@ SkillType NaoBehavior::getControlFunction(){
 
     VecPosition targetPosition = ballPosition + VecPosition(1,0,ballPosition.getZ());
 
-    kickBall(KICK_FORWARD, targetPosition);
+
+
+    return kickBall(KICK_FORWARD, targetPosition);
 
 }
 
