@@ -230,6 +230,8 @@ protected:
 
     SkillType getControlFunction();
 
+    SkillType goalingAction();
+
 public:
 
     NaoBehavior(const std::string teamName, int uNum, const map<string, string>& namedParams_, const string& rsg_);

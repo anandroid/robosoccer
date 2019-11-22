@@ -13,7 +13,45 @@ void NaoBehavior::beam( double& beamX, double& beamY, double& beamAngle ) {
     beamAngle = 0;
 }
 
+bool isNearToGoal(WorldModel *worldModel) {
 
+    double GOAL_RANGE = (3 * HALF_FIELD_X) / 8;
+    VecPosition myPosition = worldModel->getMyPosition();
+    double distanceToGoal = worldModel->distanceToOppGoal(myPosition);
+
+    if (distanceToGoal < GOAL_RANGE) {
+        return true;
+    }
+
+    return false;
+
+}
+
+SkillType NaoBehavior::goalingAction() {
+
+    // Choose any random point in in 2d window
+
+    //choosing random Y which is in the goal post range
+    double randomY = worldModel->getOppRightGoalPost().getY() +
+                     random(GOAL_Y);
+
+    //choosing random X which is in the goal post range
+    double randomX = HALF_FIELD_X - random(GOAL_X);
+
+    VecPosition targetBallPosition = VecPosition(randomX, randomY, me.getZ());
+
+    cout<<"Goaling Action"<<"\n";
+
+    //Go 3/4th of the distance dribbling it and once you are near kick the ball within the goal posts
+    if (worldModel->distanceToOppGoal(me) > HALF_FIELD_X / 4) {
+        cout<<"Goaling Action Dribble "<<targetBallPosition<<"\n";
+        return kickBall(KICK_DRIBBLE, targetBallPosition);
+    } else {
+        cout<<"Goaling Action Kick "<<targetBallPosition<<"\n";
+        return kickBall(KICK_IK, targetBallPosition);
+    }
+
+}
 
 SkillType NaoBehavior::getControlFunction(){
 
@@ -25,6 +63,9 @@ SkillType NaoBehavior::getControlFunction(){
     VecPosition targetPosition = ballPosition + VecPosition(1,0,ballPosition.getZ());
 
 
+    if (isNearToGoal(worldModel)) {
+        return goalingAction();
+    }
 
     return kickBall(KICK_FORWARD, targetPosition);
 
