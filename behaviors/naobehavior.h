@@ -2,6 +2,7 @@
 #define NAOBEHAVIOR_H
 
 #include "behavior.h"
+#include "action.h"
 #include "../headers/headers.h"
 #include "../parser/parser.h"
 #include "../worldmodel/worldmodel.h"
@@ -33,10 +34,10 @@ struct WalkVelocity
     WalkVelocity() : paramSet(WalkRequestBlock::PARAMS_DEFAULT), x(0), y(0), rot(0) {}
 
     WalkVelocity(const double& velX, const double& velY, const double& velRot) :
-        paramSet(WalkRequestBlock::PARAMS_DEFAULT), x(velX), y(velY), rot(velRot) {}
+            paramSet(WalkRequestBlock::PARAMS_DEFAULT), x(velX), y(velY), rot(velRot) {}
 
     WalkVelocity(WalkRequestBlock::ParamSet param, const double& velX, const double& velY, const double& velRot) :
-        paramSet(param), x(velX), y(velY), rot(velRot) {}
+            paramSet(param), x(velX), y(velY), rot(velRot) {}
 
     friend std::ostream& operator<<(std::ostream &out, const WalkVelocity& v)
     {
@@ -231,6 +232,12 @@ protected:
     SkillType getControlFunction();
 
     SkillType goalingAction();
+
+    Action getPossibleActions();
+
+    Action kickAccordingToDistance(const VecPosition &target);
+
+    SkillType dribbleTowardsGoal(VecPosition &currentBallPosition);
 
 public:
 
