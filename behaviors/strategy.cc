@@ -12,14 +12,21 @@ bool firstPass = false;
  * Filling params x y angle
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
-    beamX = -HALF_FIELD_X + worldModel->getUNum();
-    beamY = -HALF_FIELD_Y / 2;
+
+    int playerNum = worldModel->getUNum();
+    if(playerNum%2==0){
+        beamY = -HALF_FIELD_Y / 4;
+    }else{
+        beamY =  HALF_FIELD_Y / 4;
+    }
+    beamX =  - (1/4)*HALF_FIELD_X;
+
     beamAngle = 0;
 }
 
 bool isNearToGoal(WorldModel *worldModel) {
 
-    double GOAL_RANGE = (3 * HALF_FIELD_X) / 8;
+    double GOAL_RANGE = (2 * HALF_FIELD_X) / 8;
     VecPosition myPosition = worldModel->getMyPosition();
     double distanceToGoal = worldModel->distanceToOppGoal(myPosition);
 
@@ -148,8 +155,8 @@ VecPosition getPassablePosition(VecPosition currentPosition,
 
     double yDiff = abs(opponentPosition.getY() - teamMatePosition.getY());
 
-    int X_DISTANCE_FACTOR = 2;
-    int Y_DISTANCE_FACTOR = 1.5;
+    int X_DISTANCE_FACTOR = 4;
+    int Y_DISTANCE_FACTOR = 2;
 
 
     double newX;

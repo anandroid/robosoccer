@@ -9,7 +9,7 @@ BINARY_DIR="."
 LIBS_DIR="./libs"
 NUM_PLAYERS=2
 
-team="UTAustinVilla_Base"
+team="SunDevils"
 host="localhost"
 port=3100
 paramsfile=paramfiles/defaultParams.txt
