@@ -5,6 +5,8 @@
 
 extern int agentBodyType;
 
+bool firstPass = false;
+
 /*
  * Real game beaming.
  * Filling params x y angle
@@ -55,7 +57,7 @@ SkillType NaoBehavior::goalingAction() {
 
 }
 
-SkillType NaoBehavior::dribbleTowardsGoal(VecPosition &currentBallPosition) {
+SkillType NaoBehavior::dribbleTowardsGoal(VecPosition currentBallPosition) {
 
     int X_DISTANCE_FACTOR = 2;
     int Y_DISTANCE_FACTOR = 1.5;
@@ -66,149 +68,76 @@ SkillType NaoBehavior::dribbleTowardsGoal(VecPosition &currentBallPosition) {
     if (currentBallPosition.getY() > HALF_FIELD_Y / 2) {
         newY = currentBallPosition.getY() - Y_DISTANCE_FACTOR / 2;
     }
-    if (currentBallPosition.getY() < -HALF_FIELD_Y / 2) {
+    else if (currentBallPosition.getY() < -HALF_FIELD_Y / 2) {
         newY = currentBallPosition.getY() + Y_DISTANCE_FACTOR / 2;
+    } else {
+        newY = currentBallPosition.getY();
     }
 
     newX = currentBallPosition.getX() + X_DISTANCE_FACTOR;
+
+    cout<<"Dribbling "<<newX <<" "<<newY<<"\n";
 
     return kickBall(KICK_DRIBBLE, VecPosition(newX, newY, currentBallPosition.getZ()));
 
 
 }
 
-
-SkillType NaoBehavior::getHighestPossibleAction() {
-
-    if (isPlayerClosestToTheBall()) {
-
-        if (isNearToGoal(worldModel)) {
-            return goalingAction();
-        }
-
-        // to pass or to dribble
-        int teamMateNum =
-                getPlayerNearWithBetterAggressionInTheRange(worldModel, worldModel->getUNum());
-
-        if (teamMateNum == -1) {
-            //no player nearby, so dribble
-
-            //dribble against the opponent
-
-            return dribbleTowardsGoal(worldModel->getBall());
-
+VecPosition getTeamMatePosition(WorldModel *worldModel) {
+    VecPosition temp;
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
         } else {
-            VecPosition teamMatePosition;
-            WorldObject *teammate = worldModel->getWorldObject(otherPlayer);
+            WorldObject *teammate = worldModel->getWorldObject(i);
             if (teammate->validPosition) {
-                teamMatePosition = teammate->pos;
-                return kickBall(KICK_FORWARD,teamMatePosition);
+                temp = teammate->pos;
+            } else {
+                continue;
             }
-
-            return dribbleTowardsGoal(worldModel->getBall());
         }
-
-
-    } else {
-
-        int REACHABLEDISTANCE = 3;
-
-        VecPosition opponentPosition = getOpponentPosition(worldModel);
-        VecPosition teamMatePosition = getTeamMatePosition(worldModel);
-        VecPosition myPosition = worldModel->getMyPosition();
-
-        VecPosition targetPosition = getPassablePosition(myPosition, opponentPosition, teamMatePosition);
-
-        return goToTarget(targetPosition);
-
     }
 
-
+    return temp;
 }
 
-SkillType NaoBehavior::getControlFunction() {
-    return getHighestPossibleAction();
-}
-
-
-SkillType NaoBehavior::selectSkill() {
-
-    SkillType controlFunction = getControlFunction();
-    return controlFunction;
-    // My position and angle
-    //cout << worldModel->getUNum() << ": " << worldModel->getMyPosition() << ",\t" << worldModel->getMyAngDeg() << "\n";
-
-    // Position of the ball
-    //cout << worldModel->getBall() << "\n";
-
-    // Example usage of the roboviz drawing system and RVSender in rvdraw.cc.
-    // Agents draw the position of where they think the ball is
-    // Also see example in naobahevior.cc for drawing agent position and
-    // orientation.
-    /*
-    worldModel->getRVSender()->clear(); // erases drawings from previous cycle
-    worldModel->getRVSender()->drawPoint("ball", ball.getX(), ball.getY(), 10.0f, RVSender::MAGENTA);
-    */
-
-    // ### Demo Behaviors ###
-
-    // Walk in different directions
-    //return goToTargetRelative(VecPosition(1,0,0), 0); // Forward
-    //return goToTargetRelative(VecPosition(-1,0,0), 0); // Backward
-    //return goToTargetRelative(VecPosition(0,1,0), 0); // Left
-    //return goToTargetRelative(VecPosition(0,-1,0), 0); // Right
-    //return goToTargetRelative(VecPosition(1,1,0), 0); // Diagonal
-    //return goToTargetRelative(VecPosition(0,1,0), 90); // Turn counter-clockwise
-    //return goToTargetRelative(VecPdosition(0,-1,0), -90); // Turn clockwise
-    //return goToTargetRelative(VecPosition(1,0,0), 15); // Circle
-
-    // Walk to the ball
-    //return goToTarget(ball);
-
-    // Turn in place to face ball
-    /*double distance, angle;
-    getTargetDistanceAndAngle(ball, distance, angle);
-    if (abs(angle) > 10) {
-      return goToTargetRelative(VecPosition(), angle);
-    } else {
-      return SKILL_STAND;
-    }*/
-
-    // Walk to ball while always facing forward
-    //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
-
-    // Dribble ball toward opponent's goal
-    //return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
-
-    // Kick ball toward opponent's goal
-    //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
-    //return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0)); // IK kick
-
-    // Just stand in place
-    //return SKILL_STAND;
-
-    // Demo behavior where players form a rotating circle and kick the ball
-    // back and forth
-    return demoKickingCircle();
-}
-
-bool isOurSideKick(WorldModel *worldModel) {
-    int mode = worldModel->getPlayMode();
-    int side = worldModel->getSide();
-    if (side == SIDE_LEFT) {
-        if (mode == 1 || mode == 4 || mode == 6) {
-            return true;
+int getPlayerClosestToTheBall(WorldModel *worldModel) {
+    int playerClosestToBall = -1;
+    double closestDistanceToBall = 10000;
+    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
+        VecPosition temp;
+        int playerNum = i - WO_TEAMMATE1 + 1;
+        if (worldModel->getUNum() == playerNum) {
+            // This is us
+            temp = worldModel->getMyPosition();
         } else {
-            return false;
+            WorldObject *teammate = worldModel->getWorldObject(i);
+            if (teammate->validPosition) {
+                temp = teammate->pos;
+            } else {
+                continue;
+            }
+        }
+        temp.setZ(0);
+        double distanceToBall = temp.getDistanceTo(worldModel->getBall());
+        if (distanceToBall < closestDistanceToBall) {
+            playerClosestToBall = playerNum;
+            closestDistanceToBall = distanceToBall;
         }
     }
-    if (side == SIDE_RIGHT) {
-        if (mode == 2 || mode == 5 || mode == 7) {
-            return true;
-        } else {
-            return false;
-        }
+
+    return playerClosestToBall;
+}
+
+bool isPlayerClosestToTheBall(int currentPlayer, WorldModel *worldModel) {
+    int playerClosestToTheBall = getPlayerClosestToTheBall(worldModel);
+
+    if (currentPlayer == playerClosestToTheBall) {
+        return true;
     }
+
+    return false;
 }
 
 
@@ -236,12 +165,12 @@ VecPosition getPassablePosition(VecPosition currentPosition,
         newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR;
     } else if (teamMatePosition.getY() > 0) {
         newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR / 2;
-    }
-
-    if (teamMatePosition.getY() < -HALF_FIELD_Y / 2) {
+    } else if (teamMatePosition.getY() < -HALF_FIELD_Y / 2) {
         newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR;
     } else if (teamMatePosition.getY() < 0) {
         newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR / 2;
+    } else{
+        newY = teamMatePosition.getY();
     }
 
     //toDo check opponents position
@@ -249,6 +178,25 @@ VecPosition getPassablePosition(VecPosition currentPosition,
 
     return VecPosition(newX, newY, currentPosition.getZ());
 
+}
+
+bool isOurSideKick(WorldModel *worldModel) {
+    int mode = worldModel->getPlayMode();
+    int side = worldModel->getSide();
+    if (side == SIDE_LEFT) {
+        if (mode == 1 || mode == 4 || mode == 6) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    if (side == SIDE_RIGHT) {
+        if (mode == 2 || mode == 5 || mode == 7) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 
@@ -357,10 +305,7 @@ std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldMode
         ss << temp.getY() << "\n";
         out_string = ss.str();
         positions.append(out_string);
-        //cout << playerNum << endl;
-        //cout << temp.getY() << endl;
-        //cout << temp.getX() << endl;
-        writeToFile(positions, playerNum);
+
 
         if (temp.getX() < 0) {
             playersInRange.push_back(i);
@@ -371,80 +316,130 @@ std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldMode
 }
 
 
-Action NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
+SkillType NaoBehavior::getHighestPossibleAction() {
+
+    if (isPlayerClosestToTheBall(worldModel->getUNum(), worldModel)) {
+
+        if (isNearToGoal(worldModel)) {
+            return goalingAction();
+        }
+
+        // to pass or to dribble
+        int teamMateNum =
+                getPlayerNearWithBetterAggressionInTheRange(worldModel, worldModel->getUNum());
+
+        if (teamMateNum == -1) {
+            //no player nearby, so dribble
+
+            //dribble against the opponent
+
+            return dribbleTowardsGoal(worldModel->getBall());
+
+        } else {
+            VecPosition teamMatePosition = getTeamMatePosition(worldModel);
+            return kickBall(KICK_FORWARD, teamMatePosition);
+
+
+            // return dribbleTowardsGoal(worldModel->getBall());
+        }
+
+
+    } else {
+
+        int REACHABLEDISTANCE = 3;
+
+        VecPosition opponentPosition = getOpponentPosition(worldModel);
+        VecPosition teamMatePosition = getTeamMatePosition(worldModel);
+        VecPosition myPosition = worldModel->getMyPosition();
+
+        VecPosition targetPosition = getPassablePosition(myPosition, opponentPosition, teamMatePosition);
+
+        return goToTarget(targetPosition);
+
+    }
+
+
+}
+
+SkillType NaoBehavior::getControlFunction() {
+    return getHighestPossibleAction();
+}
+
+
+SkillType NaoBehavior::selectSkill() {
+
+    SkillType controlFunction = getControlFunction();
+    return controlFunction;
+    // My position and angle
+    //cout << worldModel->getUNum() << ": " << worldModel->getMyPosition() << ",\t" << worldModel->getMyAngDeg() << "\n";
+
+    // Position of the ball
+    //cout << worldModel->getBall() << "\n";
+
+    // Example usage of the roboviz drawing system and RVSender in rvdraw.cc.
+    // Agents draw the position of where they think the ball is
+    // Also see example in naobahevior.cc for drawing agent position and
+    // orientation.
+    /*
+    worldModel->getRVSender()->clear(); // erases drawings from previous cycle
+    worldModel->getRVSender()->drawPoint("ball", ball.getX(), ball.getY(), 10.0f, RVSender::MAGENTA);
+    */
+
+    // ### Demo Behaviors ###
+
+    // Walk in different directions
+    //return goToTargetRelative(VecPosition(1,0,0), 0); // Forward
+    //return goToTargetRelative(VecPosition(-1,0,0), 0); // Backward
+    //return goToTargetRelative(VecPosition(0,1,0), 0); // Left
+    //return goToTargetRelative(VecPosition(0,-1,0), 0); // Right
+    //return goToTargetRelative(VecPosition(1,1,0), 0); // Diagonal
+    //return goToTargetRelative(VecPosition(0,1,0), 90); // Turn counter-clockwise
+    //return goToTargetRelative(VecPdosition(0,-1,0), -90); // Turn clockwise
+    //return goToTargetRelative(VecPosition(1,0,0), 15); // Circle
+
+    // Walk to the ball
+    //return goToTarget(ball);
+
+    // Turn in place to face ball
+    /*double distance, angle;
+    getTargetDistanceAndAngle(ball, distance, angle);
+    if (abs(angle) > 10) {
+      return goToTargetRelative(VecPosition(), angle);
+    } else {
+      return SKILL_STAND;
+    }*/
+
+    // Walk to ball while always facing forward
+    //return goToTargetRelative(worldModel->g2l(ball), -worldModel->getMyAngDeg());
+
+    // Dribble ball toward opponent's goal
+    //return kickBall(KICK_DRIBBLE, VecPosition(HALF_FIELD_X, 0, 0));
+
+    // Kick ball toward opponent's goal
+    //return kickBall(KICK_FORWARD, VecPosition(HALF_FIELD_X, 0, 0)); // Basic kick
+    //return kickBall(KICK_IK, VecPosition(HALF_FIELD_X, 0, 0)); // IK kick
+
+    // Just stand in place
+    //return SKILL_STAND;
+
+    // Demo behavior where players form a rotating circle and kick the ball
+    // back and forth
+    return demoKickingCircle();
+}
+
+
+SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
 
     VecPosition myPos = worldModel->getMyPosition();
     double distance = myPos.getDistanceTo(target);
     VecPosition ballPosition = worldModel->getBall();
-    Action action;
-    if (distance < 3) {
-        action.Init(true, target, KICK_FORWARD, ballPosition);
+    if (distance < 1.5) {
+        return kickBall(KICK_DRIBBLE,target);
     } else if (distance < 6) {
-        action.Init(true, target, KICK_FORWARD, ballPosition);
-    } else if (distance > 6) {
-        action.Init(true, target, KICK_IK, ballPosition);
+        return kickBall(KICK_FORWARD,target);
+    } else {
+        return kickBall(KICK_IK,target);
     }
-    return action;
-}
-
-
-VecPosition getTeamMatePosition(WorldModel *worldModel) {
-    VecPosition temp;
-    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
-        int playerNum = i - WO_TEAMMATE1 + 1;
-        if (worldModel->getUNum() == playerNum) {
-            // This is us
-        } else {
-            WorldObject *teammate = worldModel->getWorldObject(i);
-            if (teammate->validPosition) {
-                temp = teammate->pos;
-            } else {
-                continue;
-            }
-        }
-    }
-
-    return temp;
-}
-
-boolean isPlayerClosestToTheBall() {
-    int currentPlayer == worldModel->getUNum();
-    int playerClosestToTheBall = getPlayerClosestToTheBall(worldModel);
-
-    if (currentPlayer == playerClosestToTheBall) {
-        return true;
-    }
-
-    return false;
-}
-
-
-int getPlayerClosestToTheBall(WorldModel *worldModel) {
-    int playerClosestToBall = -1;
-    double closestDistanceToBall = 10000;
-    for (int i = WO_TEAMMATE1; i < WO_TEAMMATE1 + NUM_AGENTS; ++i) {
-        VecPosition temp;
-        int playerNum = i - WO_TEAMMATE1 + 1;
-        if (worldModel->getUNum() == playerNum) {
-            // This is us
-            temp = worldModel->getMyPosition();
-        } else {
-            WorldObject *teammate = worldModel->getWorldObject(i);
-            if (teammate->validPosition) {
-                temp = teammate->pos;
-            } else {
-                continue;
-            }
-        }
-        temp.setZ(0);
-        double distanceToBall = temp.getDistanceTo(worldModel->getBall());
-        if (distanceToBall < closestDistanceToBall) {
-            playerClosestToBall = playerNum;
-            closestDistanceToBall = distanceToBall;
-        }
-    }
-
-    return playerClosestToBall;
 }
 
 

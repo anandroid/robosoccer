@@ -235,9 +235,11 @@ protected:
 
     Action getPossibleActions();
 
-    Action kickAccordingToDistance(const VecPosition &target);
+    SkillType kickAccordingToDistance(const VecPosition &target);
 
-    SkillType dribbleTowardsGoal(VecPosition &currentBallPosition);
+    SkillType dribbleTowardsGoal(VecPosition currentBallPosition);
+
+    SkillType getHighestPossibleAction();
 
 public:
 
