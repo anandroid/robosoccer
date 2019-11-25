@@ -205,6 +205,22 @@ bool isOurSideKick(WorldModel *worldModel) {
     }
 }
 
+bool isLegalKickMode(WorldModel *worldModel) {
+
+    if (isOurSideKick(worldModel)) {
+        return true;
+    }
+
+    int mode = worldModel->getPlayMode();
+
+    if (mode == PM_PLAY_ON) {
+        return true;
+    }
+
+    return false;
+
+}
+
 
 std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
@@ -324,6 +340,10 @@ std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldMode
 
 SkillType NaoBehavior::getHighestPossibleAction() {
 
+    if(!isLegalKickMode(worldModel)){
+        return SKILL_STAND;
+    }
+
 
     if (isPlayerClosestToTheBall(worldModel->getUNum(), worldModel)) {
 
@@ -350,7 +370,7 @@ SkillType NaoBehavior::getHighestPossibleAction() {
         } else {
             VecPosition teamMatePosition = getTeamMatePosition(worldModel);
 
-            if(teamMatePosition.getX()<worldModel->getMyPosition().getX()){
+            if (teamMatePosition.getX() < worldModel->getMyPosition().getX()) {
                 return dribbleTowardsGoal(worldModel->getBall());
             }
 
