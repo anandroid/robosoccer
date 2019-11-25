@@ -82,7 +82,7 @@ SkillType NaoBehavior::dribbleTowardsGoal(VecPosition currentBallPosition) {
 
     newX = currentBallPosition.getX() + X_DISTANCE_FACTOR;
 
-    cout << "Dribbling " << newX << " " << newY << "\n";
+    //cout << "Dribbling " << newX << " " << newY << "\n";
 
     return kickBall(KICK_DRIBBLE, VecPosition(newX, newY, currentBallPosition.getZ()));
 
@@ -171,10 +171,25 @@ VecPosition getPassablePosition(VecPosition currentPosition,
         newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR;
     } else if (teamMatePosition.getY() > 0) {
         newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR / 2;
+
+        double newYDiff = abs(opponentPosition.getY() - newY);
+
+        if(newYDiff<yDiff){
+            newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR / 2;
+        }
+
     } else if (teamMatePosition.getY() < -HALF_FIELD_Y / 2) {
         newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR;
     } else if (teamMatePosition.getY() < 0) {
         newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR / 2;
+
+
+        double newYDiff = abs(opponentPosition.getY() - newY);
+
+        if(newYDiff<yDiff){
+            newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR / 2;
+        }
+
     } else {
         newY = teamMatePosition.getY();
     }
@@ -260,7 +275,7 @@ std::vector<int> getPlayersAheadWithInRange(WorldModel *worldModel) {
 
         if (distanceToPlayer < RANGE) {
             if (temp.getX() > myPos.getX()) {
-                cout << "My pos " << myPos.getX() << " Passed pos " << temp.getX() << "\n";
+               // cout << "My pos " << myPos.getX() << " Passed pos " << temp.getX() << "\n";
                 playersInRange.push_back(playerNum);
             }
         }
