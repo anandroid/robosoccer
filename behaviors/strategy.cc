@@ -14,19 +14,19 @@ bool firstPass = false;
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
 
     int playerNum = worldModel->getUNum();
-    if(playerNum%2==0){
+    if (playerNum % 2 == 0) {
         beamY = -HALF_FIELD_Y / 4;
-    }else{
-        beamY =  HALF_FIELD_Y / 4;
+    } else {
+        beamY = HALF_FIELD_Y / 4;
     }
-    beamX =  - (1/4)*HALF_FIELD_X;
+    beamX = -(1 / 4) * HALF_FIELD_X;
 
     beamAngle = 0;
 }
 
 bool isNearToGoal(WorldModel *worldModel) {
 
-    double GOAL_RANGE = (2 * HALF_FIELD_X) / 8;
+    double GOAL_RANGE = (3 * HALF_FIELD_X) / 8;
     VecPosition myPosition = worldModel->getMyPosition();
     double distanceToGoal = worldModel->distanceToOppGoal(myPosition);
 
@@ -74,8 +74,7 @@ SkillType NaoBehavior::dribbleTowardsGoal(VecPosition currentBallPosition) {
 
     if (currentBallPosition.getY() > HALF_FIELD_Y / 2) {
         newY = currentBallPosition.getY() - Y_DISTANCE_FACTOR / 2;
-    }
-    else if (currentBallPosition.getY() < -HALF_FIELD_Y / 2) {
+    } else if (currentBallPosition.getY() < -HALF_FIELD_Y / 2) {
         newY = currentBallPosition.getY() + Y_DISTANCE_FACTOR / 2;
     } else {
         newY = currentBallPosition.getY();
@@ -83,7 +82,7 @@ SkillType NaoBehavior::dribbleTowardsGoal(VecPosition currentBallPosition) {
 
     newX = currentBallPosition.getX() + X_DISTANCE_FACTOR;
 
-    cout<<"Dribbling "<<newX <<" "<<newY<<"\n";
+    cout << "Dribbling " << newX << " " << newY << "\n";
 
     return kickBall(KICK_DRIBBLE, VecPosition(newX, newY, currentBallPosition.getZ()));
 
@@ -176,7 +175,7 @@ VecPosition getPassablePosition(VecPosition currentPosition,
         newY = teamMatePosition.getY() + Y_DISTANCE_FACTOR;
     } else if (teamMatePosition.getY() < 0) {
         newY = teamMatePosition.getY() - Y_DISTANCE_FACTOR / 2;
-    } else{
+    } else {
         newY = teamMatePosition.getY();
     }
 
@@ -325,7 +324,13 @@ std::vector<int> readOpponentPositionsAndReturnWithInRange(WorldModel *worldMode
 
 SkillType NaoBehavior::getHighestPossibleAction() {
 
+
     if (isPlayerClosestToTheBall(worldModel->getUNum(), worldModel)) {
+
+        if (isOurSideKick(worldModel)) {
+            VecPosition teamMatePosition = getTeamMatePosition(worldModel);
+            return kickBall(KICK_FORWARD, teamMatePosition);
+        }
 
         if (isNearToGoal(worldModel)) {
             return goalingAction();
@@ -344,6 +349,11 @@ SkillType NaoBehavior::getHighestPossibleAction() {
 
         } else {
             VecPosition teamMatePosition = getTeamMatePosition(worldModel);
+
+            if(teamMatePosition.getX()<worldModel->getMyPosition().getX()){
+                return dribbleTowardsGoal(worldModel->getBall());
+            }
+
             return kickBall(KICK_FORWARD, teamMatePosition);
 
 
@@ -352,6 +362,10 @@ SkillType NaoBehavior::getHighestPossibleAction() {
 
 
     } else {
+
+        if (isOurSideKick(worldModel)) {
+            return SKILL_STAND;
+        }
 
         int REACHABLEDISTANCE = 3;
 
@@ -441,11 +455,11 @@ SkillType NaoBehavior::kickAccordingToDistance(const VecPosition &target) {
     double distance = myPos.getDistanceTo(target);
     VecPosition ballPosition = worldModel->getBall();
     if (distance < 1.5) {
-        return kickBall(KICK_DRIBBLE,target);
+        return kickBall(KICK_DRIBBLE, target);
     } else if (distance < 6) {
-        return kickBall(KICK_FORWARD,target);
+        return kickBall(KICK_FORWARD, target);
     } else {
-        return kickBall(KICK_IK,target);
+        return kickBall(KICK_IK, target);
     }
 }
 
