@@ -11,11 +11,11 @@ extern int agentBodyType;
  */
 void NaoBehavior::beam(double &beamX, double &beamY, double &beamAngle) {
     //Choosing an X which is random on the team side
-    beamX = -random(HALF_FIELD_X);
+    beamX = -HALF_FIELD_X/4;
     //Choosing a Y which is random  anywhere on the vertical length of the field
     //to achieve it we need to go to the -HALF_FIELD_Y as 0 of Y is the center of the field and then
     //add random number within range of FIELD_Y
-    beamY = -HALF_FIELD_Y+random(FIELD_Y);
+    beamY = -HALF_FIELD_Y/4;
     beamAngle = 0;
 }
 
